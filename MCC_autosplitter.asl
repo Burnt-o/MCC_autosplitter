@@ -96,6 +96,7 @@ init //variable initialization
 	vars.ending07a = false;
 	vars.ending08a = false;
 	vars.ending07b = false;
+	vars.armorysplit = false;
 	
 	//delays unpausing at start of levels to match the late pausing at the end of levels
 	//10 ticks for the initial check, then adjustment factor per level (from measurements)
@@ -173,6 +174,7 @@ start 	//starts timer
 	{
 		if (settings["noarmory"])
 		{
+	
 			if (current.H2_levelname == "01b" && current.H2_cutsceneflag == 128 && old.H2_cutsceneflag == 48 && current.H2_tickcounter <30) //start on cairo
 			{
 				vars.ending01a = false; //reset h2 variables
@@ -188,6 +190,7 @@ start 	//starts timer
 				vars.ending07a = false;
 				vars.ending08a = false;
 				vars.ending07b = false;
+				vars.armorysplit = false;
 				return true;
 			}; 
 		} else
@@ -207,6 +210,7 @@ start 	//starts timer
 				vars.ending07a = false;
 				vars.ending08a = false;
 				vars.ending07b = false;
+				vars.armorysplit = false;
 				return true;
 				
 			}
@@ -224,7 +228,7 @@ split
 		{
 			if (settings["multigamesplit"])
 			{
-				if (timer.CurrentPhase == TimerPhase.Running && current.H1_tickcounter > 280 && current.H1_playerfrozen == false && old.H1_playerfrozen == true && current.H1_bspstate == 0)
+				if (current.H1_levelname == "a10" &&  timer.CurrentPhase == TimerPhase.Running && current.H1_tickcounter > 280 && current.H1_playerfrozen == false && old.H1_playerfrozen == true && current.H1_bspstate == 0)
 				{return true;
 				}
 			}
@@ -251,8 +255,10 @@ split
 	{
 		if (settings["multigamesplit"])
 		{
-			if (timer.CurrentPhase == TimerPhase.Running && current.H2_levelname == "01b" && current.H2_cutsceneflag == 128 && old.H2_cutsceneflag == 48 && current.H2_tickcounter <30)
-			{return true;
+			if (vars.armorysplit == false && timer.CurrentPhase == TimerPhase.Running && current.H2_levelname == "01a" && current.H2_tickcounter > 26 &&  current.H2_tickcounter < 30)
+			{
+				vars.armorysplit = true;
+				return true;
 			}
 		}
 		
