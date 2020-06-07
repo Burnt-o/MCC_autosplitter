@@ -1,6 +1,6 @@
 //Halo: The Master Chief Collection Autosplitter
 //Supports H1A and H2A
-//Updated 2020/05/26
+//Updated 2020/06/07
 //by Burnt
 
 
@@ -80,12 +80,8 @@ init //variable initialization
 		break;
 		
 	}
-	
-	vars.somethingwrongShowed = false;
-	
-	
-	
-	
+
+
 	//HALO 2
 	vars.ending01a = false;
 	vars.ending01b = false;
@@ -117,7 +113,6 @@ init //variable initialization
 	vars.adjust07b = 10 + 52;
 	vars.adjust08b = 10 + 96;
 	
-	
 }
 
 
@@ -137,7 +132,6 @@ startup //settings
 		if (timingMessage == DialogResult.Yes)
 		timer.CurrentTimingMethod = TimingMethod.GameTime;
 	}
-	
 	
 	settings.Add("ILmode", false, "Halo 1: IL mode");
 	settings.Add("noarmory", false, "Halo 2: noarmory%");
