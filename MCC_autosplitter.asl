@@ -301,188 +301,188 @@ split
 
 reset
 { 
-	if (!(settings["multigame"])
+	if (!(settings["multigame"]))
+	{
+		if (vars.H1_gameindicator.Current == "levels") //AKA if Halo 1 is loaded
 		{
-			if (vars.H1_gameindicator.Current == "levels") //AKA if Halo 1 is loaded
+			if (vars.menuindicator.Current == 7)
 			{
-				if (vars.menuindicator.Current == 7)
+				if (settings["ILmode"])
 				{
-					if (settings["ILmode"])
-					{
-						return (timer.CurrentPhase != TimerPhase.Ended &&(
-							(vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == true) 
-							|| (vars.H1_levelname.Current == "a30" && vars.H1_tickcounter.Current < 50) 
-							|| (vars.H1_levelname.Current == "a50" && vars.H1_tickcounter.Current < 500) 
-							|| (vars.H1_levelname.Current == "b30" && vars.H1_tickcounter.Current < 500) 
-							|| (vars.H1_levelname.Current == "b40" && vars.H1_tickcounter.Current < 500) 
-							|| (vars.H1_levelname.Current == "c10" && vars.H1_tickcounter.Current < 500) 
-							|| (vars.H1_levelname.Current == "c20" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
-							|| (vars.H1_levelname.Current == "c40" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
-							|| (vars.H1_levelname.Current == "d20" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
-							|| (vars.H1_levelname.Current == "d40" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
-						)); 
-					} else
-					{
-						return (vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == true); //reset on PoA
-					}
-				}
-			} else if (vars.H2_gameindicator.Current == "scenario") //AKA if Halo 2 is loaded
-			{
-				if (settings["noarmory"]) 
-				{
-					return (vars.H2_levelname.Current == "01b" && vars.H2_cutsceneflag.Current == 48 && vars.H2_tickcounter.Current <30); //reset on Cairo
+					return (timer.CurrentPhase != TimerPhase.Ended &&(
+						(vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == true) 
+						|| (vars.H1_levelname.Current == "a30" && vars.H1_tickcounter.Current < 50) 
+						|| (vars.H1_levelname.Current == "a50" && vars.H1_tickcounter.Current < 500) 
+						|| (vars.H1_levelname.Current == "b30" && vars.H1_tickcounter.Current < 500) 
+						|| (vars.H1_levelname.Current == "b40" && vars.H1_tickcounter.Current < 500) 
+						|| (vars.H1_levelname.Current == "c10" && vars.H1_tickcounter.Current < 500) 
+						|| (vars.H1_levelname.Current == "c20" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
+						|| (vars.H1_levelname.Current == "c40" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
+						|| (vars.H1_levelname.Current == "d20" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
+						|| (vars.H1_levelname.Current == "d40" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
+					)); 
 				} else
 				{
-					return (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current <20); //reset on Armory 
+					return (vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == true); //reset on PoA
 				}
-				
 			}
+		} else if (vars.H2_gameindicator.Current == "scenario") //AKA if Halo 2 is loaded
+		{
+			if (settings["noarmory"]) 
+			{
+				return (vars.H2_levelname.Current == "01b" && vars.H2_cutsceneflag.Current == 48 && vars.H2_tickcounter.Current <30); //reset on Cairo
+			} else
+			{
+				return (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current <20); //reset on Armory 
+			}
+			
 		}
 	}
-	
-	
-	isLoading
+}
+
+
+isLoading
+{
+	if (settings["multigame"] || vars.H1_gameindicator.Current == "levels") //timing for multigame and halo 1 is identical
 	{
-		if (settings["multigame"] || vars.H1_gameindicator.Current == "levels") //timing for multigame and halo 1 is identical
+		return (vars.menuindicator.Current == 7 && vars.stateindicator.Current == 44);
+	} else if (vars.H2_gameindicator.Current == "scenario") //if halo 2
+	{
+		if (vars.menuindicator.Current != 7)
+		return false;
+		
+		string H2_checklevel = vars.H2_levelname.Current;
+		switch (H2_checklevel)
 		{
-			return (vars.menuindicator.Current == 7 && vars.stateindicator.Current == 44);
-			} else if (vars.H2_gameindicator.Current == "scenario") //if halo 2
+			case "01a": //The Armory
+			if (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)    
 			{
-			if (vars.menuindicator.Current != 7)
-			return false;
-			
-			string H2_checklevel = vars.H2_levelname.Current;
-			switch (H2_checklevel)
-			{
-				case "01a": //The Armory
-				if (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)    
-				{
-					vars.ending01a = true;
-					print("we paused for 01a");
-				}
-				return (vars.ending01a);
-				break;
-				
-				case "01b": //Cairo Station
-				if (vars.ending01a == true && vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44)   //intro cutscene over check 
-				vars.ending01a = false; 
-				if (vars.ending01a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0xE5))    //outro cutscene started check
-				vars.ending01b = true;
-				return (vars.ending01a || vars.ending01b);
-				break;
-				
-				case "03a": //Outskirts
-				if (vars.ending01b == true && vars.H2_CSind.Current != 0xB1 && vars.H2_tickcounter.Current > vars.adjust03a && vars.stateindicator.Current != 44) 
-				vars.ending01b = false;
-				if (vars.ending01b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //outskirts has no outro cs
-				vars.ending03a = true;
-				return (vars.ending01b || vars.ending03a);
-				break;
-				
-				case "03b": //Metropolis
-				if (vars.ending03a == true && (vars.H2_CSind.Current != 0xF1 && vars.H2_CSind.Current != 0xB5 && vars.H2_CSind.Current != 0x8D && vars.H2_CSind.Current != 0xD5) && vars.H2_tickcounter.Current > vars.adjust03b && vars.stateindicator.Current != 44) //4 variations of intro cs for difficulties
-				vars.ending03a = false;
-				if (vars.ending03a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0xDD))
-				vars.ending03b = true;	
-				return (vars.ending03a || vars.ending03b);
-				break;
-				
-				case "04a": //The Arbiter
-				if (vars.ending03b == true && vars.H2_CSind.Current != 0x9D && vars.H2_tickcounter.Current > vars.adjust04a && vars.stateindicator.Current != 44) 
-				vars.ending03b = false;
-				if (vars.ending03b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //the arbiter has no outro cs
-				vars.ending04a = true;	
-				return (vars.ending03b || vars.ending04a);
-				break;
-				
-				case "04b": //Oracle
-				if (vars.ending04a == true && vars.H2_CSind.Current != 0x61 && vars.H2_tickcounter.Current > vars.adjust04b && vars.stateindicator.Current != 44) 
-				vars.ending04a = false;
-				if (vars.ending04a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x31)) 
-				vars.ending04b = true;	
-				return (vars.ending04a || vars.ending04b);
-				break;
-				
-				case "05a": //Delta Halo
-				if (vars.ending04b == true && vars.H2_CSind.Current != 0x69 && vars.H2_tickcounter.Current > vars.adjust05a && vars.stateindicator.Current != 44) 
-				vars.ending04b = false;
-				if (vars.ending04b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //delta halo has no outro cs
-				vars.ending05a = true;	
-				return (vars.ending04b || vars.ending05a);
-				break;
-				
-				case "05b": //Regret
-				if (vars.ending05a == true && vars.H2_CSind.Current != 0x6D && vars.H2_tickcounter.Current > vars.adjust05b && vars.stateindicator.Current != 44) 
-				vars.ending05a = false;
-				if (vars.ending05a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x45)) 
-				vars.ending05b = true;	
-				return (vars.ending05a || vars.ending05b);
-				break;
-				
-				case "06a": //Sacred Icon
-				if (vars.ending05b == true && vars.H2_CSind.Current != 0xA1 && vars.H2_tickcounter.Current > vars.adjust06a && vars.stateindicator.Current != 44) 
-				vars.ending05b = false;
-				if (vars.ending05b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //sacred icon has no outro cs
-				vars.ending06a = true;	
-				return (vars.ending05b || vars.ending06a);
-				break;
-				
-				case "06b": //Quarantine Zone
-				if (vars.ending06a == true && vars.H2_CSind.Current != 0x85 && vars.H2_tickcounter.Current > vars.adjust06b && vars.stateindicator.Current != 44) 
-				vars.ending06a = false;
-				if (vars.ending06a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x75)) 
-				vars.ending06b = true;	
-				return (vars.ending06a || vars.ending06b);
-				break;
-				
-				case "07a": //Gravemind
-				if (vars.ending06b == true && vars.H2_CSind.Current != 0x15 && vars.H2_tickcounter.Current > vars.adjust07a && vars.stateindicator.Current != 44) 
-				vars.ending06b = false;
-				if (vars.ending06b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0xF9)) 
-				vars.ending07a = true;	
-				return (vars.ending06b || vars.ending07a);
-				break;
-				
-				case "08a": //Uprising
-				if (vars.ending07a == true && vars.H2_CSind.Current != 0xB9 && vars.H2_tickcounter.Current > vars.adjust08a && vars.stateindicator.Current != 44) 
-				vars.ending07a = false;
-				if (vars.ending07a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x21)) 
-				vars.ending08a = true;	
-				return (vars.ending07a || vars.ending08a);
-				break;
-				
-				case "07b": //High Charity
-				if (vars.ending08a == true && vars.H2_CSind.Current != 0x4D && vars.H2_tickcounter.Current > vars.adjust07b && vars.stateindicator.Current != 44) 
-				vars.ending08a = false;
-				if (vars.ending08a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x79)) 
-				vars.ending07b = true;	
-				return (vars.ending08a || vars.ending07b);
-				break;
-				
-				case "08b": //The Great Journey
-				if (vars.ending07b == true && vars.H2_CSind.Current != 0xF5 && vars.H2_tickcounter.Current > vars.adjust08b && vars.stateindicator.Current != 44) 
-				vars.ending07b = false;	
-				return (vars.ending07b);
-				break; //no outro cs check cos that's game end, no need to pause
-				
-				default: 	//eg return true if any of the following are true
-				return ( 
-					vars.ending01a ||
-					vars.ending01b ||
-					vars.ending03a ||
-					vars.ending03b ||
-					vars.ending04a ||
-					vars.ending04b ||
-					vars.ending05a ||
-					vars.ending05b ||
-					vars.ending06a ||
-					vars.ending06b ||
-					vars.ending07a ||
-					vars.ending08a ||
-					vars.ending07b 
-				);
-				break;
+				vars.ending01a = true;
+				print("we paused for 01a");
 			}
+			return (vars.ending01a);
+			break;
+			
+			case "01b": //Cairo Station
+			if (vars.ending01a == true && vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44)   //intro cutscene over check 
+			vars.ending01a = false; 
+			if (vars.ending01a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0xE5))    //outro cutscene started check
+			vars.ending01b = true;
+			return (vars.ending01a || vars.ending01b);
+			break;
+			
+			case "03a": //Outskirts
+			if (vars.ending01b == true && vars.H2_CSind.Current != 0xB1 && vars.H2_tickcounter.Current > vars.adjust03a && vars.stateindicator.Current != 44) 
+			vars.ending01b = false;
+			if (vars.ending01b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //outskirts has no outro cs
+			vars.ending03a = true;
+			return (vars.ending01b || vars.ending03a);
+			break;
+			
+			case "03b": //Metropolis
+			if (vars.ending03a == true && (vars.H2_CSind.Current != 0xF1 && vars.H2_CSind.Current != 0xB5 && vars.H2_CSind.Current != 0x8D && vars.H2_CSind.Current != 0xD5) && vars.H2_tickcounter.Current > vars.adjust03b && vars.stateindicator.Current != 44) //4 variations of intro cs for difficulties
+			vars.ending03a = false;
+			if (vars.ending03a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0xDD))
+			vars.ending03b = true;	
+			return (vars.ending03a || vars.ending03b);
+			break;
+			
+			case "04a": //The Arbiter
+			if (vars.ending03b == true && vars.H2_CSind.Current != 0x9D && vars.H2_tickcounter.Current > vars.adjust04a && vars.stateindicator.Current != 44) 
+			vars.ending03b = false;
+			if (vars.ending03b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //the arbiter has no outro cs
+			vars.ending04a = true;	
+			return (vars.ending03b || vars.ending04a);
+			break;
+			
+			case "04b": //Oracle
+			if (vars.ending04a == true && vars.H2_CSind.Current != 0x61 && vars.H2_tickcounter.Current > vars.adjust04b && vars.stateindicator.Current != 44) 
+			vars.ending04a = false;
+			if (vars.ending04a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x31)) 
+			vars.ending04b = true;	
+			return (vars.ending04a || vars.ending04b);
+			break;
+			
+			case "05a": //Delta Halo
+			if (vars.ending04b == true && vars.H2_CSind.Current != 0x69 && vars.H2_tickcounter.Current > vars.adjust05a && vars.stateindicator.Current != 44) 
+			vars.ending04b = false;
+			if (vars.ending04b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //delta halo has no outro cs
+			vars.ending05a = true;	
+			return (vars.ending04b || vars.ending05a);
+			break;
+			
+			case "05b": //Regret
+			if (vars.ending05a == true && vars.H2_CSind.Current != 0x6D && vars.H2_tickcounter.Current > vars.adjust05b && vars.stateindicator.Current != 44) 
+			vars.ending05a = false;
+			if (vars.ending05a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x45)) 
+			vars.ending05b = true;	
+			return (vars.ending05a || vars.ending05b);
+			break;
+			
+			case "06a": //Sacred Icon
+			if (vars.ending05b == true && vars.H2_CSind.Current != 0xA1 && vars.H2_tickcounter.Current > vars.adjust06a && vars.stateindicator.Current != 44) 
+			vars.ending05b = false;
+			if (vars.ending05b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //sacred icon has no outro cs
+			vars.ending06a = true;	
+			return (vars.ending05b || vars.ending06a);
+			break;
+			
+			case "06b": //Quarantine Zone
+			if (vars.ending06a == true && vars.H2_CSind.Current != 0x85 && vars.H2_tickcounter.Current > vars.adjust06b && vars.stateindicator.Current != 44) 
+			vars.ending06a = false;
+			if (vars.ending06a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x75)) 
+			vars.ending06b = true;	
+			return (vars.ending06a || vars.ending06b);
+			break;
+			
+			case "07a": //Gravemind
+			if (vars.ending06b == true && vars.H2_CSind.Current != 0x15 && vars.H2_tickcounter.Current > vars.adjust07a && vars.stateindicator.Current != 44) 
+			vars.ending06b = false;
+			if (vars.ending06b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0xF9)) 
+			vars.ending07a = true;	
+			return (vars.ending06b || vars.ending07a);
+			break;
+			
+			case "08a": //Uprising
+			if (vars.ending07a == true && vars.H2_CSind.Current != 0xB9 && vars.H2_tickcounter.Current > vars.adjust08a && vars.stateindicator.Current != 44) 
+			vars.ending07a = false;
+			if (vars.ending07a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x21)) 
+			vars.ending08a = true;	
+			return (vars.ending07a || vars.ending08a);
+			break;
+			
+			case "07b": //High Charity
+			if (vars.ending08a == true && vars.H2_CSind.Current != 0x4D && vars.H2_tickcounter.Current > vars.adjust07b && vars.stateindicator.Current != 44) 
+			vars.ending08a = false;
+			if (vars.ending08a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x79)) 
+			vars.ending07b = true;	
+			return (vars.ending08a || vars.ending07b);
+			break;
+			
+			case "08b": //The Great Journey
+			if (vars.ending07b == true && vars.H2_CSind.Current != 0xF5 && vars.H2_tickcounter.Current > vars.adjust08b && vars.stateindicator.Current != 44) 
+			vars.ending07b = false;	
+			return (vars.ending07b);
+			break; //no outro cs check cos that's game end, no need to pause
+			
+			default: 	//eg return true if any of the following are true
+			return ( 
+				vars.ending01a ||
+				vars.ending01b ||
+				vars.ending03a ||
+				vars.ending03b ||
+				vars.ending04a ||
+				vars.ending04b ||
+				vars.ending05a ||
+				vars.ending05b ||
+				vars.ending06a ||
+				vars.ending06b ||
+				vars.ending07a ||
+				vars.ending08a ||
+				vars.ending07b 
+			);
+			break;
+		}
 	}
 }
 
