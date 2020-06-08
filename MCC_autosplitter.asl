@@ -2,65 +2,15 @@
 //Supports H1A and H2A
 //Updated 2020/06/07
 //by Burnt
-
-
-
-state("MCC-Win64-Shipping", "1.1570.0.0") //AKA the Steam version of the game.
-{	
-	//GENERAL
-	byte menuindicator: 0x37CC2D8; //07 in game (any game), some random junk when in main menu. used in combo with below and for sanity checking.
-	byte stateindicator: 0x38F92D9; //pgcr = 57, load = 44, ig = 255, pause = 129, menu = 255
-	
-	//HALO 1
-	//pointer for anything in halo1.dll is: 0x038DC480, 0x8, OFFSET
-	string6 H1_gameindicator: 0x038DC480, 0x8, 0x115C6F1; //UPDATE THIS - - reads "levels" if halo1.dll loaded and offsets haven't been broken by a patch
-	string3 H1_levelname: 0x038DC480, 0x8, 0x115C6F8; //indicates which level is loaded
-	uint H1_tickcounter: 0x038DC480, 0x8, 0x1FA8B94; //counts game ticks since level start
-	byte H1_bspstate: 0x038DC480, 0x8, 0x10CF324; //tracks which part of level is loaded
-	bool H1_playerfrozen: 0x038DC480, 0x8, 0x224B0C0; //only true in cutscenes
-	
-	//HALO 2
-	//pointer for anything in halo2.dll is: 0x038DC480, 0x28, OFFSET
-	string8 H2_gameindicator: 0x038DC480, 0x28, 0x13FB364; //reads "scenario" if halo2.dll loaded and offsets haven't been broken by a patch
-	string3 H2_levelname: 0x038DC480, 0x28, 0x13FB373; //indicates which level is loaded
-	uint H2_tickcounter: 0x038DC480, 0x28, 0xEADAD74; //counts game ticks since level start
-	byte H2_cutsceneflag: 0x038DC480, 0x28, 0x19A2AC8; //dec48 when in cutscene, dec128  when not, dec0 when out of level ALSO THIS FLAG LIESSSS
-	byte H2_CSind: 0x038DC480, 0x28, 0x0F1D9D70, 0x38, 0x78, 0x220, 0x15C; //check .bk2 movie files at offset 18C for vals
-	
-}
-
-state("MCC-Win64-Shipping-WinStore", "1.1570.0.0") //AKA the Microsoft Store version of the game.
-{
-	//GENERAL
-	byte menuindicator: 0x36A1258; //07 in game (any game), 12 otherwise. used in combo with below and for sanity checking
-	byte stateindicator: 0x37CE0A9; //pgcr = 57, load = 44, ig = 255, pause = 129, menu = 255 
-	
-	//HALO 1
-	//pointer for anything in halo1.dll is: 0x037B1420, 0x8, OFFSET
-	string6 H1_gameindicator: 0x037B1420, 0x8, 0x115C6F1; //UPDATE THIS - - reads "levels" if halo1.dll loaded and offsets haven't been broken by a patch
-	string3 H1_levelname: 0x037B1420, 0x8, 0x115C6F8; //indicates which level is loaded
-	uint H1_tickcounter: 0x037B1420, 0x8, 0x1FA8B94; //counts game ticks since level start
-	byte H1_bspstate: 0x037B1420, 0x8, 0x10CF324; //tracks which part of level is loaded
-	bool H1_playerfrozen: 0x037B1420, 0x8, 0x224B0C0; //only true in cutscenes
-	
-	//HALO 2
-	//pointer for anything in halo2.dll is: 0x037B1420, 0x28, OFFSET
-	string8 H2_gameindicator: 0x037B1420, 0x28, 0x13FB364; //reads "scenario" if halo2.dll loaded and offsets haven't been broken by a patch
-	string3 H2_levelname: 0x037B1420, 0x28, 0x13FB373; //indicates which level is loaded
-	uint H2_tickcounter: 0x037B1420, 0x28, 0xEADAD74; // counts game ticks since level start
-	byte H2_cutsceneflag: 0x037B1420, 0x28, 0x19A2AC8; //dec48 when in cutscene, dec128  when not, dec0 when out of level ALSO THIS FLAG LIESSSS
-	byte H2_CSind: 0x037B1420, 0x28, 0x0F1D9D70, 0x38, 0x78, 0x220, 0x15C; //check .bk2 movie files at offset 18C for vals
-	
-	
-	
-	
-} 
+state("MCC-Win64-Shipping") {}
+state("MCC-Win64-Shipping-WinStore") {}
 
 init //variable initialization
-{
+{ 
+	
+	//version check and warning message for invalid version
 	switch(modules.First().FileVersionInfo.FileVersion)
 	{
-		
 		case "1.1570.0.0": 
 		version = "1.1570.0.0";
 		break;
@@ -68,20 +18,80 @@ init //variable initialization
 		default: 
 		version = "1.1570.0.0";
 		var brokenupdateMessage = MessageBox.Show(
-				"It looks like MCC has recieved a new patch that will "+
-				"probably break me (the autosplitter). \n"+
-				"Autosplitter was made for version: "+ "1.1570.0.0" + "\n" + 
-				"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
-				"If I'm broken, you'll just have to wait for Burnt to update me. "+
-				"You won't need to do anything except restart Livesplit once I'm updated.",
-				vars.aslName+" | LiveSplit",
-				MessageBoxButtons.OK 
-			);
+			"It looks like MCC has recieved a new patch that will "+
+			"probably break me (the autosplitter). \n"+
+			"Autosplitter was made for version: "+ "1.1570.0.0" + "\n" + 
+			"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
+			"If I'm broken, you'll just have to wait for Burnt to update me. "+
+			"You won't need to do anything except restart Livesplit once I'm updated.",
+			vars.aslName+" | LiveSplit",
+			MessageBoxButtons.OK 
+		);
 		break;
-		
 	}
-
-
+	
+	//STATE init
+	if (modules.First().ToString() == "MCC-Win64-Shipping.exe")
+	{
+		if (version == "1.1570.0.0")
+		{
+			vars.watchers_fast = new MemoryWatcherList() {
+				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x37CC2D8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x38F92D9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_slow = new MemoryWatcherList() {
+				(vars.H1_gameindicator = new StringWatcher(new DeepPointer(0x038DC480, 0x8, 0x115C6F1), 6)),
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x038DC480, 0x8, 0x115C6F8), 3)),
+				(vars.H2_gameindicator = new StringWatcher(new DeepPointer(0x038DC480, 0x28, 0x13FB364), 8)),
+				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x038DC480, 0x28, 0x13FB373), 3))
+			};
+			
+			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x038DC480, 0x8, 0x1FA8B94)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x038DC480, 0x8, 0x10CF324)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x038DC480, 0x8, 0x224B0C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h2 = new MemoryWatcherList() {
+				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x038DC480, 0x28, 0xEADAD74)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_cutsceneflag = new MemoryWatcher<byte>(new DeepPointer(0x038DC480, 0x28, 0x19A2AC8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_CSind = new MemoryWatcher<byte>(new DeepPointer(0x038DC480, 0x28, 0x0F1D9D70, 0x38, 0x78, 0x220, 0x15C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+		}
+	} else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe")
+	{
+		if (version == "1.1570.0.0")
+		{
+			vars.watchers_fast = new MemoryWatcherList() {
+				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x36A1258))),
+				(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x37CE0A9)))
+			};
+			
+			vars.watchers_slow = new MemoryWatcherList() {
+				(vars.H1_gameindicator = new StringWatcher(new DeepPointer(0x037B1420, 0x8, 0x115C6F1), 6)),
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x037B1420, 0x8, 0x115C6F8), 3)),
+				(vars.H2_gameindicator = new StringWatcher(new DeepPointer(0x037B1420, 0x28, 0x13FB364), 8)),
+				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x037B1420, 0x28, 0x13FB373), 3))
+			};
+			
+			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x037B1420, 0x8, 0x1FA8B94))),
+				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x037B1420, 0x8, 0x10CF324))),
+				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x037B1420, 0x8, 0x224B0C0)))
+			};
+			
+			vars.watchers_h2 = new MemoryWatcherList() {
+				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x037B1420, 0x28, 0xEADAD74))),
+				(vars.H2_cutsceneflag = new MemoryWatcher<byte>(new DeepPointer(0x037B1420, 0x28, 0x19A2AC8))),
+				(vars.H2_CSind = new MemoryWatcher<byte>(new DeepPointer(0x037B1420, 0x28, 0x0F1D9D70, 0x38, 0x78, 0x220, 0x15C)))
+			};
+		}
+	}
+	
+	//VARIABLE inits
+	vars.loopcount = 0;
 	//HALO 2
 	vars.ending01a = false;
 	vars.ending01b = false;
@@ -138,11 +148,32 @@ startup //settings
 	settings.Add("noarmory", false, "Halo 2: noarmory%");
 	settings.Add("multigame", false, "Multi-game run (eg trilogy run)");
 	settings.Add("multigamesplit", true, "Add split at start of first level of each game", "multigame");
-	
 } 
 
 
-
+update {
+	vars.watchers_fast.UpdateAll(game);
+	
+	if (vars.loopcount == 60)
+	{
+		vars.watchers_slow.UpdateAll(game);
+		vars.loopcount = 0;
+	} else
+	{
+		++vars.loopcount;
+	}
+	
+	if (vars.H1_gameindicator.Current == "levels")
+	{ 
+		vars.watchers_h1.UpdateAll(game);
+	} else if (vars.H2_gameindicator.Current == "scenario")  
+	{
+		vars.watchers_h2.UpdateAll(game);
+	}
+	//print("h1_levelname" + vars.H1_level//name.Current);
+	//print("h1_tickcounter" + vars.H1_tick//counter.Current);
+	//print ("h2cs current" + vars.H2_CSind.Current);
+}
 
 
 
@@ -150,32 +181,32 @@ startup //settings
 
 start 	//starts timer
 {	
-	if (current.H1_gameindicator == "levels") //AKA if Halo 1 is loaded
+	if (vars.H1_gameindicator.Current == "levels") //AKA if Halo 1 is loaded
 	{
 		if (settings["ILmode"])
 		{
 			return (
-				(current.H1_levelname == "a10" && current.H1_tickcounter > 280 && current.H1_playerfrozen == false && old.H1_playerfrozen == true) 
-				|| (current.H1_levelname == "a30" && current.H1_tickcounter == 183) 
-				|| (current.H1_levelname == "a50" && current.H1_tickcounter == 850) 
-				|| (current.H1_levelname == "b30" && current.H1_tickcounter == 1093) 
-				|| (current.H1_levelname == "b40" && current.H1_tickcounter == 966) 
-				|| (current.H1_levelname == "c10" && current.H1_tickcounter == 717) 
-				|| (current.H1_levelname == "c20" && current.H1_playerfrozen == false && old.H1_playerfrozen == true)
-				|| (current.H1_levelname == "c40" && current.H1_playerfrozen == false && old.H1_playerfrozen == true)
-				|| (current.H1_levelname == "d20" && current.H1_playerfrozen == false && old.H1_playerfrozen == true)
-				|| (current.H1_levelname == "d40" && current.H1_playerfrozen == false && old.H1_playerfrozen == true)
+				(vars.H1_levelname.Current == "a10" && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true) 
+				|| (vars.H1_levelname.Current == "a30" && vars.H1_tickcounter.Current == 183) 
+				|| (vars.H1_levelname.Current == "a50" && vars.H1_tickcounter.Current == 850) 
+				|| (vars.H1_levelname.Current == "b30" && vars.H1_tickcounter.Current == 1093) 
+				|| (vars.H1_levelname.Current == "b40" && vars.H1_tickcounter.Current == 966) 
+				|| (vars.H1_levelname.Current == "c10" && vars.H1_tickcounter.Current == 717) 
+				|| (vars.H1_levelname.Current == "c20" && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+				|| (vars.H1_levelname.Current == "c40" && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+				|| (vars.H1_levelname.Current == "d20" && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+				|| (vars.H1_levelname.Current == "d40" && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
 			); 
 		} else
 		{
-			return (current.H1_tickcounter > 280 && current.H1_playerfrozen == false && old.H1_playerfrozen == true); //poa start code
+			return (vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true); //poa start code
 		}
-	} else if (current.H2_gameindicator == "scenario") //AKA if Halo 2 is loaded
+	} else if (vars.H2_gameindicator.Current == "scenario") //AKA if Halo 2 is loaded
 	{
 		if (settings["noarmory"])
 		{
-	
-			if (current.H2_levelname == "01b" && current.H2_cutsceneflag == 128 && old.H2_cutsceneflag == 48 && current.H2_tickcounter <30) //start on cairo
+			
+			if (vars.H2_levelname.Current == "01b" && vars.H2_cutsceneflag.Current == 128 &&  vars.H2_cutsceneflag.Old == 48 && vars.H2_tickcounter.Current <30) //start on cairo
 			{
 				vars.ending01a = false; //reset h2 variables
 				vars.ending01b = false;
@@ -195,7 +226,7 @@ start 	//starts timer
 			}; 
 		} else
 		{
-			if (current.H2_levelname == "01a" && current.H2_tickcounter > 26 &&  current.H2_tickcounter < 30) //start on armory
+			if (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30) //start on armory
 			{
 				vars.ending01a = false; //reset h2 variables
 				vars.ending01b = false;
@@ -222,13 +253,13 @@ start 	//starts timer
 
 split
 { 
-	if (current.H1_gameindicator == "levels") //AKA if Halo 1 is loaded
+	if (vars.H1_gameindicator.Current == "levels") //AKA if Halo 1 is loaded
 	{
-		if (current.menuindicator == 7)
+		if (vars.menuindicator.Current == 7)
 		{
 			if (settings["multigamesplit"])
 			{
-				if (current.H1_levelname == "a10" &&  timer.CurrentPhase == TimerPhase.Running && current.H1_tickcounter > 280 && current.H1_playerfrozen == false && old.H1_playerfrozen == true && current.H1_bspstate == 0)
+				if (vars.H1_levelname.Current == "a10" &&  timer.CurrentPhase == TimerPhase.Running && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true && vars.H1_bspstate.Current == 0)
 				{return true;
 				}
 			}
@@ -236,33 +267,33 @@ split
 			if (settings["ILmode"])
 			{
 				return (
-					((current.stateindicator == 57 || current.stateindicator == 44) && (old.stateindicator != 57 && old.stateindicator != 44) && current.H1_levelname != "d20") //split on PGCR or Loading screen
-					|| (current.H1_levelname == "d20" && current.H1_bspstate == 3 && current.H1_playerfrozen == true && old.H1_playerfrozen == false) //Keyes ending to end time at start of cutscene instead of end of it
-					|| (current.H1_levelname == "d40" && current.H1_bspstate == 7 && current.H1_playerfrozen == true && old.H1_playerfrozen == false) //Maw ending
+					((vars.stateindicator.Current == 57 || vars.stateindicator.Current == 44) && (vars.stateindicator.Old != 57 && vars.stateindicator.Old != 44) && vars.H1_levelname.Current != "d20") //split on PGCR or Loading screen
+					|| (vars.H1_levelname.Current == "d20" && vars.H1_bspstate.Current == 3 && vars.H1_playerfrozen.Current == true && vars.H1_playerfrozen.Old == false) //Keyes ending to end time at start of cutscene instead of end of it
+					|| (vars.H1_levelname.Current == "d40" && vars.H1_bspstate.Current == 7 && vars.H1_playerfrozen.Current == true && vars.H1_playerfrozen.Old == false) //Maw ending
 				);
 			} else
 			{
-				if (!(current.H1_levelname == "d40" && current.H1_bspstate == 7)) //!= maw last bsp
+				if (!(vars.H1_levelname.Current == "d40" && vars.H1_bspstate.Current == 7)) //!= maw last bsp
 				{
-					return(current.stateindicator == 44 && old.stateindicator != 44); //split on loading screen
+					return(vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44); //split on loading screen
 				} else
 				{
-					return (current.H1_bspstate == 7 && current.H1_playerfrozen == true); //maw ending
+					return (vars.H1_bspstate.Current == 7 && vars.H1_playerfrozen.Current == true); //maw ending
 				}
 			}
 		}
-	} else if (current.H2_gameindicator == "scenario") //AKA if Halo 2 is loaded
+	} else if (vars.H2_gameindicator.Current == "scenario") //AKA if Halo 2 is loaded
 	{
 		if (settings["multigamesplit"])
 		{
-			if (vars.armorysplit == false && timer.CurrentPhase == TimerPhase.Running && current.H2_levelname == "01a" && current.H2_tickcounter > 26 &&  current.H2_tickcounter < 30)
+			if (vars.armorysplit == false && timer.CurrentPhase == TimerPhase.Running && vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30)
 			{
 				vars.armorysplit = true;
 				return true;
 			}
 		}
 		
-		return ((current.stateindicator == 44 && old.stateindicator != 44 && current.menuindicator == 7) || (current.H2_levelname == "08b" && current.H2_CSind == 0x19 && old.H2_CSind != 0x19));
+		return ((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && vars.menuindicator.Current == 7) || (vars.H2_levelname.Current == "08b" && vars.H2_CSind.Current == 0x19 && vars.H2_CSind.Old != 0x19));
 	}
 	
 }
@@ -270,184 +301,188 @@ split
 
 reset
 { 
-	if (current.H1_gameindicator == "levels") //AKA if Halo 1 is loaded
-	{
-		if (current.menuindicator == 7)
+	if (!(settings["multigame"])
 		{
-			if (settings["ILmode"])
+			if (vars.H1_gameindicator.Current == "levels") //AKA if Halo 1 is loaded
 			{
-				return (timer.CurrentPhase != TimerPhase.Ended &&(
-					(current.H1_levelname == "a10" && current.H1_bspstate == 0 && current.H1_playerfrozen == true) 
-					|| (current.H1_levelname == "a30" && current.H1_tickcounter < 50) 
-					|| (current.H1_levelname == "a50" && current.H1_tickcounter < 500) 
-					|| (current.H1_levelname == "b30" && current.H1_tickcounter < 500) 
-					|| (current.H1_levelname == "b40" && current.H1_tickcounter < 500) 
-					|| (current.H1_levelname == "c10" && current.H1_tickcounter < 500) 
-					|| (current.H1_levelname == "c20" && current.H1_playerfrozen == true && current.H1_tickcounter < 50)
-					|| (current.H1_levelname == "c40" && current.H1_playerfrozen == true && current.H1_tickcounter < 50)
-					|| (current.H1_levelname == "d20" && current.H1_playerfrozen == true && current.H1_tickcounter < 50)
-					|| (current.H1_levelname == "d40" && current.H1_playerfrozen == true && current.H1_tickcounter < 50)
-				)); 
-			} else
+				if (vars.menuindicator.Current == 7)
+				{
+					if (settings["ILmode"])
+					{
+						return (timer.CurrentPhase != TimerPhase.Ended &&(
+							(vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == true) 
+							|| (vars.H1_levelname.Current == "a30" && vars.H1_tickcounter.Current < 50) 
+							|| (vars.H1_levelname.Current == "a50" && vars.H1_tickcounter.Current < 500) 
+							|| (vars.H1_levelname.Current == "b30" && vars.H1_tickcounter.Current < 500) 
+							|| (vars.H1_levelname.Current == "b40" && vars.H1_tickcounter.Current < 500) 
+							|| (vars.H1_levelname.Current == "c10" && vars.H1_tickcounter.Current < 500) 
+							|| (vars.H1_levelname.Current == "c20" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
+							|| (vars.H1_levelname.Current == "c40" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
+							|| (vars.H1_levelname.Current == "d20" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
+							|| (vars.H1_levelname.Current == "d40" && vars.H1_playerfrozen.Current == true && vars.H1_tickcounter.Current < 50)
+						)); 
+					} else
+					{
+						return (vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == true); //reset on PoA
+					}
+				}
+			} else if (vars.H2_gameindicator.Current == "scenario") //AKA if Halo 2 is loaded
 			{
-				return (current.H1_levelname == "a10" && current.H1_bspstate == 0 && current.H1_playerfrozen == true); //reset on PoA
+				if (settings["noarmory"]) 
+				{
+					return (vars.H2_levelname.Current == "01b" && vars.H2_cutsceneflag.Current == 48 && vars.H2_tickcounter.Current <30); //reset on Cairo
+				} else
+				{
+					return (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current <20); //reset on Armory 
+				}
+				
 			}
 		}
-	} else if (current.H2_gameindicator == "scenario") //AKA if Halo 2 is loaded
-	{
-		if (settings["noarmory"]) 
-		{
-			return (current.H2_levelname == "01b" && current.H2_cutsceneflag == 48 && current.H2_tickcounter <30); //reset on Cairo
-		} else
-		{
-			return (current.H2_levelname == "01a" && current.H2_tickcounter <20); //reset on Armory 
-		}
-		
 	}
-}
-
-
-isLoading
-{
-	if (settings["multigame"] || current.H1_gameindicator == "levels") //timing for multigame and halo 1 is identical
+	
+	
+	isLoading
 	{
-		return (current.menuindicator == 7 && current.stateindicator == 44);
-	} else if (current.H2_gameindicator == "scenario") //if halo 2
-	{
-		if (current.menuindicator != 7)
-		return false;
-		
-		string H2_checklevel = current.H2_levelname;
-		switch (H2_checklevel)
+		if (settings["multigame"] || vars.H1_gameindicator.Current == "levels") //timing for multigame and halo 1 is identical
 		{
-			case "01a": //The Armory
-			if (current.stateindicator == 44 || current.stateindicator == 57)    
+			return (vars.menuindicator.Current == 7 && vars.stateindicator.Current == 44);
+			} else if (vars.H2_gameindicator.Current == "scenario") //if halo 2
 			{
-				vars.ending01a = true;
+			if (vars.menuindicator.Current != 7)
+			return false;
+			
+			string H2_checklevel = vars.H2_levelname.Current;
+			switch (H2_checklevel)
+			{
+				case "01a": //The Armory
+				if (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)    
+				{
+					vars.ending01a = true;
+					print("we paused for 01a");
+				}
+				return (vars.ending01a);
+				break;
+				
+				case "01b": //Cairo Station
+				if (vars.ending01a == true && vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44)   //intro cutscene over check 
+				vars.ending01a = false; 
+				if (vars.ending01a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0xE5))    //outro cutscene started check
+				vars.ending01b = true;
+				return (vars.ending01a || vars.ending01b);
+				break;
+				
+				case "03a": //Outskirts
+				if (vars.ending01b == true && vars.H2_CSind.Current != 0xB1 && vars.H2_tickcounter.Current > vars.adjust03a && vars.stateindicator.Current != 44) 
+				vars.ending01b = false;
+				if (vars.ending01b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //outskirts has no outro cs
+				vars.ending03a = true;
+				return (vars.ending01b || vars.ending03a);
+				break;
+				
+				case "03b": //Metropolis
+				if (vars.ending03a == true && (vars.H2_CSind.Current != 0xF1 && vars.H2_CSind.Current != 0xB5 && vars.H2_CSind.Current != 0x8D && vars.H2_CSind.Current != 0xD5) && vars.H2_tickcounter.Current > vars.adjust03b && vars.stateindicator.Current != 44) //4 variations of intro cs for difficulties
+				vars.ending03a = false;
+				if (vars.ending03a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0xDD))
+				vars.ending03b = true;	
+				return (vars.ending03a || vars.ending03b);
+				break;
+				
+				case "04a": //The Arbiter
+				if (vars.ending03b == true && vars.H2_CSind.Current != 0x9D && vars.H2_tickcounter.Current > vars.adjust04a && vars.stateindicator.Current != 44) 
+				vars.ending03b = false;
+				if (vars.ending03b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //the arbiter has no outro cs
+				vars.ending04a = true;	
+				return (vars.ending03b || vars.ending04a);
+				break;
+				
+				case "04b": //Oracle
+				if (vars.ending04a == true && vars.H2_CSind.Current != 0x61 && vars.H2_tickcounter.Current > vars.adjust04b && vars.stateindicator.Current != 44) 
+				vars.ending04a = false;
+				if (vars.ending04a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x31)) 
+				vars.ending04b = true;	
+				return (vars.ending04a || vars.ending04b);
+				break;
+				
+				case "05a": //Delta Halo
+				if (vars.ending04b == true && vars.H2_CSind.Current != 0x69 && vars.H2_tickcounter.Current > vars.adjust05a && vars.stateindicator.Current != 44) 
+				vars.ending04b = false;
+				if (vars.ending04b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //delta halo has no outro cs
+				vars.ending05a = true;	
+				return (vars.ending04b || vars.ending05a);
+				break;
+				
+				case "05b": //Regret
+				if (vars.ending05a == true && vars.H2_CSind.Current != 0x6D && vars.H2_tickcounter.Current > vars.adjust05b && vars.stateindicator.Current != 44) 
+				vars.ending05a = false;
+				if (vars.ending05a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x45)) 
+				vars.ending05b = true;	
+				return (vars.ending05a || vars.ending05b);
+				break;
+				
+				case "06a": //Sacred Icon
+				if (vars.ending05b == true && vars.H2_CSind.Current != 0xA1 && vars.H2_tickcounter.Current > vars.adjust06a && vars.stateindicator.Current != 44) 
+				vars.ending05b = false;
+				if (vars.ending05b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //sacred icon has no outro cs
+				vars.ending06a = true;	
+				return (vars.ending05b || vars.ending06a);
+				break;
+				
+				case "06b": //Quarantine Zone
+				if (vars.ending06a == true && vars.H2_CSind.Current != 0x85 && vars.H2_tickcounter.Current > vars.adjust06b && vars.stateindicator.Current != 44) 
+				vars.ending06a = false;
+				if (vars.ending06a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x75)) 
+				vars.ending06b = true;	
+				return (vars.ending06a || vars.ending06b);
+				break;
+				
+				case "07a": //Gravemind
+				if (vars.ending06b == true && vars.H2_CSind.Current != 0x15 && vars.H2_tickcounter.Current > vars.adjust07a && vars.stateindicator.Current != 44) 
+				vars.ending06b = false;
+				if (vars.ending06b == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0xF9)) 
+				vars.ending07a = true;	
+				return (vars.ending06b || vars.ending07a);
+				break;
+				
+				case "08a": //Uprising
+				if (vars.ending07a == true && vars.H2_CSind.Current != 0xB9 && vars.H2_tickcounter.Current > vars.adjust08a && vars.stateindicator.Current != 44) 
+				vars.ending07a = false;
+				if (vars.ending07a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x21)) 
+				vars.ending08a = true;	
+				return (vars.ending07a || vars.ending08a);
+				break;
+				
+				case "07b": //High Charity
+				if (vars.ending08a == true && vars.H2_CSind.Current != 0x4D && vars.H2_tickcounter.Current > vars.adjust07b && vars.stateindicator.Current != 44) 
+				vars.ending08a = false;
+				if (vars.ending08a == false && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.H2_CSind.Current == 0x79)) 
+				vars.ending07b = true;	
+				return (vars.ending08a || vars.ending07b);
+				break;
+				
+				case "08b": //The Great Journey
+				if (vars.ending07b == true && vars.H2_CSind.Current != 0xF5 && vars.H2_tickcounter.Current > vars.adjust08b && vars.stateindicator.Current != 44) 
+				vars.ending07b = false;	
+				return (vars.ending07b);
+				break; //no outro cs check cos that's game end, no need to pause
+				
+				default: 	//eg return true if any of the following are true
+				return ( 
+					vars.ending01a ||
+					vars.ending01b ||
+					vars.ending03a ||
+					vars.ending03b ||
+					vars.ending04a ||
+					vars.ending04b ||
+					vars.ending05a ||
+					vars.ending05b ||
+					vars.ending06a ||
+					vars.ending06b ||
+					vars.ending07a ||
+					vars.ending08a ||
+					vars.ending07b 
+				);
+				break;
 			}
-			return (vars.ending01a);
-			break;
-			
-			case "01b": //Cairo Station
-			if (vars.ending01a == true && current.H2_CSind != 0xD9 && current.H2_tickcounter > vars.adjust01b && current.stateindicator != 44)   //intro cutscene over check 
-			vars.ending01a = false; 
-			if (vars.ending01a == false && (current.stateindicator == 44 || current.stateindicator == 57 || current.H2_CSind == 0xE5))    //outro cutscene started check
-			vars.ending01b = true;
-			return (vars.ending01a || vars.ending01b);
-			break;
-			
-			case "03a": //Outskirts
-			if (vars.ending01b == true && current.H2_CSind != 0xB1 && current.H2_tickcounter > vars.adjust03a && current.stateindicator != 44) 
-			vars.ending01b = false;
-			if (vars.ending01b == false && (current.stateindicator == 44 || current.stateindicator == 57)) //outskirts has no outro cs
-			vars.ending03a = true;
-			return (vars.ending01b || vars.ending03a);
-			break;
-			
-			case "03b": //Metropolis
-			if (vars.ending03a == true && (current.H2_CSind != 0xF1 && current.H2_CSind != 0xB5 && current.H2_CSind != 0x8D && current.H2_CSind != 0xD5) && current.H2_tickcounter > vars.adjust03b && current.stateindicator != 44) //4 variations of intro cs for difficulties
-			vars.ending03a = false;
-			if (vars.ending03a == false && (current.stateindicator == 44 || current.stateindicator == 57 || current.H2_CSind == 0xDD))
-			vars.ending03b = true;	
-			return (vars.ending03a || vars.ending03b);
-			break;
-			
-			case "04a": //The Arbiter
-			if (vars.ending03b == true && current.H2_CSind != 0x9D && current.H2_tickcounter > vars.adjust04a && current.stateindicator != 44) 
-			vars.ending03b = false;
-			if (vars.ending03b == false && (current.stateindicator == 44 || current.stateindicator == 57)) //the arbiter has no outro cs
-			vars.ending04a = true;	
-			return (vars.ending03b || vars.ending04a);
-			break;
-			
-			case "04b": //Oracle
-			if (vars.ending04a == true && current.H2_CSind != 0x61 && current.H2_tickcounter > vars.adjust04b && current.stateindicator != 44) 
-			vars.ending04a = false;
-			if (vars.ending04a == false && (current.stateindicator == 44 || current.stateindicator == 57 || current.H2_CSind == 0x31)) 
-			vars.ending04b = true;	
-			return (vars.ending04a || vars.ending04b);
-			break;
-			
-			case "05a": //Delta Halo
-			if (vars.ending04b == true && current.H2_CSind != 0x69 && current.H2_tickcounter > vars.adjust05a && current.stateindicator != 44) 
-			vars.ending04b = false;
-			if (vars.ending04b == false && (current.stateindicator == 44 || current.stateindicator == 57)) //delta halo has no outro cs
-			vars.ending05a = true;	
-			return (vars.ending04b || vars.ending05a);
-			break;
-			
-			case "05b": //Regret
-			if (vars.ending05a == true && current.H2_CSind != 0x6D && current.H2_tickcounter > vars.adjust05b && current.stateindicator != 44) 
-			vars.ending05a = false;
-			if (vars.ending05a == false && (current.stateindicator == 44 || current.stateindicator == 57 || current.H2_CSind == 0x45)) 
-			vars.ending05b = true;	
-			return (vars.ending05a || vars.ending05b);
-			break;
-			
-			case "06a": //Sacred Icon
-			if (vars.ending05b == true && current.H2_CSind != 0xA1 && current.H2_tickcounter > vars.adjust06a && current.stateindicator != 44) 
-			vars.ending05b = false;
-			if (vars.ending05b == false && (current.stateindicator == 44 || current.stateindicator == 57)) //sacred icon has no outro cs
-			vars.ending06a = true;	
-			return (vars.ending05b || vars.ending06a);
-			break;
-			
-			case "06b": //Quarantine Zone
-			if (vars.ending06a == true && current.H2_CSind != 0x85 && current.H2_tickcounter > vars.adjust06b && current.stateindicator != 44) 
-			vars.ending06a = false;
-			if (vars.ending06a == false && (current.stateindicator == 44 || current.stateindicator == 57 || current.H2_CSind == 0x75)) 
-			vars.ending06b = true;	
-			return (vars.ending06a || vars.ending06b);
-			break;
-			
-			case "07a": //Gravemind
-			if (vars.ending06b == true && current.H2_CSind != 0x15 && current.H2_tickcounter > vars.adjust07a && current.stateindicator != 44) 
-			vars.ending06b = false;
-			if (vars.ending06b == false && (current.stateindicator == 44 || current.stateindicator == 57 || current.H2_CSind == 0xF9)) 
-			vars.ending07a = true;	
-			return (vars.ending06b || vars.ending07a);
-			break;
-			
-			case "08a": //Uprising
-			if (vars.ending07a == true && current.H2_CSind != 0xB9 && current.H2_tickcounter > vars.adjust08a && current.stateindicator != 44) 
-			vars.ending07a = false;
-			if (vars.ending07a == false && (current.stateindicator == 44 || current.stateindicator == 57 || current.H2_CSind == 0x21)) 
-			vars.ending08a = true;	
-			return (vars.ending07a || vars.ending08a);
-			break;
-			
-			case "07b": //High Charity
-			if (vars.ending08a == true && current.H2_CSind != 0x4D && current.H2_tickcounter > vars.adjust07b && current.stateindicator != 44) 
-			vars.ending08a = false;
-			if (vars.ending08a == false && (current.stateindicator == 44 || current.stateindicator == 57 || current.H2_CSind == 0x79)) 
-			vars.ending07b = true;	
-			return (vars.ending08a || vars.ending07b);
-			break;
-			
-			case "08b": //The Great Journey
-			if (vars.ending07b == true && current.H2_CSind != 0xF5 && current.H2_tickcounter > vars.adjust08b && current.stateindicator != 44) 
-			vars.ending07b = false;	
-			return (vars.ending07b);
-			break; //no outro cs check cos that's game end, no need to pause
-			
-			default: 	//eg return true if any of the following are true
-			return ( 
-				vars.ending01a ||
-				vars.ending01b ||
-				vars.ending03a ||
-				vars.ending03b ||
-				vars.ending04a ||
-				vars.ending04b ||
-				vars.ending05a ||
-				vars.ending05b ||
-				vars.ending06a ||
-				vars.ending06b ||
-				vars.ending07a ||
-				vars.ending08a ||
-				vars.ending07b 
-			);
-			break;
-		}
 	}
 }
 
