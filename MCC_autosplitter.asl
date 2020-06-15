@@ -112,17 +112,17 @@ init //variable initialization
 	//10 ticks for the initial check, then adjustment factor per level (from measurements)
 	vars.adjust01b = 10 + 113;
 	vars.adjust03a = 10 + 46;
-	vars.adjust03b = 10 + 18;
-	vars.adjust04a = 10 + 79;
-	vars.adjust04b = 10 + 30;
-	vars.adjust05a = 10 + 79;
-	vars.adjust05b = 10 + 20;
-	vars.adjust06a = 10 + 19;
-	vars.adjust06b = 10 + 23;
-	vars.adjust07a = 10 + 22;
-	vars.adjust08a = 10 + 17;
-	vars.adjust07b = 10 + 52;
-	vars.adjust08b = 10 + 96;
+	vars.adjust03b = 10 + 22;
+	vars.adjust04a = 10 + 85;
+	vars.adjust04b = 10 + 48;
+	vars.adjust05a = 10 + 85;
+	vars.adjust05b = 10 + 32;
+	vars.adjust06a = 10 + 23;
+	vars.adjust06b = 10 + 29;
+	vars.adjust07a = 10 + 29;
+	vars.adjust08a = 10 + 32;
+	vars.adjust07b = 10 + 67;
+	vars.adjust08b = 10 + 109;
 	
 }
 
