@@ -93,7 +93,7 @@ init //variable initialization
 			
 			
 			vars.watchers_h3bsp = new MemoryWatcherList() {
-				(vars.H3_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x038C5120, 0x48, 0x879F10)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H3_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x038C5120, 0x48, 0xC4D314)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h3IL = new MemoryWatcherList() {
@@ -145,6 +145,7 @@ init //variable initialization
 	//VARIABLE inits
 	vars.loopcount = 0;
 	vars.dirtybsps = new List<byte>();
+	vars.h3dirtybsps = new List<ulong>();
 	
 	//HALO 1
 	vars.splitbsp_a10 = new byte[6] { 1, 2, 3, 4, 5, 6 };
@@ -208,11 +209,11 @@ init //variable initialization
 	vars.adjust08b = 10 + 109;
 	
 	//HALO 3
-	vars.splitbsp_010 = new byte[1] { 0 }; //sierra
-	vars.splitbsp_040 = new byte[1] { 0 }; //storm 
-	vars.splitbsp_070 = new byte[1] { 0 }; //ark
-	vars.splitbsp_100 = new byte[1] { 0 }; //cov
-	vars.splitbsp_120 = new byte[1] { 0 }; //halo
+	vars.splitbsp_010 = new ulong[8] { 7, 4111, 4127, 8589938751, 12884907135, 4294972543, 4294972927, 6143}; //sierra
+	vars.splitbsp_040 = new ulong[8] { 70746701299715, 76347338653703, 5987184410895, 43920335569183, 52712133624127, 4449586119039, 110002702385663, 127560528691711 }; //storm 
+	vars.splitbsp_070 = new ulong[9] { 319187993615142919, 497073530286903311, 5109160733019475999, 7059113264503853119, 7058267740062093439, 5296235395170702591, 6467180094380056063, 6471685893030682623, 6453663797939806207 }; //ark
+	vars.splitbsp_100 = new ulong[11] { 4508347378708774919, 2060429875000377375, 4384271889560765215, 2060429875000378143, 4508347378708775711, 4229124150272197439, 4105313024951190527, 4159567262287660031, 4153434048988972031, 4099400491367139327, 21673629041340192 }; //cov
+	vars.splitbsp_120 = new ulong[6] { 1030792151055, 691489734703, 1924145349759, 1133871367679, 1202590844927, 1219770714111 }; //halo
 	
 }
 
@@ -253,8 +254,11 @@ startup //settings
 	);
 	
 	
-	settings.Add("H3bsp", false, "Halo 3: split on bsp loads (THIS IS BROKEN)");
-	settings.SetToolTip("H3bsp", "Split on fresh bsp loads (\"Loading... Done\") within levels.");
+	settings.Add("H3bsp", false, "Halo 3: split on bsp loads");
+	settings.SetToolTip("H3bsp", "Split on fresh bsp loads (\"Loading... Done\") within levels. (well, most of them) \n" +
+		"You'll need to add the following amount of extra splits for each level: \n 117: 8 \n Storm: 8 \n Ark: 9 \n Cov: 11 \n Halo: 6 \n" +
+		"BTW you may want to make these splits into subsplits, see here: redd.it/84661r"
+	);
 	
 	
 	settings.Add("noarmory", false, "Halo 2: noarmory%");
@@ -309,6 +313,7 @@ update {
 start 	//starts timer
 {	
 	vars.dirtybsps.Clear();
+	vars.h3dirtybsps.Clear();
 	if (vars.H1_gameindicator.Current == "levels") //AKA if Halo 1 is loaded
 	{
 		if (settings["H1ILmode"])
@@ -698,48 +703,47 @@ split
 	} else if (vars.H3_gameindicator.Current == "This")
 	{
 		if (vars.stateindicator.Current != vars.stateindicator.Old && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57))
-		{vars.dirtybsps.Clear();}
-		
+		{vars.h3dirtybsps.Clear();}
 		string checklevel = vars.H3_levelname.Current;
 		switch (checklevel)
 		{
 			case "010":
-			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_010, x => x == vars.H23_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H3_bspstate.Current)))
+			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_010, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
 			{
-				vars.dirtybsps.Add(vars.H3_bspstate.Current);
+				vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
 				return true;
 			}
 			break;
 			
 			case "040":
-			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_040, x => x == vars.H23_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H3_bspstate.Current)))
+			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_040, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
 			{
-				vars.dirtybsps.Add(vars.H3_bspstate.Current);
+				vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
 				return true;
 			}
 			break;
 			
 			case "070":
-			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_070, x => x == vars.H23_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H3_bspstate.Current)))
+			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_070, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
 			{
-				vars.dirtybsps.Add(vars.H3_bspstate.Current);
+				vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
 				return true;
 			}
 			break;
 			
 			
 			case "100":
-			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_010, x => x == vars.H23_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H3_bspstate.Current)))
+			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_100, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
 			{
-				vars.dirtybsps.Add(vars.H3_bspstate.Current);
+				vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
 				return true;
 			}
 			break;
 			
 			case "120":
-			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_010, x => x == vars.H23_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H3_bspstate.Current)))
+			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_120, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
 			{
-				vars.dirtybsps.Add(vars.H3_bspstate.Current);
+				vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
 				return true;
 			}
 			break;
@@ -747,12 +751,7 @@ split
 			default:
 			break;
 		}
-		
-		vars.splitbsp_010 = new byte[1] { 0 }; //sierra
-		vars.splitbsp_040 = new byte[1] { 0 }; //storm 
-		vars.splitbsp_070 = new byte[1] { 0 }; //ark
-		vars.splitbsp_100 = new byte[1] { 0 }; //cov
-		vars.splitbsp_120 = new byte[1] { 0 }; //halo
+
 	}
 	
 }
