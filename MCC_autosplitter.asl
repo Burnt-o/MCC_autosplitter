@@ -379,7 +379,7 @@ start 	//starts timer
 	{
 		if (settings["H2ILmode"])
 		{
-			return (vars.H2_IGT.Current > 10);	
+			return (vars.H2_IGT.Current > 10 && vars.H2_IGT.Current < 30);
 		}
 		
 		
@@ -430,7 +430,7 @@ start 	//starts timer
 	{
 		if (settings["H3ILmode"])
 		{
-			return (vars.H3_IGT.Current > 10);
+			return (vars.H3_IGT.Current > 10 && vars.H2_IGT.Current < 30);
 			
 			
 		}
@@ -874,8 +874,11 @@ split
 		}
 	} else if (vars.H3_gameindicator.Current == "This")
 	{
-		if (vars.stateindicator.Current != vars.stateindicator.Old && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57))
-		{vars.h3dirtybsps.Clear();}
+	if ((vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57))
+		{vars.h3dirtybsps.Clear();
+		return true;	//hopefully doesn't split too early
+		}
+	
 		string checklevel = vars.H3_levelname.Current;
 		
 	if (settings["H3bsp_cache"])
