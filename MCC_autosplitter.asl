@@ -101,6 +101,30 @@ init //variable initialization
 				
 			};
 			
+			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //invalid but need blank
+				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //invalid but need blank
+				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //invalid but need blank
+			};
+			
+			vars.watchers_h2 = new MemoryWatcherList() {
+				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //invalid but need blank
+				(vars.H2_cutsceneflag = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //invalid but need blank
+				(vars.H2_CSind = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //invalid but need blank
+			}; 
+			
+			vars.watchers_h2bsp = new MemoryWatcherList() {
+				(vars.H2_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //invalid but need blank
+			};
+			
+			vars.watchers_h2IL = new MemoryWatcherList() {
+				(vars.H2_IGT = new MemoryWatcher<uint>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //invalid but need blank
+			};
+			
+			vars.watchers_h3 = new MemoryWatcherList() {
+				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x038C5120, 0x48, 0xD7A4FC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H3_validtimeflag = new MemoryWatcher<byte>(new DeepPointer(0x038C5120, 0x48, 0xD7A4F6)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
 			
 			vars.watchers_h3bsp = new MemoryWatcherList() {
 				(vars.H3_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x038C5120, 0x48, 0xC4D314)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
@@ -140,6 +164,8 @@ init //variable initialization
 				(vars.H2_CSind = new MemoryWatcher<byte>(new DeepPointer(0x037B1420, 0x28, 0x0F1D9D70, 0x38, 0x78, 0x220, 0x15C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
+			
+			
 			vars.watchers_h2bsp = new MemoryWatcherList() {
 				(vars.H2_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x037B1420, 0x28, 0x1294D74)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
@@ -166,6 +192,7 @@ init //variable initialization
 	vars.loopcount = 0;
 	vars.dirtybsps = new List<byte>();
 	vars.h3dirtybsps = new List<ulong>();
+	vars.h3times = 0;
 	
 	//HALO 1
 	vars.splitbsp_a10 = new byte[6] { 1, 2, 3, 4, 5, 6 };
@@ -178,6 +205,7 @@ init //variable initialization
 	vars.splitbsp_c40 = new byte[8] { 12, 10, 1, 9, 8, 6, 0, 5 };
 	vars.splitbsp_d20 = new byte[2] { 4, 3 };
 	vars.splitbsp_d40 = new byte[7] { 1, 2, 3, 4, 5, 6, 7 };
+	vars.poasplit = false;
 	
 	//HALO 2
 	vars.splitbsp_01b = new byte[3] { 2, 0, 3 }; //cairo
@@ -234,6 +262,10 @@ init //variable initialization
 	vars.splitbsp_070 = new ulong[9] { 319187993615142919, 497073530286903311, 5109160733019475999, 7059113264503853119, 7058267740062093439, 5296235395170702591, 6467180094380056063, 6471685893030682623, 6453663797939806207 }; //ark
 	vars.splitbsp_100 = new ulong[11] { 4508347378708774919, 2060429875000377375, 4384271889560765215, 2060429875000378143, 4508347378708775711, 4229124150272197439, 4105313024951190527, 4159567262287660031, 4153434048988972031, 4099400491367139327, 21673629041340192 }; //cov
 	vars.splitbsp_120 = new ulong[6] { 1030792151055, 691489734703, 1924145349759, 1133871367679, 1202590844927, 1219770714111 }; //halo
+	vars.sierrasplit = false;
+	
+	
+	
 	
 }
 
@@ -270,7 +302,7 @@ startup //settings
 		"You probably shouldn't turn this on, unless you're say, practicing a specific segment of a level (from one load to another)."
 	);
 	
-		settings.Add("noarmory", false, "Halo 2: noarmory%");
+	settings.Add("noarmory", false, "Halo 2: noarmory%");
 	settings.SetToolTip("noarmory", "Let's the timer auto-start/reset on Cairo Station, instead of Armory");
 	
 	settings.Add("H2ILmode", false, "Halo 2: IL mode");
@@ -304,7 +336,7 @@ startup //settings
 		"You probably shouldn't turn this on, unless you're say, practicing a specific segment of a level (from one load to another)."
 	);
 	
-
+	
 	settings.Add("multigame", false, "Multi-game run (eg trilogy run)");
 	settings.SetToolTip("multigame", "Changes all timing to use RTA minus loads");
 	settings.Add("multigamesplit", true, "Add split at start of first level of each game", "multigame");
@@ -340,6 +372,8 @@ update {
 		{ vars.watchers_h3bsp.UpdateAll(game); }
 		if (settings["H3ILmode"])
 		{ vars.watchers_h3IL.UpdateAll(game); }
+		else 
+		{ vars.watchers_h3.UpdateAll(game); }
 		
 	}
 	//print("h1_levelname" + vars.H1_level//name.Current);
@@ -399,7 +433,7 @@ start 	//starts timer
 				vars.ending06a = false;
 				vars.ending06b = false;
 				vars.ending07a = false;
-				vars.ending08a = false;
+				vars.ending08a = false; 
 				vars.ending07b = false;
 				vars.armorysplit = false;
 				return true;
@@ -428,11 +462,16 @@ start 	//starts timer
 		}
 	} else if (vars.H3_gameindicator.Current == "This"  && vars.menuindicator.Current == 7)
 	{
+		
 		if (settings["H3ILmode"])
 		{
 			return (vars.H3_IGT.Current > 10 && vars.H2_IGT.Current < 30);
 			
 			
+		} else
+		{
+			vars.h3times = 0;
+			return (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30);
 		}
 		
 	}
@@ -442,15 +481,17 @@ start 	//starts timer
 
 split
 { 
-	if (vars.H1_gameindicator.Current == "levels") //AKA if Halo 1 is loaded
+	if (vars.menuindicator.Current == 7)
 	{
-		if (vars.menuindicator.Current == 7)
+		if (vars.H1_gameindicator.Current == "levels") //AKA if Halo 1 is loaded
 		{
+			
 			if (settings["multigamesplit"])
 			{
-				if (vars.H1_levelname.Current == "a10" &&  timer.CurrentPhase == TimerPhase.Running && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true && vars.H1_bspstate.Current == 0)
+				if (vars.poasplit == false && vars.H1_levelname.Current == "a10" &&  timer.CurrentPhase == TimerPhase.Running && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true && vars.H1_bspstate.Current == 0)
 				{
 					vars.dirtybsps.Clear();
+					vars.poasplit = true;
 					return true;
 				}
 			}
@@ -460,7 +501,7 @@ split
 			if (settings["H1bsp"])
 			{
 				string checklevel = vars.H1_levelname.Current;
-			if (settings["H1bsp_cache"])
+				if (settings["H1bsp_cache"])
 				{
 					switch (checklevel)
 					{
@@ -625,346 +666,373 @@ split
 					}
 				}
 			}
-		}
-	} else if (vars.H2_gameindicator.Current == "scenario") //AKA if Halo 2 is loaded
-	{
-		if (settings["multigamesplit"])
-		{
-			if (vars.armorysplit == false && timer.CurrentPhase == TimerPhase.Running && vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30)
-			{
-				vars.armorysplit = true;
-				return true;
-			}
-		}
-		
-		if (settings["H2bsp"])
-		{
-			string checklevel = vars.H2_levelname.Current;
 			
-			if (settings["H2bsp_cache"])
+		} else if (vars.H2_gameindicator.Current == "scenario") //AKA if Halo 2 is loaded
+		{
+			if (settings["multigamesplit"])
 			{
-				switch (checklevel)
+				if (vars.armorysplit == false && timer.CurrentPhase == TimerPhase.Running && vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30)
 				{
-					case "01b":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_01b, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "03a":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_03a, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "03b":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_03b, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "04a":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_04a, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "04b":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_04b, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "05a":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_05a, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "05b":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_05b, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "06a":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_06a, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "06b":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_06b, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "07a":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_07a, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "08a":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_08a, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "07b":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_07b, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					case "08b":
-					return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_08b, x => x == vars.H2_bspstate.Current));
-					break;
-					
-					
-					default:
-					return false;
-					break;
-					
+					vars.dirtybsps.clear();
+					vars.armorysplit = true;
+					return true;
 				}
 			}
 			
-			switch (checklevel)
+			if (settings["H2bsp"])
 			{
-				case "01b":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_01b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)) )
-				{
-					if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps.Contains(2)))
-					{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
-					
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
+				string checklevel = vars.H2_levelname.Current;
 				
-				case "03a":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_03a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+				if (settings["H2bsp_cache"])
 				{
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
-				
-				case "03b":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_03b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
-				{
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
-				
-				case "04a":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_04a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
-				{
-					if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps.Contains(3)))
-					{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
-				
-				case "04b":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_04b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
-				{
-					if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps.Contains(3)))
-					{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
-				
-				case "05a":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_05a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
-				{
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
-				
-				case "05b":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_05b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
-				{
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
-				
-				case "06a":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_06a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
-				{
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
-				
-				case "06b":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_06b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
-				{
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
-				
-				case "07a":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_07a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
-				{
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
-				
-				case "08a":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_08a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
-				{
-					if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps.Contains(1)))
-					{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
-				
-				case "07b":
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_07b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
-				{
-					vars.dirtybsps.Add(vars.H2_bspstate.Current);
-					return true;
-				}
-				break;
-				
-				case "08b":
-				//TGJ -- starts 0 and in cs, then goes to 1, then 0, then 1, then 0, then 3 (skipping 2 cos it's skippable)
-				//so I have jank logic cos it does so much backtracking and backbacktracking
-				if (vars.H2_bspstate.Current != vars.H2_bspstate.Old)
-				{
-					byte checkbspstate = vars.H2_bspstate.Current;
-					switch (checkbspstate)
+					switch (checklevel)
 					{
-						case 1:
-						if (!(vars.dirtybsps.Contains(1)))
-						{
-							vars.dirtybsps.Add(1);
-							return true;
-						} else if (!(vars.dirtybsps.Contains(21)))
-						{
-							vars.dirtybsps.Add(21);
-							return true;
-						}
-						
+						case "01b":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_01b, x => x == vars.H2_bspstate.Current));
 						break;
 						
-						case 0:
-						if (!(vars.dirtybsps.Contains(10)))
-						{
-							vars.dirtybsps.Add(10);
-							return true;
-						} else if (!(vars.dirtybsps.Contains(20)))
-						{
-							vars.dirtybsps.Add(20);
-							return true;
-						}
+						case "03a":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_03a, x => x == vars.H2_bspstate.Current));
 						break;
 						
-						case 3:
-						if (!(vars.dirtybsps.Contains(3)))
-						{
-							vars.dirtybsps.Add(3);
-							return true;
-						}
+						case "03b":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_03b, x => x == vars.H2_bspstate.Current));
 						break;
+						
+						case "04a":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_04a, x => x == vars.H2_bspstate.Current));
+						break;
+						
+						case "04b":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_04b, x => x == vars.H2_bspstate.Current));
+						break;
+						
+						case "05a":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_05a, x => x == vars.H2_bspstate.Current));
+						break;
+						
+						case "05b":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_05b, x => x == vars.H2_bspstate.Current));
+						break;
+						
+						case "06a":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_06a, x => x == vars.H2_bspstate.Current));
+						break;
+						
+						case "06b":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_06b, x => x == vars.H2_bspstate.Current));
+						break;
+						
+						case "07a":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_07a, x => x == vars.H2_bspstate.Current));
+						break;
+						
+						case "08a":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_08a, x => x == vars.H2_bspstate.Current));
+						break;
+						
+						case "07b":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_07b, x => x == vars.H2_bspstate.Current));
+						break;
+						
+						case "08b":
+						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_08b, x => x == vars.H2_bspstate.Current));
+						break;
+						
 						
 						default:
+						return false;
 						break;
 						
 					}
+				}
+				
+				switch (checklevel)
+				{
+					case "01b":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_01b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)) )
+					{
+						if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps.Contains(2)))
+						{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
+						
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "03a":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_03a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+					{
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "03b":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_03b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+					{
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "04a":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_04a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+					{
+						if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps.Contains(3)))
+						{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "04b":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_04b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+					{
+						if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps.Contains(3)))
+						{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "05a":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_05a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+					{
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "05b":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_05b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+					{
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "06a":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_06a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+					{
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "06b":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_06b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+					{
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "07a":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_07a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+					{
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "08a":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_08a, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+					{
+						if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps.Contains(1)))
+						{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "07b":
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_07b, x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H2_bspstate.Current)))
+					{
+						vars.dirtybsps.Add(vars.H2_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "08b":
+					//TGJ -- starts 0 and in cs, then goes to 1, then 0, then 1, then 0, then 3 (skipping 2 cos it's skippable)
+					//so I have jank logic cos it does so much backtracking and backbacktracking
+					if (vars.H2_bspstate.Current != vars.H2_bspstate.Old)
+					{
+						byte checkbspstate = vars.H2_bspstate.Current;
+						switch (checkbspstate)
+						{
+							case 1:
+							if (!(vars.dirtybsps.Contains(1)))
+							{
+								vars.dirtybsps.Add(1);
+								return true;
+							} else if (!(vars.dirtybsps.Contains(21)))
+							{
+								vars.dirtybsps.Add(21);
+								return true;
+							}
+							
+							break;
+							
+							case 0:
+							if (!(vars.dirtybsps.Contains(10)))
+							{
+								vars.dirtybsps.Add(10);
+								return true;
+							} else if (!(vars.dirtybsps.Contains(20)))
+							{
+								vars.dirtybsps.Add(20);
+								return true;
+							}
+							break;
+							
+							case 3:
+							if (!(vars.dirtybsps.Contains(3)))
+							{
+								vars.dirtybsps.Add(3);
+								return true;
+							}
+							break;
+							
+							default:
+							break;
+							
+						}
+					} 
+					break;
+					
+					default:
+					break;
+				}
+				
+			}
+			
+			
+			if ((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && vars.menuindicator.Current == 7) || (vars.H2_levelname.Current == "08b" && vars.H2_CSind.Current == 0x19 && vars.H2_CSind.Old != 0x19))
+			{
+				vars.dirtybsps.Clear();
+				return true;
+			}
+		} else if (vars.H3_gameindicator.Current == "This")
+		{
+			if (settings["multigamesplit"])
+			{
+				if (vars.sierrasplit == false && timer.CurrentPhase == TimerPhase.Running && vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
+				{
+					vars.sierrasplit = true;
+					return true;
+				}
+			}
+			
+			
+			
+			if (settings["H3bsp"])
+			{
+				
+				string checklevel = vars.H3_levelname.Current;
+				
+				if (settings["H3bsp_cache"])
+				{
+					switch (checklevel)
+					{
+						case "010":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_010, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "040":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_040, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "070":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_070, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "100":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_100, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "120":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_120, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						
+						default:
+						return false;
+						break;
+						
+					}
+					
+				}
+				
+				switch (checklevel)
+				{
+					case "010":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_010, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "040":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_040, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "070":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_070, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					
+					case "100":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_100, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "120":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_120, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					default:
+					break;
+				}
+			} 
+			
+			if (settings["H3ILmode"])
+			{
+				if ((vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57))
+				{
+					vars.h3dirtybsps.Clear();
+					return true;
+					}
+			} else if (vars.H3_levelname.Current != "120") //not on IL mode, and not on last level
+			{
+				if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44)
+				{
+					vars.h3dirtybsps.Clear();
+					return true;
 				} 
-				break;
-				
-				default:
-				break;
-			}
+			} 
+			
 			
 		}
-		
-		
-		if ((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && vars.menuindicator.Current == 7) || (vars.H2_levelname.Current == "08b" && vars.H2_CSind.Current == 0x19 && vars.H2_CSind.Old != 0x19))
-		{
-			vars.dirtybsps.Clear();
-			return true;
-		}
-	} else if (vars.H3_gameindicator.Current == "This")
-	{
-	if ((vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57))
-		{vars.h3dirtybsps.Clear();
-		return true;	//hopefully doesn't split too early
-		}
-	
-		string checklevel = vars.H3_levelname.Current;
-		
-	if (settings["H3bsp_cache"])
-		{
-			switch (checklevel)
-			{
-				case "010":
-				return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_010, x => x == vars.H3_bspstate.Current));
-				break;
-				
-				case "040":
-				return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_040, x => x == vars.H3_bspstate.Current));
-				break;
-				
-				case "070":
-				return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_070, x => x == vars.H3_bspstate.Current));
-				break;
-				
-				case "100":
-				return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_100, x => x == vars.H3_bspstate.Current));
-				break;
-				
-				case "120":
-				return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_120, x => x == vars.H3_bspstate.Current));
-				break;
-				
-				
-				default:
-				return false;
-				break;
-				
-			}
-			
-		}
-		
-		switch (checklevel)
-		{
-			case "010":
-			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_010, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
-			{
-				vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
-				return true;
-			}
-			break;
-			
-			case "040":
-			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_040, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
-			{
-				vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
-				return true;
-			}
-			break;
-			
-			case "070":
-			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_070, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
-			{
-				vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
-				return true;
-			}
-			break;
-			
-			
-			case "100":
-			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_100, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
-			{
-				vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
-				return true;
-			}
-			break;
-			
-			case "120":
-			if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_120, x => x == vars.H3_bspstate.Current) && !(vars.h3dirtybsps.Contains(vars.H3_bspstate.Current)))
-			{
-				vars.h3dirtybsps.Add(vars.H3_bspstate.Current);
-				return true;
-			}
-			break;
-			
-			default:
-			break;
-		}
-		
 	}
-	
 }
-
 
 reset
 { 
@@ -1009,6 +1077,10 @@ reset
 			if (settings["H3ILmode"])
 			{
 				return ( timer.CurrentPhase != TimerPhase.Ended && vars.H3_IGT.Current < 10);
+			} else
+			{
+				return (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 0 && vars.H3_theatertime.Current < 15);	
+				
 			}
 		}
 		
@@ -1022,7 +1094,7 @@ reset
 
 isLoading
 {
-	if ((settings["H2ILmode"]) || (settings["H3ILmode"])) 
+	if ((settings["H2ILmode"]) || (vars.H3_gameindicator.Current == "This"  && !(settings["multigame"]))) 
 	{return true;}
 	
 	
@@ -1175,10 +1247,22 @@ gameTime
 	if (settings["H2ILmode"] && vars.H2_gameindicator.Current == "scenario") 
 	{return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H2_IGT.Current) + 500);}
 	
-	if (settings["H3ILmode"] && vars.H3_gameindicator.Current == "This") 
-	{return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H3_IGT.Current) + 500);}
+	if (vars.H3_gameindicator.Current == "This" && !(settings["multigame"])) 
+	{
+		if (settings["H3ILmode"])
+		{return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H3_IGT.Current) + 500);}
+		else
+		{
+			if (vars.H3_validtimeflag.Current == 0 && vars.H3_validtimeflag.Old == 1 && vars.menuindicator.Current == 7)
+			{
+				vars.h3times = vars.h3times + (vars.H3_theatertime.Old - (vars.H3_theatertime.Old % 60));
+			}
+			
+			return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h3times + vars.H3_theatertime.Current)) ));
+			
+		}
+	}
 }
-
 
 
 
