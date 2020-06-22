@@ -420,7 +420,7 @@ start 	//starts timer
 		else if (settings["noarmory"])
 		{
 			
-			if (vars.H2_levelname.Current == "01b" && vars.H2_cutsceneflag.Current == 128 &&  vars.H2_cutsceneflag.Old == 48 && vars.H2_tickcounter.Current <30) //start on cairo
+		if (vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44 && vars.H2_tickcounter.Current < (vars.adjust01b + 30)) //start on cairo
 			{
 				vars.ending01a = false; //reset h2 variables
 				vars.ending01b = false;
@@ -436,6 +436,8 @@ start 	//starts timer
 				vars.ending08a = false; 
 				vars.ending07b = false;
 				vars.armorysplit = false;
+				vars.cairosplit = false;
+				vars.ending01a = false; 
 				return true;
 			}; 
 		} else
@@ -455,6 +457,7 @@ start 	//starts timer
 				vars.ending07a = false;
 				vars.ending08a = false;
 				vars.ending07b = false;
+				vars.cairosplit = false;
 				vars.armorysplit = false;
 				return true;
 				
@@ -671,7 +674,17 @@ split
 		{
 			if (settings["multigamesplit"])
 			{
-				if (vars.armorysplit == false && timer.CurrentPhase == TimerPhase.Running && vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30)
+				if (settings["noarmory"])
+				{
+					if (vars.cairosplit == false && timer.CurrentPhase == TimerPhase.Running && vars.H2_levelname.Current == "01b" && vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44)
+					{
+					vars.dirtybsps.clear();
+					vars.ending01a = false; 
+					vars.cairosplit = true;
+					return true;
+					}
+				}
+				else if (vars.armorysplit == false && timer.CurrentPhase == TimerPhase.Running && vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30)
 				{
 					vars.dirtybsps.clear();
 					vars.armorysplit = true;
@@ -1020,7 +1033,7 @@ split
 					vars.h3dirtybsps.Clear();
 					return true;
 					}
-			} else if (vars.H3_levelname.Current != "120") //not on IL mode, and not on last level
+			} else //not on IL mode, and not on last level
 			{
 				if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44)
 				{
@@ -1066,7 +1079,7 @@ reset
 			}
 			else if (settings["noarmory"]) 
 			{
-				return (vars.H2_levelname.Current == "01b" && vars.H2_cutsceneflag.Current == 48 && vars.H2_tickcounter.Current <30); //reset on Cairo
+			return (vars.H2_CSind.Current == 0xD9); //reset on Cairo
 			} else
 			{
 				return (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current <20); //reset on Armory 
