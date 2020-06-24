@@ -5,7 +5,7 @@
 
 
 state("MCC-Win64-Shipping") {}
-state("MCC-Win64-Shipping-WinStore") {}
+state("MCC-Win64-Shipping-WinStore") {} 
 
 init //variable initialization
 { 
@@ -83,12 +83,12 @@ init //variable initialization
 				(vars.H3_IGT = new MemoryWatcher<uint>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //invalid but need blank
 			};
 			
-		} else if (version == "1.1629.0.0") //h3 flight
+		} else if (version == "1.1658.0.0") //h3 flight
 		{
 			
 			vars.watchers_fast = new MemoryWatcherList() {
-				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x37B4F58)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x38E17A9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x37BD258)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x38E9BC9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) ////pgcr = 57, load = 44, ig = 255, pause = 129, menu = 255 
 			};
 			
 			vars.watchers_slow = new MemoryWatcherList() {
@@ -96,8 +96,8 @@ init //variable initialization
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x0), 3)), //invalid but need blank
 				(vars.H2_gameindicator = new StringWatcher(new DeepPointer(0x0), 8)), //invalid but need blank
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x0), 3)), //invalid but need blank
-				(vars.H3_gameindicator = new StringWatcher(new DeepPointer(0x038C5120, 0x48, 0x4E), 4)),
-				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x038C5120, 0x48, 0xAA6CCB), 3))
+				(vars.H3_gameindicator = new StringWatcher(new DeepPointer(0x038CD420, 0x48, 0x4E), 4)),
+				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x038CD420, 0x48, 0xAB53CB), 3))
 				
 			};
 			
@@ -122,16 +122,16 @@ init //variable initialization
 			};
 			
 			vars.watchers_h3 = new MemoryWatcherList() {
-				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x038C5120, 0x48, 0xD7A4FC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H3_validtimeflag = new MemoryWatcher<byte>(new DeepPointer(0x038C5120, 0x48, 0xD7A4F6)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x038CD420, 0x48, 0xD88C1C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H3_validtimeflag = new MemoryWatcher<byte>(new DeepPointer(0x038CD420, 0x48, 0xD88C16)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h3bsp = new MemoryWatcherList() {
-				(vars.H3_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x038C5120, 0x48, 0xC4D314)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H3_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x038CD420, 0x48, 0xC5BA14)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h3IL = new MemoryWatcherList() {
-				(vars.H3_IGT = new MemoryWatcher<uint>(new DeepPointer(0x038C5120, 0x48, 0xE78690)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H3_IGT = new MemoryWatcher<uint>(new DeepPointer(0x038CD420, 0x48, 0xE86D90)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 		}
 	} else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe")
@@ -182,7 +182,7 @@ init //variable initialization
 				(vars.H3_IGT = new MemoryWatcher<uint>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //invalid but need blank
 			};
 			
-		} else if (version == "1.1629.0.0")
+		} else if (version == "1.1658.0.0")
 		{
 			//h3 flight stuff - but not actually going to do winstore ver
 		}
