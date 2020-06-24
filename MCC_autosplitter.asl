@@ -468,7 +468,7 @@ start 	//starts timer
 		
 		if (settings["H3ILmode"])
 		{
-			return (vars.H3_IGT.Current > 10 && vars.H2_IGT.Current < 30);
+			return (vars.H3_IGT.Current > 10 && vars.H3_IGT.Current < 30);
 			
 			
 		} else
