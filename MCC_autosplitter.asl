@@ -13,8 +13,8 @@ init //variable initialization
 	//version check and warning message for invalid version 
 	switch(modules.First().FileVersionInfo.FileVersion)
 	{
-		case "1.1570.0.0": 
-		version = "1.1570.0.0";
+		case "1.1619.0.0": 
+		version = "1.1619.0.0";
 		break;
 		
 		case "1.1658.0.0": 
@@ -23,23 +23,27 @@ init //variable initialization
 		
 		default: 
 		version = "1.1570.0.0";
-		var brokenupdateMessage = MessageBox.Show(
-			"It looks like MCC has recieved a new patch that will "+
-			"probably break me (the autosplitter). \n"+
-			"Autosplitter was made for version: "+ "1.1570.0.0" + "\n" + 
-			"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
-			"If I'm broken, you'll just have to wait for Burnt to update me. "+
-			"You won't need to do anything except restart Livesplit once I'm updated.",
-			vars.aslName+" | LiveSplit",
-			MessageBoxButtons.OK 
-		);
+		if (vars.brokenupdateshowed == false)
+		{
+			var brokenupdateMessage = MessageBox.Show(
+				"It looks like MCC has recieved a new patch that will "+
+				"probably break me (the autosplitter). \n"+
+				"Autosplitter was made for version: "+ "1.1570.0.0" + "\n" + 
+				"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
+				"If I'm broken, you'll just have to wait for Burnt to update me. "+
+				"You won't need to do anything except restart Livesplit once I'm updated.",
+				vars.aslName+" | LiveSplit",
+				MessageBoxButtons.OK 
+			);
+			vars.brokenupdateshowed = true;
+		}
 		break;
 	}
 	
 	//STATE init
 	if (modules.First().ToString() == "MCC-Win64-Shipping.exe")
 	{
-		if (version == "1.1570.0.0")
+		if (version == "1.1619.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
 				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x37CC2D8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -136,7 +140,7 @@ init //variable initialization
 		}
 	} else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe")
 	{
-		if (version == "1.1570.0.0")
+		if (version == "1.16190.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
 				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x36A1258)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -286,6 +290,8 @@ startup //settings
 		if (timingMessage == DialogResult.Yes)
 		timer.CurrentTimingMethod = TimingMethod.GameTime;
 	}
+	vars.brokenupdateshowed = false;
+	
 	
 	settings.Add("H1ILmode", false, "Halo 1: IL mode");
 	settings.SetToolTip("H1ILmode", "Makes the timer start, reset and ending split at the correct IL time for each H1 level");
@@ -420,7 +426,7 @@ start 	//starts timer
 		else if (settings["noarmory"])
 		{
 			
-		if (vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44 && vars.H2_tickcounter.Current < (vars.adjust01b + 30)) //start on cairo
+			if (vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44 && vars.H2_tickcounter.Current < (vars.adjust01b + 30)) //start on cairo
 			{
 				vars.ending01a = false; //reset h2 variables
 				vars.ending01b = false;
@@ -590,10 +596,22 @@ split
 					break;
 					
 					case "b40":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_b40, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H1_bspstate.Current)))
+					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old)
 					{
-						vars.dirtybsps.Add(vars.H1_bspstate.Current);
-						return true;
+						if (!(vars.dirtybsps.Contains(3)) && vars.H1_bspstate.Current == 3)
+						{
+							vars.dirtybsps.Add(3);
+						} 
+						if (Array.Exists((byte[]) vars.splitbsp_b40, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H1_bspstate.Current)))
+						{
+							if (vars.H1_bspstate.Current == 0 && !(vars.dirtybsps.Contains(3)))
+							{
+								return false;
+							}
+							
+							vars.dirtybsps.Add(vars.H1_bspstate.Current);
+							return true;
+						}
 					}
 					break;
 					
@@ -614,12 +632,25 @@ split
 					break;
 					
 					case "c40":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_c40, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H1_bspstate.Current)))
+					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old)
 					{
-						vars.dirtybsps.Add(vars.H1_bspstate.Current);
-						return true;
+						if (!(vars.dirtybsps.Contains(2)) && vars.H1_bspstate.Current == 2)
+						{
+							vars.dirtybsps.Add(2);
+						} 
+						if (Array.Exists((byte[]) vars.splitbsp_c40, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H1_bspstate.Current)) && vars.H1_tickcounter.Current > 30)
+						{
+							if (vars.H1_bspstate.Current == 0 && !(vars.dirtybsps.Contains(2)))
+							{
+								return false;
+							}
+							
+							vars.dirtybsps.Add(vars.H1_bspstate.Current);
+							return true;
+						}
 					}
 					break;
+					
 					
 					case "d20":
 					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_d20, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps.Contains(vars.H1_bspstate.Current)))
@@ -639,16 +670,16 @@ split
 					
 					default:
 					break;
+					}
+					
 				}
 				
-			}
-			
-			
-			if (settings["H1ILmode"])
-			{
-				return (
-					((vars.stateindicator.Current == 57 || vars.stateindicator.Current == 44) && (vars.stateindicator.Old != 57 && vars.stateindicator.Old != 44) && vars.H1_levelname.Current != "d20") //split on PGCR or Loading screen
-					|| (vars.H1_levelname.Current == "d20" && vars.H1_bspstate.Current == 3 && vars.H1_playerfrozen.Current == true && vars.H1_playerfrozen.Old == false) //Keyes ending to end time at start of cutscene instead of end of it
+				
+				if (settings["H1ILmode"])
+				{
+					return (
+						((vars.stateindicator.Current == 57 || vars.stateindicator.Current == 44) && (vars.stateindicator.Old != 57 && vars.stateindicator.Old != 44) && vars.H1_levelname.Current != "d20") //split on PGCR or Loading screen
+						|| (vars.H1_levelname.Current == "d20" && vars.H1_bspstate.Current == 3 && vars.H1_playerfrozen.Current == true && vars.H1_playerfrozen.Old == false) //Keyes ending to end time at start of cutscene instead of end of it
 					|| (vars.H1_levelname.Current == "d40" && vars.H1_bspstate.Current == 7 && vars.H1_playerfrozen.Current == true && vars.H1_playerfrozen.Old == false) //Maw ending
 				);
 			} else
@@ -678,10 +709,10 @@ split
 				{
 					if (vars.cairosplit == false && timer.CurrentPhase == TimerPhase.Running && vars.H2_levelname.Current == "01b" && vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44)
 					{
-					vars.dirtybsps.clear();
-					vars.ending01a = false; 
-					vars.cairosplit = true;
-					return true;
+						vars.dirtybsps.clear();
+						vars.ending01a = false; 
+						vars.cairosplit = true;
+						return true;
 					}
 				}
 				else if (vars.armorysplit == false && timer.CurrentPhase == TimerPhase.Running && vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30)
@@ -1032,7 +1063,7 @@ split
 				{
 					vars.h3dirtybsps.Clear();
 					return true;
-					}
+				}
 			} else //not on IL mode, and not on last level
 			{
 				if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44)
@@ -1079,7 +1110,7 @@ reset
 			}
 			else if (settings["noarmory"]) 
 			{
-			return (vars.H2_CSind.Current == 0xD9); //reset on Cairo
+				return (vars.H2_CSind.Current == 0xD9); //reset on Cairo
 			} else
 			{
 				return (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current <20); //reset on Armory 
