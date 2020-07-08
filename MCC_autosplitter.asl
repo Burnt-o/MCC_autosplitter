@@ -306,7 +306,7 @@ startup //variable init and settings
 	vars.hrtimes = 0;
 	vars.wcsplit = false;
 	
-	vars.splitbsp_m10 = new uint[3] { 143, 175, 239 }; // WC
+	vars.splitbsp_m10 = new uint[4] { 143, 175, 239, 495 }; // WC
 	vars.splitbsp_m20 = new uint[4] { 249, 505, 509, 511 }; // oni
 	vars.splitbsp_m30 = new uint[6] { 269, 781, 797, 1821, 1853, 1917 }; // nightfall
 	vars.splitbsp_m35 = new uint[5] { 4111, 4127, 4223, 4607, 5119 }; //tots
