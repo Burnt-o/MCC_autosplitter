@@ -507,6 +507,7 @@ startup //variable init and settings
 	vars.h2times = 0;
 	vars.brokenupdateshowed = false;
 	vars.reachwarningshowed = false;
+	vars.multigamepauseflag = false;
 	
 	
 	//HALO 1
@@ -578,8 +579,16 @@ startup //variable init and settings
 	vars.splitbsp_070 = new ulong[9] { 319187993615142919, 497073530286903311, 5109160733019475999, 7059113264503853119, 7058267740062093439, 5296235395170702591, 6467180094380056063, 6471685893030682623, 6453663797939806207 }; //ark
 	vars.splitbsp_100 = new ulong[11] { 4508347378708774919, 2060429875000377375, 4384271889560765215, 2060429875000378143, 4508347378708775711, 4229124150272197439, 4105313024951190527, 4159567262287660031, 4153434048988972031, 4099400491367139327, 21673629041340192 }; //cov
 	vars.splitbsp_120 = new ulong[6] { 1030792151055, 691489734703, 1924145349759, 1133871367679, 1202590844927, 1219770714111 }; //halo
+	
+	//new levels
+	vars.splitbsp_020 = new ulong[10] { 2753726871765283, 351925325267239, 527984624664871, 527980329698111, 355107896034111, 495845384389503, 1058778157941759, 2081384101315583, 2076028277097471, 2043042928264191}; //crows nest
+	vars.splitbsp_030 = new ulong[5] { 708669603847, 1812476198927, 1709396983839, 128849018943, 2327872274495}; //tsavo
+	vars.splitbsp_050 = new ulong[7] { 137438953607, 154618822791, 167503724703, 98784247967, 98784247999, 133143986431, 111669150207}; //floodgate
+	vars.splitbsp_110 = new ulong[4] { 4294967459, 4294967527, 4294967535, 4294967551}; //cortana
+	
 	vars.sierrasplit = false;
 	vars.addtimes = false;
+	vars.splith3 = false;
 	
 	//HALO REACH
 	vars.hrtimes = 0;
@@ -636,6 +645,7 @@ startup //variable init and settings
 	settings.Add("multigame", false, "Multi-game run (eg trilogy run)");
 	settings.SetToolTip("multigame", "Changes all timing to use RTA minus loads");
 	settings.Add("multigamesplit", true, "Add split at start of first level of each game", "multigame");
+	settings.Add("multigamepause", false, "Pause time inbetween game end -> game start", "multigame");
 	
 	settings.Add("warning", true, "Show Reach EAC warning.");
 	settings.SetToolTip("warning", "Gets rid of the following important message: \n"+
@@ -653,7 +663,6 @@ startup //variable init and settings
 
 update {
 	vars.watchers_fast.UpdateAll(game);
-	
 	if (vars.loopcount == 60)
 	{
 		vars.watchers_slow.UpdateAll(game);
@@ -707,8 +716,191 @@ update {
 
 start 	//starts timer
 {	
+	vars.varsreset = false;
 	string checklevel; 
 	
+	
+	
+	if (vars.menuindicator.Current == 7)
+	{
+		byte test = vars.gameindicator.Current;
+		switch (test)
+		{
+			
+			case 0:
+			if (settings["ILmode"])
+			{
+				checklevel = vars.H1_levelname.Current;
+				
+				switch (checklevel)
+				{
+					case "a10":
+					if (vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					case "a30":
+					if (vars.H1_tickcounter.Current == 183)
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					case "a50":
+					if (vars.H1_tickcounter.Current == 850)
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					case "b30":
+					if (vars.H1_tickcounter.Current == 1093)
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					case "b40":
+					if (vars.H1_tickcounter.Current == 966)
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					case "c10":
+					if (vars.H1_tickcounter.Current == 717)
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					case "c20":
+					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					case "c40":
+					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					case "d20":
+					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					case "d40":
+					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+				}
+				
+			} else if (vars.H1_levelname.Current == "a10" && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+			{
+				vars.startedlevel = "a10";
+				vars.varsreset = false;
+				return true;
+			}
+			break;
+			
+			case 1:
+			if (settings["ILmode"] && vars.H2_IGT.Current > 10 && vars.H2_IGT.Current < 30)
+			{
+				vars.startedlevel = vars.H2_levelname.Current;
+				vars.varsreset = false;
+				return true;
+			} else if (vars.H2_levelname.Current == "01b" && vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44 && vars.H2_tickcounter.Current < (vars.adjust01b + 30)) //start on cairo
+			{
+				vars.startedlevel = "01b";
+				vars.varsreset = false;
+				return true;
+			} else if (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30) //start on armory
+			{
+				vars.startedlevel = "01a";
+				vars.varsreset = false;
+				return true;
+			}
+			break;
+			
+			case 2:
+			if (settings["ILmode"] && vars.H3_IGT.Current > 10 && vars.H3_IGT.Current < 30)
+			{
+				vars.startedlevel = vars.H3_levelname.Current;
+				vars.varsreset = false;
+				return true;
+			} else if (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
+			{
+				vars.startedlevel = "010";
+				vars.varsreset = false;
+				return true;
+			}
+			break;
+			
+			case 6:
+			if (vars.reachwarningshowed == false && ((settings["warning"]) == true))
+			{
+				vars.reachwarningshowed = true;
+				
+				var reachwarningmessage = MessageBox.Show(
+					"Heya, looks like you're running Reach with EAC disabled. \n"+
+					"Obviously EAC disabled is necessary for this autosplitter to work, \n"+
+					"but it's worth being aware that the Reach speedrun community \n" + 
+					"has not yet come to a decision on whether EAC disabled runs \n" +
+					"are valid to submit. Run at your own risk.",
+					vars.aslName+" | LiveSplit",
+					MessageBoxButtons.OK 
+				);
+			}
+			
+			if ((settings["ILmode"] || vars.HR_levelname.Current == "m10")  && vars.HR_IGT.Current > 10 && vars.HR_IGT.Current < 30)
+			{
+				print ("what");
+				print ("eee: " + vars.HR_IGT.Current);
+				print ("aaa: " + vars.HR_levelname.Current);
+				vars.startedlevel = vars.HR_levelname.Current;
+				vars.varsreset = false;
+				return true;
+			}
+			break;
+		}
+	}
+}
+
+
+
+split
+{ 
 	if (vars.varsreset == false)
 	{
 		vars.ending01a = false; //reset h2 variables
@@ -746,184 +938,12 @@ start 	//starts timer
 		vars.h2times = 0;
 		vars.addtimes = false;
 		
+		vars.multigamepauseflag = false;
+		
 		vars.varsreset = true;
+		print ("autosplitter vars reinit!");
 	}
 	
-	
-	byte test = vars.gameindicator.Current;
-	switch (test)
-	{
-		
-		case 0:
-		if (settings["ILmode"])
-		{
-			checklevel = vars.H1_levelname.Current;
-			
-			switch (checklevel)
-			{
-				case "a10":
-				if (vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
-				{
-					vars.startedlevel = checklevel;
-					vars.varsreset = false;
-					return true;
-				}
-				break;
-				
-				case "a30":
-				if (vars.H1_tickcounter.Current == 183)
-				{
-					vars.startedlevel = checklevel;
-					vars.varsreset = false;
-					return true;
-				}
-				break;
-				
-				case "a50":
-				if (vars.H1_tickcounter.Current == 850)
-				{
-					vars.startedlevel = checklevel;
-					vars.varsreset = false;
-					return true;
-				}
-				break;
-				
-				case "b30":
-				if (vars.H1_tickcounter.Current == 1093)
-				{
-					vars.startedlevel = checklevel;
-					vars.varsreset = false;
-					return true;
-				}
-				break;
-				
-				case "b40":
-				if (vars.H1_tickcounter.Current == 966)
-				{
-					vars.startedlevel = checklevel;
-					vars.varsreset = false;
-					return true;
-				}
-				break;
-				
-				case "c10":
-				if (vars.H1_tickcounter.Current == 717)
-				{
-					vars.startedlevel = checklevel;
-					vars.varsreset = false;
-					return true;
-				}
-				break;
-				
-				case "c20":
-				if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
-				{
-					vars.startedlevel = checklevel;
-					vars.varsreset = false;
-					return true;
-				}
-				break;
-				
-				case "c40":
-				if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
-				{
-					vars.startedlevel = checklevel;
-					vars.varsreset = false;
-					return true;
-				}
-				break;
-				
-				case "d20":
-				if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
-				{
-					vars.startedlevel = checklevel;
-					vars.varsreset = false;
-					return true;
-				}
-				break;
-				
-				case "d40":
-				if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
-				{
-					vars.startedlevel = checklevel;
-					vars.varsreset = false;
-					return true;
-				}
-				break;
-				
-			}
-			
-		} else if (vars.H1_levelname.Current == "a10" && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
-		{
-			vars.startedlevel = "a10";
-			vars.varsreset = false;
-			return true;
-		}
-		break;
-		
-		case 1:
-		if (settings["ILmode"] && vars.H2_IGT.Current > 10 && vars.H2_IGT.Current < 30)
-		{
-			vars.startedlevel = vars.H2_levelname.Current;
-			vars.varsreset = false;
-			return true;
-		} else if (vars.H2_levelname.Current == "01b" && vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44 && vars.H2_tickcounter.Current < (vars.adjust01b + 30)) //start on cairo
-		{
-			vars.startedlevel = "01b";
-			vars.varsreset = false;
-			return true;
-		} else if (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30) //start on armory
-		{
-			vars.startedlevel = "01a";
-			vars.varsreset = false;
-			return true;
-		}
-		break;
-		
-		case 2:
-		if (settings["ILmode"] && vars.H3_IGT.Current > 10 && vars.H3_IGT.Current < 30)
-		{
-			vars.startedlevel = vars.H3_levelname.Current;
-			vars.varsreset = false;
-			return true;
-		} else if (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
-		{
-			vars.startedlevel = "010";
-			vars.varsreset = false;
-			return true;
-		}
-		break;
-		
-		case 6:
-		if (vars.reachwarningshowed == false && ((settings["warning"]) == true))
-		{
-			vars.reachwarningshowed = true;
-			
-			var reachwarningmessage = MessageBox.Show(
-				"Heya, looks like you're running Reach with EAC disabled. \n"+
-				"Obviously EAC disabled is necessary for this autosplitter to work, \n"+
-				"but it's worth being aware that the Reach speedrun community \n" + 
-				"has not yet come to a decision on whether EAC disabled runs \n" +
-				"are valid to submit. Run at your own risk.",
-				vars.aslName+" | LiveSplit",
-				MessageBoxButtons.OK 
-			);
-		}
-		
-		if ((settings["ILmode"] || vars.HR_levelname.Current == "m10")  && vars.HR_IGT.Current > 10 && vars.HR_IGT.Current < 30)
-		{
-			vars.startedlevel = vars.HR_levelname.Current;
-			vars.varsreset = false;
-			return true;
-		}
-		break;
-	}
-}
-
-
-
-split
-{ 
 	
 	
 	
@@ -939,7 +959,7 @@ split
 			checklevel = vars.H1_levelname.Current;
 			if (settings["multigamesplit"])
 			{
-				if (vars.poasplit == false && vars.H1_levelname.Current == "a10" &&  timer.CurrentPhase == TimerPhase.Running && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true && vars.H1_bspstate.Current == 0)
+				if (vars.poasplit == false && vars.H1_levelname.Current == "a10" && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true && vars.H1_bspstate.Current == 0 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
 				{
 					vars.dirtybsps_byte.Clear();
 					vars.poasplit = true;
@@ -1226,18 +1246,86 @@ split
 			}
 			
 			
-			if (settings["ILmode"])
+			if (settings["ILmode"] && vars.H1_playerfrozen.Current == true && vars.H1_playerfrozen.Old == false)
 			{
-				if (
-					((vars.stateindicator.Current == 57 || vars.stateindicator.Current == 44) && (vars.stateindicator.Old != 57 && vars.stateindicator.Old != 44) && !(vars.H1_levelname.Current == "d20" && vars.H1_bspstate.Current == 3)) //split on PGCR or Loading screen
-					|| (vars.H1_levelname.Current == "d20" && vars.H1_bspstate.Current == 3 && vars.H1_playerfrozen.Current == true && vars.H1_playerfrozen.Old == false) //Keyes ending to end time at start of cutscene instead of end of it
-					|| (vars.H1_levelname.Current == "d40" && vars.H1_bspstate.Current == 7 && vars.H1_playerfrozen.Current == true && vars.H1_playerfrozen.Old == false) //Maw ending
-				)
+				switch (checklevel)
 				{
+					
+					case "a10":
+					if (vars.H1_bspstate.Current == 6)
+					{
+						vars.dirtybsps_byte.Clear();
+						vars.loopsplit = false;
+						return true;
+					}
+					break;
+					
+					case "a30": //so we don't false split on lightbridge cs
+					if (vars.H1_bspstate.Current == 1)
+					{
+						vars.dirtybsps_byte.Clear();
+						vars.loopsplit = false;
+						return true;
+					}
+					break;
+					
+					case "a50": 
+					if (vars.H1_bspstate.Current == 2)
+					{
+						vars.dirtybsps_byte.Clear();
+						vars.loopsplit = false;
+						return true;
+					}
+					break;
+					
+					case "b30": //will false split if you go to security button
+					if (vars.H1_bspstate.Current == 0)
+					{
+						vars.dirtybsps_byte.Clear();
+						vars.loopsplit = false;
+						return true;
+					}
+					break;
+					
+					
+					
+					case "c10": //so we don't split on reveal cs
+					if (vars.H1_bspstate.Current != 2)
+					{
+						vars.dirtybsps_byte.Clear();
+						vars.loopsplit = false;
+						return true;
+					}
+					break;
+					
+					
+					case "d20": //keyes -- won't false split on fullpath
+					if (vars.H1_bspstate.Current != 0 && vars.H1_bspstate.Current != 1)
+					{
+						vars.dirtybsps_byte.Clear();
+						vars.loopsplit = false;
+						return true;
+					}
+					break;
+					
+					case "d40": //maw - will false split on bad ending but not bridge cs
+					if (vars.H1_bspstate.Current != 1)
+					{
+						vars.dirtybsps_byte.Clear();
+						vars.loopsplit = false;
+						return true;
+					}
+					break;
+					
+					default: //don't need bsp check for levels without multiple cutscenes
 					vars.dirtybsps_byte.Clear();
 					vars.loopsplit = false;
 					return true;
+					break;
+					
 				}
+				
+				
 				
 			} else
 			{
@@ -1254,6 +1342,7 @@ split
 					{
 						vars.mawsplit = true;
 						vars.dirtybsps_byte.Clear();
+						vars.multigamepauseflag = true;
 						return true;
 					}
 				}
@@ -1263,15 +1352,21 @@ split
 			
 			case 1:
 			checklevel = vars.H2_levelname.Current;
-			if (settings["multigamesplit"])
+			
+			
+			
+			if (settings["multigamesplit"] || settings["multigamepause"])
 			{
-				if (vars.armorysplit == false && timer.CurrentPhase == TimerPhase.Running && vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30)
-				{
-					vars.dirtybsps_byte.clear();
+				if (vars.armorysplit == false && vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 && vars.H2_tickcounter.Current < 30 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
+				{																		
+					vars.dirtybsps_byte.Clear();
 					vars.armorysplit = true;
-					return true;
+					vars.multigamepauseflag = false;
+					return (settings["multigamesplit"]);
 				}
 			}
+			
+			
 			
 			if (settings["Loopmode"] && vars.H2_levelname.Current == vars.startedlevel)
 			{
@@ -1537,6 +1632,7 @@ split
 			{
 				vars.dirtybsps_byte.Clear();
 				vars.loopsplit = false;
+				vars.multigamepauseflag = true;
 				return true;
 			}
 			
@@ -1544,12 +1640,13 @@ split
 			
 			case 2:
 			checklevel = vars.H3_levelname.Current;
-			if (settings["multigamesplit"])
+			if (settings["multigamesplit"] || settings["multigamepause"])
 			{
-				if (vars.sierrasplit == false && timer.CurrentPhase == TimerPhase.Running && vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
+				if (vars.sierrasplit == false && vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
 				{
 					vars.sierrasplit = true;
-					return true;
+					vars.multigamepauseflag = false;
+					return (settings["multigamesplit"]);
 				}
 			}
 			
@@ -1569,8 +1666,6 @@ split
 			if (settings["bspmode"])
 			{
 				
-				
-				
 				if (settings["bsp_cache"])
 				{
 					switch (checklevel)
@@ -1579,8 +1674,20 @@ split
 						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_010, x => x == vars.H3_bspstate.Current));
 						break;
 						
+						case "020":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_020, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "030":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_030, x => x == vars.H3_bspstate.Current));
+						break;
+						
 						case "040":
 						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_040, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "050":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_050, x => x == vars.H3_bspstate.Current));
 						break;
 						
 						case "070":
@@ -1589,6 +1696,10 @@ split
 						
 						case "100":
 						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_100, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "110":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_110, x => x == vars.H3_bspstate.Current));
 						break;
 						
 						case "120":
@@ -1614,8 +1725,32 @@ split
 					}
 					break;
 					
+					case "020":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_020, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "030":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_030, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
 					case "040":
 					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_040, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "050":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_050, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
 					{
 						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
 						return true;
@@ -1633,6 +1768,14 @@ split
 					
 					case "100":
 					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_100, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "110":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_110, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
 					{
 						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
 						return true;
@@ -1662,9 +1805,9 @@ split
 				}
 			} else //not on IL mode, and not on last level
 			{
-				if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44)
+				if (vars.splith3 == true)
 				{
-					vars.addtimes = true;
+					vars.splith3 = false;
 					vars.dirtybsps_long.Clear();
 					return true;
 				} 
@@ -1673,12 +1816,13 @@ split
 			
 			case 6:
 			checklevel = vars.HR_levelname.Current;
-			if (settings["multigamesplit"])
+			if (settings["multigamesplit"] || settings["multigamepause"])
 			{
-				if (vars.wcsplit == false && timer.CurrentPhase == TimerPhase.Running && vars.HR_levelname.Current == "010" && vars.HR_IGT.Current > 15 && vars.HR_IGT.Current < 30)
+				if (vars.wcsplit == false && vars.HR_levelname.Current == "010" && vars.HR_IGT.Current > 15 && vars.HR_IGT.Current < 30 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
 				{
 					vars.wcsplit = true;
-					return true;
+					vars.multigamepauseflag = false;
+					return (settings["multigamesplit"]);
 				}
 			}
 			
@@ -1939,7 +2083,15 @@ isLoading
 {
 	if (settings["multigame"]) //timing for multigame and halo 1 is identical
 	{
-		return (vars.stateindicator.Current == 44);
+		
+		if (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
+		return true;
+		
+		if (settings["multigamepause"])
+		{
+			return (vars.multigamepauseflag);	
+			
+		}
 	} 
 	
 	//also should prolly code load removal to work in loading screens when menuindicator isn't == 7 in case of restart/crash
@@ -1948,7 +2100,7 @@ isLoading
 	{
 		
 		case 0:
-		return (vars.stateindicator.Current == 44);
+		return (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57);
 		break;
 		
 		case 1:
@@ -2136,9 +2288,11 @@ gameTime
 			{return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H3_IGT.Current));}
 			else
 			{
-				if (vars.addtimes == true)
+				if (vars.H3_theatertime.Old > vars.H3_theatertime.Current)
 				{
-					vars.addtimes = false;
+					vars.splith3 = true;
+					print ("Adding times");
+					print ("time added: " + vars.H3_theatertime.Old);
 					vars.h3times = vars.h3times + (vars.H3_theatertime.Old - (vars.H3_theatertime.Old % 60));
 				}
 				
@@ -2174,7 +2328,11 @@ gameTime
 
 
 
-
+exit
+{
+	if (vars.multigamepauseflag == false)
+	timer.IsGameTimePaused = false; //unpause the timer on gamecrash UNLESS it was paused for multi-game-pause option.
+}
 
 
 
