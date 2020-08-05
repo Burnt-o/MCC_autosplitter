@@ -717,6 +717,7 @@ update {
 start 	//starts timer
 {	
 	vars.varsreset = false;
+	vars.startedlevel = "000";
 	string checklevel; 
 	
 	
@@ -901,6 +902,7 @@ start 	//starts timer
 
 split
 { 
+	byte test = vars.gameindicator.Current;
 	if (vars.varsreset == false)
 	{
 		vars.ending01a = false; //reset h2 variables
@@ -931,7 +933,25 @@ split
 		vars.dirtybsps_byte.Clear();
 		vars.dirtybsps_int.Clear();
 		vars.dirtybsps_long.Clear();
-		vars.startedlevel = "000";
+		//vars.startedlevel = "000";
+		switch (test)
+		{
+			case 0: //halo 1
+			vars.startedlevel = vars.H1_levelname.Current;
+			break;
+			
+			case 1:
+			vars.startedlevel = vars.H2_levelname.Current;
+			break;
+			
+						case 2:
+			vars.startedlevel = vars.H3_levelname.Current;
+			break;
+			
+						case 6:
+			vars.startedlevel = vars.HR_levelname.Current;
+			break;
+			}
 		
 		vars.h3times = 0;
 		vars.hrtimes = 0;
@@ -951,7 +971,6 @@ split
 	{
 		
 		string checklevel;
-		byte test = vars.gameindicator.Current;
 		switch (test)
 		{
 			
@@ -2288,7 +2307,7 @@ gameTime
 			{return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H3_IGT.Current));}
 			else
 			{
-				if (vars.H3_theatertime.Old > vars.H3_theatertime.Current)
+				if (vars.H3_theatertime.Old > vars.H3_theatertime.Current && vars.H3_levelname.Current != "")
 				{
 					vars.splith3 = true;
 					print ("Adding times");
