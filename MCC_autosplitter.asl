@@ -2388,6 +2388,7 @@ isLoading
 			return (vars.multigamepauseflag);	
 			
 		}
+		return false;
 	} 
 	
 	//also should prolly code load removal to work in loading screens when menuindicator isn't == 7 in case of restart/crash
