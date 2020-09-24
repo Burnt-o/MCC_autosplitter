@@ -80,7 +80,8 @@ init //hooking to game to make memorywatchers
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0x8, 0x2A6B00C), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0x28, 0xE342C3), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0x48, 0xB94513B), 3)), 
-				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0xC8, 0x28478D7), 3))
+				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0xC8, 0x28478D7), 3)),
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0xA8, 0xA942E25), 4))
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -154,6 +155,23 @@ init //hooking to game to make memorywatchers
 			vars.watchers_hrdeath = new MemoryWatcherList(){
 				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x038DFE90, 0xC8, 0x01163A88, 0x543A39)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.HR_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x038DFE90, 0xC8, 0x00DA1C20, 0x422)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+				vars.watchers_odst = new MemoryWatcherList() {
+				(vars.odst_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x038DFE90, 0xA8, 0xC8E00A8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstbsp = new MemoryWatcherList() {
+				(vars.odst_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x038DFE90, 0xA8, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstIL = new MemoryWatcherList() {
+				(vars.odst_IGT = new MemoryWatcher<uint>(new DeepPointer(0x038DFE90, 0xA8, 0xA876FF0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstdeath = new MemoryWatcherList(){
+				(vars.odst_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x038DFE90, 0xA8, 0x0AD4339C, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.odst_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x038DFE90, 0xA8, 0x00B85020, 0x422)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 		}else if (version == "1.1716.0.0")
@@ -264,7 +282,8 @@ init //hooking to game to make memorywatchers
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0x8, 0x2A6B00C), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0x28, 0xE342C3), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0x48, 0xB94513B), 3)), 
-				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0xC8, 0x28478D7), 3))
+				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0xC8, 0x28478D7), 3)),
+								(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0xA8, 0xA942E25), 4))
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -338,6 +357,25 @@ init //hooking to game to make memorywatchers
 			vars.watchers_hrdeath = new MemoryWatcherList(){
 				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03791DA0, 0xC8, 0x01163A88, 0x543A39)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.HR_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x03791DA0, 0xC8, 0x00DA1C20, 0x422)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			
+			
+				vars.watchers_odst = new MemoryWatcherList() {
+				(vars.odst_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x038DFE90, 0xA8, 0xC8E00A8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstbsp = new MemoryWatcherList() {
+				(vars.odst_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x038DFE90, 0xA8, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstIL = new MemoryWatcherList() {
+				(vars.odst_IGT = new MemoryWatcher<uint>(new DeepPointer(0x038DFE90, 0xA8, 0xA876FF0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstdeath = new MemoryWatcherList(){
+				(vars.odst_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x038DFE90, 0xA8, 0x0AD4339C, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.odst_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x038DFE90, 0xA8, 0x00B85020, 0x422)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 		}else if (version == "1.1716.0.0")
@@ -449,6 +487,7 @@ startup //variable init and settings
 	vars.dirtybsps_int = new List<uint>();
 	vars.dirtybsps_long = new List<ulong>();
 	vars.h3times = 0;
+	vars.odsttimes = 0;
 	vars.startedlevel = "000";
 	vars.varsreset = false;
 	vars.loopsplit = true;
@@ -551,6 +590,11 @@ startup //variable init and settings
 	//skipping NA
 	vars.splitbsp_m60 = new uint[5] { 113, 125, 4221, 4223, 5119 }; //package
 	vars.splitbsp_m70 = new uint[7] { 31, 63, 127, 255, 511, 1023, 2047 }; //poa
+	
+	
+	//HALO ODST
+	vars.ptdsplit = false;
+	vars.splitodst = false;
 	
 	
 	vars.aslName = "MCCsplitter";
@@ -730,6 +774,17 @@ update {
 			{ vars.watchers_h3.UpdateAll(game); }
 			break;
 			
+			case 5:
+			if (settings["deathcounter"] || settings["revertcounter"])
+			{vars.watchers_odstdeath.UpdateAll(game); }
+			if (settings["bspmode"])
+			{ vars.watchers_odstbsp.UpdateAll(game); }
+			if (settings["ILmode"])
+			{ vars.watchers_odstIL.UpdateAll(game); }
+			else 
+			{ vars.watchers_odst.UpdateAll(game); }
+			break;
+			
 			case 6: 
 			vars.watchers_hr.UpdateAll(game);	
 			if (settings["deathcounter"] || settings["revertcounter"])
@@ -737,6 +792,8 @@ update {
 			if (settings["bspmode"])
 			{ vars.watchers_hrbsp.UpdateAll(game); }
 			break;
+			
+			
 			
 		}
 	}
@@ -917,6 +974,20 @@ start 	//starts timer
 			}
 			break;
 			
+			case 5: //ODST
+			if (settings["ILmode"] && vars.odst_IGT.Current > 10 && vars.odst_IGT.Current < 30)
+			{
+				vars.startedlevel = vars.ODST_levelname.Current;
+				vars.varsreset = false;
+				return true;
+			} else if (vars.ODST_levelname.Current == "c100" && vars.odst_theatertime.Current > 15 && vars.odst_theatertime.Current < 30)
+			{
+				vars.startedlevel = "c100";
+				vars.varsreset = false;
+				return true;
+			}
+			break;
+			
 			case 6:
 			if (vars.reachwarningshowed == false && ((settings["warning"]) == true))
 			{
@@ -999,11 +1070,15 @@ split
 			vars.startedlevel = vars.H3_levelname.Current;
 			break;
 			
+			case 5:
+			vars.startedlevel = vars.ODST_levelname.Current;
+			break;
+			
 			case 6:
 			vars.startedlevel = vars.HR_levelname.Current;
 			break;
 		}
-		
+		vars.odsttimes = 0;
 		vars.h3times = 0;
 		vars.hrtimes = 0;
 		vars.h2times = 0;
@@ -2021,6 +2096,236 @@ split
 			} 
 			break;
 			
+			
+			case 5: //ODST
+			if (settings["counters"])
+				{
+					if (settings["deathcounter"])
+					{
+						if (vars.odst_deathflag.Current && !vars.odst_deathflag.Old)
+						{
+							print ("adding death");
+							vars.DeathCounter += 1;
+							vars.UpdateDeathCounter();
+						}
+						
+					}
+					//Revert counter check
+					if (settings["revertcounter"])
+					{
+						if (vars.odst_revertcount.Current > vars.odst_revertcount.Old && !(vars.odst_deathflag.Old)) //don't count it if you're dead
+						{
+							print ("adding revert");
+							vars.RevertCounter += 1;
+							vars.UpdateRevertCounter();
+						}
+						
+					} 
+					//Revert counter death check
+					if (settings["revertcounterdeaths"])
+					{
+						if (vars.odst_deathflag.Current && !vars.odst_deathflag.Old)
+						{
+							print ("adding revert-death");
+							vars.RevertCounter += 1;
+							vars.UpdateRevertCounter();
+						}
+						
+					}
+				}
+			
+			
+			
+			
+			checklevel = vars.ODST_levelname.Current;
+			if (settings["multigamesplit"] || settings["multigamepause"])
+			{
+				if (vars.ptdsplit == false && vars.ODST_levelname.Current == "c100" && vars.odst_theatertime.Current > 15 && vars.odst_theatertime.Current < 30 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
+				{
+					vars.ptdsplit = true;
+					vars.multigamepauseflag = false;
+					return (settings["multigamesplit"]);
+				}
+			}
+			
+			if (settings["Loopmode"] && vars.ODST_levelname.Current == vars.startedlevel && vars.loopsplit == false)
+			{
+				if (vars.odst_IGT.Current > 10 && vars.odst_IGT.Current < 30)
+				{
+					vars.loopsplit = true;
+					vars.dirtybsps_byte.Clear();
+					return true;
+				}
+				
+			}
+			
+			if (settings["multigame"])
+			{
+				if (vars.ODST_levelname.Current != vars.ODST_levelname.Old)
+				{
+					vars.splitodst = false;
+					vars.dirtybsps_long.Clear();
+					return true;
+				}
+			}
+			
+			
+			if (settings["bspmode"])
+			{
+				
+				if (settings["bsp_cache"])
+				{
+					switch (checklevel)
+					{
+						/* case "010":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_010, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "020":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_020, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "030":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_030, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "040":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_040, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "050":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_050, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "070":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_070, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "100":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_100, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "110":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_110, x => x == vars.H3_bspstate.Current));
+						break;
+						
+						case "120":
+						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_120, x => x == vars.H3_bspstate.Current));
+						break; */
+						
+						
+						default:
+						return false;
+						break;
+						
+					}
+					
+				}
+				
+				switch (checklevel)
+				{
+					/* case "010":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_010, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "020":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_020, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "030":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_030, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "040":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_040, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "050":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_050, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "070":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_070, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					
+					case "100":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_100, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "110":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_110, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "120":
+					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_120, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						return true;
+					}
+					break; */
+					
+					default:
+					break;
+				} 
+			} 
+			
+			if (settings["ILmode"])
+			{
+				if ((vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57))
+				{
+					vars.dirtybsps_long.Clear();
+					vars.loopsplit = false;
+					return true;
+				}
+			} else if (!(settings["multigame"])) //not on IL mode, and not on last level
+			{
+				if (vars.splitodst == true)
+				{
+					vars.splitodst = false;
+					vars.dirtybsps_long.Clear();
+					return true;
+				} 
+			} 
+			break;
+			
+			
+			
+			
+			
+			
 			case 6:
 			//Death counter check
 		if (settings["counters"]) 
@@ -2305,6 +2610,19 @@ reset
 			} 
 			break;
 			
+						case 5:
+			if (vars.ODST_levelname.Current == vars.startedlevel) //odst
+			{
+				if (settings["ILmode"])
+				{
+					return ( timer.CurrentPhase != TimerPhase.Ended && ( vars.odst_IGT.Current < 10));
+				} else
+				{
+					return (vars.ODST_levelname.Current == "c100" && vars.odst_theatertime.Current > 0 && vars.odst_theatertime.Current < 15);	
+				}
+			} 
+			break;
+			
 			case 6:
 			if (vars.HR_levelname.Current == vars.startedlevel) //hr
 			{
@@ -2498,6 +2816,7 @@ isLoading
 		break;
 		
 		case 2:
+		case 5:
 		case 6:
 		return true;
 		break;
@@ -2544,6 +2863,23 @@ gameTime
 				}
 				
 				return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h3times + vars.H3_theatertime.Current)) ));
+				
+			}
+		} else if (vars.gameindicator.Current == 5) //ODST
+		{
+			if (settings["ILmode"])
+			{return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));}
+			else
+			{
+				if (vars.odst_theatertime.Old > vars.odst_theatertime.Current && vars.ODST_levelname.Current != "")
+				{
+					vars.splitodst = true;
+					print ("Adding times");
+					print ("time added: " + vars.odst_theatertime.Old);
+					vars.odsttimes = vars.odsttimes + (vars.odst_theatertime.Old - (vars.odst_theatertime.Old % 60));
+				}
+				
+				return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_theatertime.Current)) ));
 				
 			}
 		} else if (settings["ILmode"] && vars.gameindicator.Current == 1) //h2
