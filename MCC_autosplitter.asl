@@ -283,7 +283,7 @@ init //hooking to game to make memorywatchers
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0x28, 0xE342C3), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0x48, 0xB94513B), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0xC8, 0x28478D7), 3)),
-								(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0xA8, 0xA942E25), 4))
+								(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0xA8, 0xA942E25), 4))
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -362,20 +362,20 @@ init //hooking to game to make memorywatchers
 			
 			
 				vars.watchers_odst = new MemoryWatcherList() {
-				(vars.odst_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x038DFE90, 0xA8, 0xC8E00A8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.odst_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x03791DA0, 0xA8, 0xC8E00A8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
-				(vars.odst_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x038DFE90, 0xA8, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.odst_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03791DA0, 0xA8, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
 			vars.watchers_odstIL = new MemoryWatcherList() {
-				(vars.odst_IGT = new MemoryWatcher<uint>(new DeepPointer(0x038DFE90, 0xA8, 0xA876FF0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.odst_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03791DA0, 0xA8, 0xA876FF0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
-				(vars.odst_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x038DFE90, 0xA8, 0x0AD4339C, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.odst_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x038DFE90, 0xA8, 0x00B85020, 0x422)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.odst_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03791DA0, 0xA8, 0x0AD4339C, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.odst_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x03791DA0, 0xA8, 0x00B85020, 0x422)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 		}else if (version == "1.1716.0.0")
