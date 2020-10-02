@@ -124,7 +124,7 @@ init //hooking to game to make memorywatchers
 				(vars.H2_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x038DFE90, 0x28, 0x67AFCA2)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
-
+			
 			vars.watchers_h3 = new MemoryWatcherList() {
 				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x038DFE90, 0x48, 0xBA7AE40)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 				//(vars.H3_validtimeflag = new MemoryWatcher<byte>(new DeepPointer(0x038CF520, 0x48, 0xD64296)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //not using anymore
@@ -157,12 +157,12 @@ init //hooking to game to make memorywatchers
 				(vars.HR_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x038DFE90, 0xC8, 0x00DA1C20, 0x422)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
-				vars.watchers_odst = new MemoryWatcherList() {
+			vars.watchers_odst = new MemoryWatcherList() {
 				(vars.odst_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x038DFE90, 0xA8, 0xC8E00A8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
-				(vars.odst_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x038DFE90, 0xA8, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.odst_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x038DFE90, 0xA8, 0xCCD73A0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
 			vars.watchers_odstIL = new MemoryWatcherList() {
@@ -186,7 +186,8 @@ init //hooking to game to make memorywatchers
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x038CF520, 0x8, 0x115C90C), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x038CF520, 0x28, 0xE33303), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x038CF520, 0x48, 0xA90A4B), 3)), 
-				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x038CF520, 0xC8, 0x2AA3277), 3))
+				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x038CF520, 0xC8, 0x2AA3277), 3)),
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x0), 4))
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -261,6 +262,25 @@ init //hooking to game to make memorywatchers
 				(vars.HR_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x038CF520, 0xC8, 0x00D0A1A0, 0x422)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
+			
+			vars.watchers_odst = new MemoryWatcherList() {
+				(vars.odst_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstbsp = new MemoryWatcherList() {
+				(vars.odst_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstIL = new MemoryWatcherList() {
+				(vars.odst_IGT = new MemoryWatcher<uint>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstdeath = new MemoryWatcherList(){
+				(vars.odst_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.odst_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			
 		} 
 		
 		
@@ -272,7 +292,7 @@ init //hooking to game to make memorywatchers
 		
 		if (version == "1.1829.0.0")
 		{
-				vars.watchers_fast = new MemoryWatcherList() {
+			vars.watchers_fast = new MemoryWatcherList() {
 				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3681BD8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
 				(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x37AE859)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
@@ -283,7 +303,7 @@ init //hooking to game to make memorywatchers
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0x28, 0xE342C3), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0x48, 0xB94513B), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0xC8, 0x28478D7), 3)),
-								(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0xA8, 0xA942E25), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0xA8, 0xA942E25), 4))
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -326,7 +346,7 @@ init //hooking to game to make memorywatchers
 				(vars.H2_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x03791DA0, 0x28, 0x67AFCA2)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
-
+			
 			vars.watchers_h3 = new MemoryWatcherList() {
 				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x03791DA0, 0x48, 0xBA7AE40)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 				//(vars.H3_validtimeflag = new MemoryWatcher<byte>(new DeepPointer(0x038CF520, 0x48, 0xD64296)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //not using anymore
@@ -361,12 +381,12 @@ init //hooking to game to make memorywatchers
 			
 			
 			
-				vars.watchers_odst = new MemoryWatcherList() {
+			vars.watchers_odst = new MemoryWatcherList() {
 				(vars.odst_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x03791DA0, 0xA8, 0xC8E00A8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
-				(vars.odst_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03791DA0, 0xA8, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.odst_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03791DA0, 0xA8, 0xCCD73A0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
 			vars.watchers_odstIL = new MemoryWatcherList() {
@@ -390,7 +410,8 @@ init //hooking to game to make memorywatchers
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03780430, 0x8, 0x115C90C), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03780430, 0x28, 0xE33303), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03780430, 0x48, 0xA90A4B), 3)), 
-				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03780430, 0xC8, 0x2AA3277), 3))
+				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03780430, 0xC8, 0x2AA3277), 3)),
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x0), 4))
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -464,6 +485,24 @@ init //hooking to game to make memorywatchers
 				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03780430, 0xC8, 0x010CC008, 0x543A39)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.HR_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x038CF520, 0xC8, 0x00D0A1A0, 0x422)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
+			
+			vars.watchers_odst = new MemoryWatcherList() {
+				(vars.odst_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstbsp = new MemoryWatcherList() {
+				(vars.odst_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstIL = new MemoryWatcherList() {
+				(vars.odst_IGT = new MemoryWatcher<uint>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstdeath = new MemoryWatcherList(){
+				(vars.odst_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.odst_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
 			
 		} 
 	}
@@ -595,6 +634,48 @@ startup //variable init and settings
 	//HALO ODST
 	vars.ptdsplit = false;
 	vars.splitodst = false;
+	
+	//streets
+	vars.splitbsp_h100 = new ulong[9] { 1271310319912, 1511828488552, //drone optic
+		1511828488544, 1305670058352, 1717986918896, 3848290698224, //guass turret
+		1125281431814, //remote det (actually goes to sniper)
+		1666447311756, //sniper rifle (actually goes to guass turret)
+		1112396529931
+		//no loads on pre data hive
+	};//end streets
+	//hopefully no 1236950581544, it shows up on drone optic without actual bsp load
+	//1374389535040, 1168231104880 shows up on guass turret
+	//1116691497220 shows up on remote det
+	//3848290698120 shows up on .. first bsp load doesn't show up on my bytes, so gonna have to skip that one
+	//1108101562634 more bad vals
+	//1103806595337 more
+	//no bsp loads on ptd
+	
+	vars.splitbsp_sc10 = new ulong[3] { 60129542158, 55834574863, 38654705679 }; //tayari
+	
+	
+	vars.splitbsp_sc11 = new ulong[3] { 339302416463, 395136991327, 412316860543 }; //uplift reserve
+	//first load has issue of being used in cutscene - add check for pgcr time being > 30 or something
+	
+	vars.splitbsp_sc13 = new ulong[2] { 47244640267,  30064771087}; //oni
+	//bad vals 38654705673
+	//12884901899 is a a valid bsp bsp load but i've removed it since it doesn't save time to compare to
+	
+	vars.splitbsp_sc12 = new ulong[3] { 47244640267, 60129542159, 51539607567 }; //kizingo
+	//bad vals 38654705673, 42949672971
+	
+	vars.splitbsp_sc14 = new ulong[3] { 47244640267, 60129542159, 51539607567}; //NMPD
+	//bad vals 38654705673
+	//yes the vals are the same as kizongo
+	
+	vars.splitbsp_sc15 = new ulong[3] { 60129542159, 120259084319, 103079215135 }; //kikowani
+	//bad vals 4294967297, 25769803783
+	
+	vars.splitbsp_l200 = new ulong[7] { 60129542159, 120259084319, 103079215135, 206158430271, 893353197823, 962072674559, 1786706395647}; //data hive
+	//30064771079, 30064771072, 824633721087
+	
+	vars.splitbsp_l300  = new ulong[1] { 141733920935 }; //coastal
+	//575525617798, 176093659311 (valid bsp but no timesave), 171798692015, 240518168767(valid but no timesave), 206158430399, 481036337407
 	
 	
 	vars.aslName = "MCCsplitter";
@@ -1117,54 +1198,54 @@ split
 			case 0:
 			//Death counter check
 			if (settings["counters"])
+			{
+				if (settings["deathcounter"])
 				{
-					if (settings["deathcounter"])
+					if (vars.H1_deathflag.Current && !vars.H1_deathflag.Old)
 					{
-						if (vars.H1_deathflag.Current && !vars.H1_deathflag.Old)
-						{
-							print ("adding death");
-							vars.DeathCounter += 1;
-							vars.UpdateDeathCounter();
-						}
-						
+						print ("adding death");
+						vars.DeathCounter += 1;
+						vars.UpdateDeathCounter();
 					}
-					//Revert counter check
-					if (settings["revertcounter"])
-					{
-						if (vars.H1_revertcount.Current > vars.H1_revertcount.Old && !(vars.H1_deathflag.Old)) //don't count it if you're dead
-						{
-							print ("adding revert");
-							vars.RevertCounter += 1;
-							vars.UpdateRevertCounter();
-						}
-						
-					} 
-					//Revert counter death check
-					if (settings["revertcounterdeaths"])
-					{
-						if (vars.H1_deathflag.Current && !vars.H1_deathflag.Old)
-						{
-							print ("adding revert-death");
-							vars.RevertCounter += 1;
-							vars.UpdateRevertCounter();
-						}
-						
-					}
+					
 				}
-				
-				checklevel = vars.H1_levelname.Current;
-				if (settings["multigamesplit"])
+				//Revert counter check
+				if (settings["revertcounter"])
 				{
-					if (vars.poasplit == false && vars.H1_levelname.Current == "a10" && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true && vars.H1_bspstate.Current == 0 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
+					if (vars.H1_revertcount.Current > vars.H1_revertcount.Old && !(vars.H1_deathflag.Old)) //don't count it if you're dead
 					{
-						vars.dirtybsps_byte.Clear();
-						vars.poasplit = true;
-						return true;
+						print ("adding revert");
+						vars.RevertCounter += 1;
+						vars.UpdateRevertCounter();
 					}
-				}
-				
-				if (settings["Loopmode"] && vars.H1_levelname.Current == vars.startedlevel && vars.loopsplit == false)
+					
+				} 
+				//Revert counter death check
+				if (settings["revertcounterdeaths"])
 				{
+					if (vars.H1_deathflag.Current && !vars.H1_deathflag.Old)
+					{
+						print ("adding revert-death");
+						vars.RevertCounter += 1;
+						vars.UpdateRevertCounter();
+					}
+					
+				}
+			}
+			
+			checklevel = vars.H1_levelname.Current;
+			if (settings["multigamesplit"])
+			{
+				if (vars.poasplit == false && vars.H1_levelname.Current == "a10" && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true && vars.H1_bspstate.Current == 0 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
+				{
+					vars.dirtybsps_byte.Clear();
+					vars.poasplit = true;
+					return true;
+				}
+			}
+			
+			if (settings["Loopmode"] && vars.H1_levelname.Current == vars.startedlevel && vars.loopsplit == false)
+			{
 				switch (checklevel)
 				{
 					case "a10":
@@ -1548,40 +1629,40 @@ split
 			
 			case 1:
 			if (settings["counters"])
+			{
+				if (settings["deathcounter"])
 				{
-					if (settings["deathcounter"])
+					if (vars.H2_deathflag.Current && !vars.H2_deathflag.Old)
 					{
-						if (vars.H2_deathflag.Current && !vars.H2_deathflag.Old)
-						{
-							print ("adding death");
-							vars.DeathCounter += 1;
-							vars.UpdateDeathCounter();
-						}
-						
+						print ("adding death");
+						vars.DeathCounter += 1;
+						vars.UpdateDeathCounter();
 					}
-					//Revert counter check
-					if (settings["revertcounter"])
-					{
-						if (vars.H2_revertcount.Current > vars.H2_revertcount.Old && !(vars.H2_deathflag.Old)) //don't count it if you're dead
-						{
-							print ("adding revert");
-							vars.RevertCounter += 1;
-							vars.UpdateRevertCounter();
-						}
-						
-					} 
-					//Revert counter death check
-					if (settings["revertcounterdeaths"])
-					{
-						if (vars.H2_deathflag.Current && !vars.H2_deathflag.Old)
-						{
-							print ("adding revert-death");
-							vars.RevertCounter += 1;
-							vars.UpdateRevertCounter();
-						}
-						
-					}
+					
 				}
+				//Revert counter check
+				if (settings["revertcounter"])
+				{
+					if (vars.H2_revertcount.Current > vars.H2_revertcount.Old && !(vars.H2_deathflag.Old)) //don't count it if you're dead
+					{
+						print ("adding revert");
+						vars.RevertCounter += 1;
+						vars.UpdateRevertCounter();
+					}
+					
+				} 
+				//Revert counter death check
+				if (settings["revertcounterdeaths"])
+				{
+					if (vars.H2_deathflag.Current && !vars.H2_deathflag.Old)
+					{
+						print ("adding revert-death");
+						vars.RevertCounter += 1;
+						vars.UpdateRevertCounter();
+					}
+					
+				}
+			}
 			
 			
 			
@@ -1874,40 +1955,40 @@ split
 			
 			case 2:
 			if (settings["counters"])
+			{
+				if (settings["deathcounter"])
 				{
-					if (settings["deathcounter"])
+					if (vars.H3_deathflag.Current && !vars.H3_deathflag.Old)
 					{
-						if (vars.H3_deathflag.Current && !vars.H3_deathflag.Old)
-						{
-							print ("adding death");
-							vars.DeathCounter += 1;
-							vars.UpdateDeathCounter();
-						}
-						
+						print ("adding death");
+						vars.DeathCounter += 1;
+						vars.UpdateDeathCounter();
 					}
-					//Revert counter check
-					if (settings["revertcounter"])
-					{
-						if (vars.H3_revertcount.Current > vars.H3_revertcount.Old && !(vars.H3_deathflag.Old)) //don't count it if you're dead
-						{
-							print ("adding revert");
-							vars.RevertCounter += 1;
-							vars.UpdateRevertCounter();
-						}
-						
-					} 
-					//Revert counter death check
-					if (settings["revertcounterdeaths"])
-					{
-						if (vars.H3_deathflag.Current && !vars.H3_deathflag.Old)
-						{
-							print ("adding revert-death");
-							vars.RevertCounter += 1;
-							vars.UpdateRevertCounter();
-						}
-						
-					}
+					
 				}
+				//Revert counter check
+				if (settings["revertcounter"])
+				{
+					if (vars.H3_revertcount.Current > vars.H3_revertcount.Old && !(vars.H3_deathflag.Old)) //don't count it if you're dead
+					{
+						print ("adding revert");
+						vars.RevertCounter += 1;
+						vars.UpdateRevertCounter();
+					}
+					
+				} 
+				//Revert counter death check
+				if (settings["revertcounterdeaths"])
+				{
+					if (vars.H3_deathflag.Current && !vars.H3_deathflag.Old)
+					{
+						print ("adding revert-death");
+						vars.RevertCounter += 1;
+						vars.UpdateRevertCounter();
+					}
+					
+				}
+			}
 			
 			
 			
@@ -2099,40 +2180,40 @@ split
 			
 			case 5: //ODST
 			if (settings["counters"])
+			{
+				if (settings["deathcounter"])
 				{
-					if (settings["deathcounter"])
+					if (vars.odst_deathflag.Current && !vars.odst_deathflag.Old)
 					{
-						if (vars.odst_deathflag.Current && !vars.odst_deathflag.Old)
-						{
-							print ("adding death");
-							vars.DeathCounter += 1;
-							vars.UpdateDeathCounter();
-						}
-						
+						print ("adding death");
+						vars.DeathCounter += 1;
+						vars.UpdateDeathCounter();
 					}
-					//Revert counter check
-					if (settings["revertcounter"])
-					{
-						if (vars.odst_revertcount.Current > vars.odst_revertcount.Old && !(vars.odst_deathflag.Old)) //don't count it if you're dead
-						{
-							print ("adding revert");
-							vars.RevertCounter += 1;
-							vars.UpdateRevertCounter();
-						}
-						
-					} 
-					//Revert counter death check
-					if (settings["revertcounterdeaths"])
-					{
-						if (vars.odst_deathflag.Current && !vars.odst_deathflag.Old)
-						{
-							print ("adding revert-death");
-							vars.RevertCounter += 1;
-							vars.UpdateRevertCounter();
-						}
-						
-					}
+					
 				}
+				//Revert counter check
+				if (settings["revertcounter"])
+				{
+					if (vars.odst_revertcount.Current > vars.odst_revertcount.Old && !(vars.odst_deathflag.Old)) //don't count it if you're dead
+					{
+						print ("adding revert");
+						vars.RevertCounter += 1;
+						vars.UpdateRevertCounter();
+					}
+					
+				} 
+				//Revert counter death check
+				if (settings["revertcounterdeaths"])
+				{
+					if (vars.odst_deathflag.Current && !vars.odst_deathflag.Old)
+					{
+						print ("adding revert-death");
+						vars.RevertCounter += 1;
+						vars.UpdateRevertCounter();
+					}
+					
+				}
+			}
 			
 			
 			
@@ -2177,42 +2258,48 @@ split
 				{
 					switch (checklevel)
 					{
-						/* case "010":
-						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_010, x => x == vars.H3_bspstate.Current));
+						case "h100":
+						return (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_h100, x => x == vars.odst_bspstate.Current));
 						break;
 						
-						case "020":
-						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_020, x => x == vars.H3_bspstate.Current));
+						case "sc10":
+						return (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc10, x => x == vars.odst_bspstate.Current));
 						break;
 						
-						case "030":
-						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_030, x => x == vars.H3_bspstate.Current));
+						case "sc11":
+						if (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc11, x => x == vars.odst_bspstate.Current))
+						{
+							vars.watchers_odstIL.UpdateAll(game); 
+							if (vars.odst_IGT.Current > 30)
+							{
+								return true;
+							}
+						}
 						break;
 						
-						case "040":
-						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_040, x => x == vars.H3_bspstate.Current));
+						case "sc13":
+						return (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc13, x => x == vars.odst_bspstate.Current));
 						break;
 						
-						case "050":
-						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_050, x => x == vars.H3_bspstate.Current));
+						case "sc12":
+						return (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc12, x => x == vars.odst_bspstate.Current));
 						break;
 						
-						case "070":
-						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_070, x => x == vars.H3_bspstate.Current));
+						case "sc14":
+						return (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc14, x => x == vars.odst_bspstate.Current));
 						break;
 						
-						case "100":
-						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_100, x => x == vars.H3_bspstate.Current));
+						case "sc15":
+						return (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc15, x => x == vars.odst_bspstate.Current));
 						break;
 						
-						case "110":
-						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_110, x => x == vars.H3_bspstate.Current));
+						case "l200":
+						return (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_l200, x => x == vars.odst_bspstate.Current));
 						break;
 						
-						case "120":
-						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_120, x => x == vars.H3_bspstate.Current));
-						break; */
-						
+						case "l300":
+						return (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_l300, x => x == vars.odst_bspstate.Current));
+						break;
 						
 						default:
 						return false;
@@ -2224,78 +2311,86 @@ split
 				
 				switch (checklevel)
 				{
-					/* case "010":
-					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_010, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					case "h100":
+					if (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_h100, x => x == vars.odst_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.odst_bspstate.Current)))
 					{
-						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						vars.dirtybsps_long.Add(vars.odst_bspstate.Current);
 						return true;
 					}
 					break;
 					
-					case "020":
-					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_020, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					case "sc10":
+					if (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc10, x => x == vars.odst_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.odst_bspstate.Current)))
 					{
-						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						vars.dirtybsps_long.Add(vars.odst_bspstate.Current);
 						return true;
 					}
 					break;
 					
-					case "030":
-					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_030, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					case "sc11":
+					if (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc11, x => x == vars.odst_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.odst_bspstate.Current)))
 					{
-						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						vars.watchers_odstIL.UpdateAll(game); 
+						if (vars.odst_IGT.Current > 30)
+						{
+							vars.dirtybsps_long.Add(vars.odst_bspstate.Current);
+							return true;
+						}
+						
+						
+						
+					}
+					break;
+					
+					case "sc13":
+					if (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc13, x => x == vars.odst_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.odst_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.odst_bspstate.Current);
 						return true;
 					}
 					break;
 					
-					case "040":
-					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_040, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					case "sc12":
+					if (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc12, x => x == vars.odst_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.odst_bspstate.Current)))
 					{
-						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						vars.dirtybsps_long.Add(vars.odst_bspstate.Current);
 						return true;
 					}
 					break;
 					
-					case "050":
-					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_050, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					case "sc14":
+					if (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc14, x => x == vars.odst_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.odst_bspstate.Current)))
 					{
-						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						vars.dirtybsps_long.Add(vars.odst_bspstate.Current);
 						return true;
 					}
 					break;
 					
-					case "070":
-					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_070, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					case "sc15":
+					if (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc15, x => x == vars.odst_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.odst_bspstate.Current)))
 					{
-						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+						vars.dirtybsps_long.Add(vars.odst_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "l200":
+					if (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_l200, x => x == vars.odst_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.odst_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.odst_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "l300":
+					if (vars.odst_bspstate.Current != vars.odst_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_l300, x => x == vars.odst_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.odst_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.odst_bspstate.Current);
 						return true;
 					}
 					break;
 					
 					
-					case "100":
-					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_100, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
-					{
-						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
-						return true;
-					}
-					break;
-					
-					case "110":
-					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_110, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
-					{
-						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
-						return true;
-					}
-					break;
-					
-					case "120":
-					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_120, x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
-					{
-						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
-						return true;
-					}
-					break; */
 					
 					default:
 					break;
@@ -2315,7 +2410,10 @@ split
 				if (vars.splitodst == true)
 				{
 					vars.splitodst = false;
-					vars.dirtybsps_long.Clear();
+					if (checklevel != "h100") //don't clear dirty bsps of streets in fg.. tho will break in multigame. meh who uses bsp splits in multigame lmao
+					{
+						vars.dirtybsps_long.Clear();
+					}
 					return true;
 				} 
 			} 
@@ -2328,42 +2426,42 @@ split
 			
 			case 6:
 			//Death counter check
-		if (settings["counters"]) 
+			if (settings["counters"]) 
+			{
+				if (settings["deathcounter"])
 				{
-					if (settings["deathcounter"])
+					if (vars.HR_deathflag.Current && !vars.HR_deathflag.Old)
 					{
-						if (vars.HR_deathflag.Current && !vars.HR_deathflag.Old)
-						{
-							print ("adding death");
-							vars.DeathCounter += 1;
-							vars.UpdateDeathCounter();
-						}
-						
+						print ("adding death");
+						vars.DeathCounter += 1;
+						vars.UpdateDeathCounter();
 					}
-					//Revert counter check
-					if (settings["revertcounter"]  && vars.stateindicator.Current != 44) //have to add an extra check here cos reach revert counter is a lil buggy
-					{
-						if (vars.HR_revertcount.Current > vars.HR_revertcount.Old && !(vars.HR_deathflag.Old)) //don't count it if you're dead
-						{
-							print ("adding revert");
-							vars.RevertCounter += 1;
-							vars.UpdateRevertCounter();
-						}
-						
-					} 
-					//Revert counter death check
-					if (settings["revertcounterdeaths"])
-					{
-						if (vars.HR_deathflag.Current && !vars.HR_deathflag.Old)
-						{
-							print ("adding revert-death");
-							vars.RevertCounter += 1;
-							vars.UpdateRevertCounter();
-						}
-						
-					}
+					
 				}
-			
+				//Revert counter check
+				if (settings["revertcounter"]  && vars.stateindicator.Current != 44) //have to add an extra check here cos reach revert counter is a lil buggy
+				{
+					if (vars.HR_revertcount.Current > vars.HR_revertcount.Old && !(vars.HR_deathflag.Old)) //don't count it if you're dead
+					{
+						print ("adding revert");
+						vars.RevertCounter += 1;
+						vars.UpdateRevertCounter();
+					}
+					
+				} 
+				//Revert counter death check
+				if (settings["revertcounterdeaths"])
+				{
+				if (vars.HR_deathflag.Current && !vars.HR_deathflag.Old)
+				{
+					print ("adding revert-death");
+					vars.RevertCounter += 1;
+					vars.UpdateRevertCounter();
+				}
+				
+				}
+				}
+				
 			
 			
 			checklevel = vars.HR_levelname.Current;
@@ -2383,7 +2481,7 @@ split
 				{
 					vars.loopsplit = true;
 					vars.dirtybsps_int.Clear();
-				return true;
+					return true;
 				}
 			}
 			
@@ -2610,7 +2708,7 @@ reset
 			} 
 			break;
 			
-						case 5:
+			case 5:
 			if (vars.ODST_levelname.Current == vars.startedlevel) //odst
 			{
 				if (settings["ILmode"])
