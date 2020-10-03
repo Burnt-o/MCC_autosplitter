@@ -893,6 +893,8 @@ start 	//starts timer
 	
 	if (vars.secondreset == true) 
 	{
+		vars.lasth3mgsplit = 0;
+		vars.lastodstmgsplit = 0;
 		vars.startedlevel = "000";
 		vars.DeathCounter = 0;
 		vars.RevertCounter = 0;
@@ -1108,6 +1110,8 @@ split
 	byte test = vars.gameindicator.Current;
 	if (vars.varsreset == false)
 	{
+	vars.lasth3mgsplit = 0;
+	vars.lastodstmgsplit = 0;
 		vars.ending01a = false; //reset h2 variables
 		vars.ending01b = false;
 		vars.ending03a = false;
@@ -2017,9 +2021,10 @@ split
 			
 			if (settings["multigame"])
 			{
-				if (vars.H3_levelname.Current != vars.H3_levelname.Old)
+				if (vars.H3_levelname.Current != vars.H3_levelname.Old && timer.CurrentTime.RealTime.Value.TotalSeconds > vars.lasth3mgsplit + 30 && vars.H3_levelname != null)
 				{
 					vars.splith3 = false;
+					vars.lasth3mgsplit = timer.CurrentTime.RealTime.Value.TotalSeconds;
 					vars.dirtybsps_long.Clear();
 					return true;
 				}
@@ -2225,7 +2230,9 @@ split
 				{
 					vars.ptdsplit = true;
 					vars.multigamepauseflag = false;
+					print ("eeeeee");
 					return (settings["multigamesplit"]);
+					
 				}
 			}
 			
@@ -2235,18 +2242,22 @@ split
 				{
 					vars.loopsplit = true;
 					vars.dirtybsps_byte.Clear();
-					return true;
+					return true; 
 				}
 				
 			}
 			
 			if (settings["multigame"])
 			{
-				if (vars.ODST_levelname.Current != vars.ODST_levelname.Old)
+				if (vars.ODST_levelname.Current != vars.ODST_levelname.Old && vars.ODST_levelname.Old != null && timer.CurrentTime.RealTime.Value.TotalSeconds > vars.lastodstmgsplit + 30)
 				{
 					vars.splitodst = false;
+					vars.lastodstmgsplit = timer.CurrentTime.RealTime.Value.TotalSeconds;
 					vars.dirtybsps_long.Clear();
+					//print ("a:" + vars.ODST_levelname.Current);
+					//print ("b:" + vars.ODST_levelname.Old);
 					return true;
+					
 				}
 			}
 			
