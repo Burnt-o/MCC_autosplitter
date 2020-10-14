@@ -634,6 +634,7 @@ startup //variable init and settings
 	//HALO ODST
 	vars.ptdsplit = false;
 	vars.splitodst = false;
+	vars.ptdremoval = 0;
 	
 	//streets
 	vars.splitbsp_h100 = new ulong[9] { 1271310319912, 1511828488552, //drone optic
@@ -856,10 +857,9 @@ update {
 			break;
 			
 			case 5:
+			vars.watchers_odstbsp.UpdateAll(game); 
 			if (settings["deathcounter"] || settings["revertcounter"])
 			{vars.watchers_odstdeath.UpdateAll(game); }
-			if (settings["bspmode"])
-			{ vars.watchers_odstbsp.UpdateAll(game); }
 			if (settings["ILmode"])
 			{ vars.watchers_odstIL.UpdateAll(game); }
 			else 
@@ -893,6 +893,7 @@ start 	//starts timer
 	
 	if (vars.secondreset == true) 
 	{
+		vars.ptdremoval = 0;
 		vars.lasth3mgsplit = 0;
 		vars.lastodstmgsplit = 0;
 		vars.startedlevel = "000";
@@ -1063,7 +1064,7 @@ start 	//starts timer
 				vars.startedlevel = vars.ODST_levelname.Current;
 				vars.varsreset = false;
 				return true;
-			} else if (vars.ODST_levelname.Current == "c100" && vars.odst_theatertime.Current > 15 && vars.odst_theatertime.Current < 30)
+			} else if (vars.ODST_levelname.Current == "c100" && vars.odst_theatertime.Current > 15 && vars.odst_theatertime.Current < 30 && vars.odst_bspstate.Current != 12884901891)
 			{
 				vars.startedlevel = "c100";
 				vars.varsreset = false;
@@ -1125,7 +1126,7 @@ split
 		vars.ending07a = false;
 		vars.ending08a = false; 
 		vars.ending07b = false;
-		
+		vars.ptdremoval = 0;
 		vars.ending01a = false; 
 		
 		vars.loopsplit = true;
@@ -2727,7 +2728,7 @@ reset
 					return ( timer.CurrentPhase != TimerPhase.Ended && ( vars.odst_IGT.Current < 10));
 				} else
 				{
-					return (vars.ODST_levelname.Current == "c100" && vars.odst_theatertime.Current > 0 && vars.odst_theatertime.Current < 15);	
+				return ((vars.odst_bspstate.Current == 12884901891) || (vars.ODST_levelname.Current == "c100" && vars.odst_theatertime.Current > 0 && vars.odst_theatertime.Current < 15) );	
 				}
 			} 
 			break;
@@ -2976,6 +2977,9 @@ gameTime
 			}
 		} else if (vars.gameindicator.Current == 5) //ODST
 		{
+		
+			// bsp value to remove ptd times on 1133871366144
+		
 			if (settings["ILmode"])
 			{return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));}
 			else
@@ -2987,8 +2991,14 @@ gameTime
 					print ("time added: " + vars.odst_theatertime.Old);
 					vars.odsttimes = vars.odsttimes + (vars.odst_theatertime.Old - (vars.odst_theatertime.Old % 60));
 				}
+				if (vars.odst_bspstate.Current == 1133871366144 && vars.odst_bspstate.Old != 1133871366144 && vars.ODST_levelname.Current == "c100")
+				{
+					vars.ptdremoval = (vars.odst_theatertime.Old - (vars.odst_theatertime.Old % 60));
+					print ("removing ptd time");
+				print ("time removed: " + ((vars.odst_theatertime.Old - (vars.odst_theatertime.Old % 60)) / 60));
+				}
 				
-				return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_theatertime.Current)) ));
+				return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_theatertime.Current - vars.ptdremoval)) ));
 				
 			}
 		} else if (settings["ILmode"] && vars.gameindicator.Current == 1) //h2
