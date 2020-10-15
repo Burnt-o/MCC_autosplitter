@@ -31,7 +31,7 @@ init //hooking to game to make memorywatchers
 	
 	
 	
-	//version check and warning message for invalid version 
+	//version check and warning message for invalid version  
 	switch(modules.First().FileVersionInfo.FileVersion)
 	{
 		
@@ -43,15 +43,19 @@ init //hooking to game to make memorywatchers
 		version = "1.1829.0.0";
 		break;
 		
+		case "1.1864.0.0":
+		version = "1.1864.0.0";
+		break;
+		
 		default: 
-		version = "1.1829.0.0";
+		version = "1.1864.0.0";
 		if (vars.brokenupdateshowed == false)
 		{
 			vars.brokenupdateshowed = true;
 			var brokenupdateMessage = MessageBox.Show(
 				"It looks like MCC has recieved a new patch that will "+
 				"probably break me (the autosplitter). \n"+
-				"Autosplitter was made for version: "+ "1.1716.0.0" + "\n" + 
+				"Autosplitter was made for version: "+ "1.1864.0.0" + "\n" + 
 				"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
 				"If I'm broken, you'll just have to wait for Burnt to update me. "+
 				"You won't need to do anything except restart Livesplit once I'm updated.",
@@ -68,7 +72,7 @@ init //hooking to game to make memorywatchers
 	if (modules.First().ToString() == "MCC-Win64-Shipping.exe")
 	{
 		
-		if (version == "1.1829.0.0")
+		if (version == "1.1829.0.0" || version == "1.1864.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
 				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x37CFCD8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
@@ -290,7 +294,7 @@ init //hooking to game to make memorywatchers
 	} else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe")
 	{
 		
-		if (version == "1.1829.0.0")
+		if (version == "1.1829.0.0" || version == "1.1864.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
 				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3681BD8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
