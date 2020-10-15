@@ -536,7 +536,6 @@ startup //variable init and settings
 	vars.loopsplit = true;
 	vars.h2times = 0;
 	vars.brokenupdateshowed = false;
-	vars.reachwarningshowed = false;
 	vars.multigamepauseflag = false;
 	
 	
@@ -741,16 +740,7 @@ startup //variable init and settings
 	settings.SetToolTip("revertcounterdeaths", "Makes dying also count as a revert"
 	);
 	
-	settings.Add("warning", true, "Show Reach EAC warning.");
-	settings.SetToolTip("warning", "Gets rid of the following important message: \n"+
-		"\n" +
-		"Heya, looks like you're running Reach with EAC disabled. \n"+
-		"Obviously EAC disabled is necessary for this autosplitter to work, \n"+
-		"but it's worth being aware that the Reach speedrun community \n" + 
-		"has not yet come to a decision on whether EAC disabled runs \n" +
-		"are valid to submit. Run at your own risk."
-		
-	);
+
 	
 	
 	//DEATH COUNTERS AND FUN
@@ -1077,21 +1067,6 @@ start 	//starts timer
 			break;
 			
 			case 6:
-			if (vars.reachwarningshowed == false && ((settings["warning"]) == true))
-			{
-				vars.reachwarningshowed = true;
-				
-				var reachwarningmessage = MessageBox.Show(
-					"Heya, looks like you're running Reach with EAC disabled. \n"+
-					"Obviously EAC disabled is necessary for this autosplitter to work, \n"+
-					"but it's worth being aware that the Reach speedrun community \n" + 
-					"has not yet come to a decision on whether EAC disabled runs \n" +
-					"are valid to submit. Run at your own risk.",
-					vars.aslName+" | LiveSplit",
-					MessageBoxButtons.OK 
-				);
-			}
-			
 			if ((settings["ILmode"] || vars.HR_levelname.Current == "m10")  && vars.HR_IGT.Current > 10 && vars.HR_IGT.Current < 30)
 			{
 				print ("what");
