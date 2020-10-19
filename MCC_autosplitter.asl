@@ -836,10 +836,7 @@ startup //variable init and settings
 	);
 	
 	
-	settings.Add("multigame", false, "Multi-game run (eg trilogy run)");
-	settings.SetToolTip("multigame", "Changes all timing to use RTA minus loads");
-	settings.Add("multigamesplit", true, "Add split at start of first level of each game", "multigame");
-	settings.Add("multigamepause", false, "Pause time inbetween game end -> game start", "multigame");
+
 	
 	
 	settings.Add("counters", false, "Counters and fun stuff");
@@ -1266,7 +1263,7 @@ split
 		vars.h2times = 0;
 		vars.addtimes = false;
 		
-		vars.multigamepauseflag = false;
+	
 		
 		vars.varsreset = true;
 		
@@ -1335,15 +1332,7 @@ split
 			}
 			
 			checklevel = vars.H1_levelname.Current;
-			if (settings["multigamesplit"])
-			{
-				if (vars.poasplit == false && vars.H1_levelname.Current == "a10" && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true && vars.H1_bspstate.Current == 0 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
-				{
-					vars.dirtybsps_byte.Clear();
-					vars.poasplit = true;
-					return true;
-				}
-			}
+
 			
 			if (settings["Loopmode"] && vars.H1_levelname.Current == vars.startedlevel && vars.loopsplit == false)
 			{
@@ -1720,7 +1709,6 @@ split
 					{
 						vars.mawsplit = true;
 						vars.dirtybsps_byte.Clear();
-						vars.multigamepauseflag = true;
 						return true;
 					}
 				}
@@ -1771,16 +1759,7 @@ split
 			
 			
 			
-			if (settings["multigamesplit"] || settings["multigamepause"])
-			{
-				if (vars.armorysplit == false && vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 && vars.H2_tickcounter.Current < 30 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
-				{																		
-					vars.dirtybsps_byte.Clear();
-					vars.armorysplit = true;
-					vars.multigamepauseflag = false;
-					return (settings["multigamesplit"]);
-				}
-			}
+
 			
 			
 			
@@ -2048,7 +2027,6 @@ split
 			{
 				vars.dirtybsps_byte.Clear();
 				vars.loopsplit = false;
-				vars.multigamepauseflag = true;
 				return true;
 			}
 			
@@ -2095,15 +2073,7 @@ split
 			
 			
 			checklevel = vars.H3_levelname.Current;
-			if (settings["multigamesplit"] || settings["multigamepause"])
-			{
-				if (vars.sierrasplit == false && vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
-				{
-					vars.sierrasplit = true;
-					vars.multigamepauseflag = false;
-					return (settings["multigamesplit"]);
-				}
-			}
+
 			
 			if (settings["Loopmode"] && vars.H3_levelname.Current == vars.startedlevel && vars.loopsplit == false)
 			{
@@ -2116,16 +2086,7 @@ split
 				
 			}
 			
-			if (settings["multigame"])
-			{
-				if (vars.H3_levelname.Current != vars.H3_levelname.Old && timer.CurrentTime.RealTime.Value.TotalSeconds > vars.lasth3mgsplit + 30 && vars.H3_levelname != null)
-				{
-					vars.splith3 = false;
-					vars.lasth3mgsplit = timer.CurrentTime.RealTime.Value.TotalSeconds;
-					vars.dirtybsps_long.Clear();
-					return true;
-				}
-			}
+
 			
 			
 			if (settings["bspmode"])
@@ -2268,7 +2229,7 @@ split
 					vars.loopsplit = false;
 					return true;
 				}
-			} else if (!(settings["multigame"])) //not on IL mode, and not on last level
+			} else  //not on IL mode, and not on last level
 			{
 				if (vars.splith3 == true)
 				{
@@ -2321,17 +2282,7 @@ split
 			
 			
 			checklevel = vars.ODST_levelname.Current;
-			if (settings["multigamesplit"] || settings["multigamepause"])
-			{
-				if (vars.ptdsplit == false && vars.ODST_levelname.Current == "c100" && vars.odst_theatertime.Current > 15 && vars.odst_theatertime.Current < 30 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
-				{
-					vars.ptdsplit = true;
-					vars.multigamepauseflag = false;
-					print ("eeeeee");
-					return (settings["multigamesplit"]);
-					
-				}
-			}
+
 			
 			if (settings["Loopmode"] && vars.ODST_levelname.Current == vars.startedlevel && vars.loopsplit == false)
 			{
@@ -2344,19 +2295,7 @@ split
 				
 			}
 			
-			if (settings["multigame"])
-			{
-				if (vars.ODST_levelname.Current != vars.ODST_levelname.Old && vars.ODST_levelname.Old != null && timer.CurrentTime.RealTime.Value.TotalSeconds > vars.lastodstmgsplit + 30)
-				{
-					vars.splitodst = false;
-					vars.lastodstmgsplit = timer.CurrentTime.RealTime.Value.TotalSeconds;
-					vars.dirtybsps_long.Clear();
-					//print ("a:" + vars.ODST_levelname.Current);
-					//print ("b:" + vars.ODST_levelname.Old);
-					return true;
-					
-				}
-			}
+
 			
 			
 			if (settings["bspmode"])
@@ -2513,7 +2452,7 @@ split
 					vars.loopsplit = false;
 					return true;
 				}
-			} else if (!(settings["multigame"])) //not on IL mode, and not on last level
+			} else  //not on IL mode, and not on last level
 			{
 				if (vars.splitodst == true)
 				{
@@ -2573,15 +2512,7 @@ split
 			
 			
 			checklevel = vars.HR_levelname.Current;
-			if (settings["multigamesplit"] || settings["multigamepause"])
-			{
-				if (vars.wcsplit == false && vars.HR_levelname.Current == "010" && vars.HR_IGT.Current > 15 && vars.HR_IGT.Current < 30 && timer.CurrentTime.RealTime.Value.TotalSeconds > 30)
-				{
-					vars.wcsplit = true;
-					vars.multigamepauseflag = false;
-					return (settings["multigamesplit"]);
-				}
-			}
+			
 			
 			if (settings["Loopmode"] && vars.HR_levelname == vars.startedlevel)
 			{
@@ -2754,7 +2685,7 @@ reset
 		return true;
 	}
 	
-	if (!( (settings["multigame"]) || (settings["Loopmode"]) ) && vars.menuindicator.Current == 7)
+if ((!(settings["Loopmode"])) && vars.menuindicator.Current == 7)
 	{
 		
 		byte test = vars.gameindicator.Current;
@@ -2851,19 +2782,7 @@ reset
 
 isLoading
 {
-	if (settings["multigame"]) //timing for multigame and halo 1 is identical
-	{
-		
-		if (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
-		return true;
-		
-		if (settings["multigamepause"])
-		{
-			return (vars.multigamepauseflag);	
-			
-		}
-		return false;
-	} 
+	
 	
 	//also should prolly code load removal to work in loading screens when menuindicator isn't == 7 in case of restart/crash
 	byte test = vars.gameindicator.Current;
@@ -3033,7 +2952,7 @@ isLoading
 gameTime
 {
 	
-	if (!(settings["multigame"]) && vars.menuindicator.Current == 7)
+	if (vars.menuindicator.Current == 7)
 	{
 		if (vars.gameindicator.Current == 6) //reach
 		{
@@ -3128,7 +3047,6 @@ gameTime
 
 exit
 {
-	if (vars.multigamepauseflag == false)
 	timer.IsGameTimePaused = false; //unpause the timer on gamecrash UNLESS it was paused for multi-game-pause option.
 }
 
