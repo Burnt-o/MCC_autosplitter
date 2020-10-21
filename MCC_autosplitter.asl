@@ -408,8 +408,8 @@ init //hooking to game to make memorywatchers
 			
 			
 			
-			}
-
+		}
+		
 		
 		else if (version == "1.1829.0.0" || version == "1.1864.0.0")
 		{
@@ -653,7 +653,11 @@ startup //variable init and settings
 	vars.loopsplit = true;
 	vars.h2times = 0;
 	vars.brokenupdateshowed = false;
-	vars.multigamepauseflag = false;
+	vars.multigamepause = false;
+	vars.multigametime = TimeSpan.Zero;
+	vars.needtosplitending = false;
+	
+	vars.startedgame = 0;
 	
 	
 	//HALO 1
@@ -835,8 +839,8 @@ startup //variable init and settings
 		"You probably shouldn't turn this on, unless you're say, practicing a specific segment of a level (from one load to another)."
 	);
 	
-	
 
+	
 	
 	
 	settings.Add("counters", false, "Counters and fun stuff");
@@ -854,7 +858,7 @@ startup //variable init and settings
 	settings.SetToolTip("revertcounterdeaths", "Makes dying also count as a revert"
 	);
 	
-
+	
 	
 	
 	//DEATH COUNTERS AND FUN
@@ -1001,6 +1005,8 @@ start 	//starts timer
 	
 	if (vars.secondreset == true) 
 	{
+		vars.multigametime = TimeSpan.Zero;
+		vars.multigamepause = false;
 		vars.ptdremoval = 0;
 		vars.lasth3mgsplit = 0;
 		vars.lastodstmgsplit = 0;
@@ -1022,6 +1028,7 @@ start 	//starts timer
 	
 	if (vars.menuindicator.Current == 7) 
 	{
+		vars.startedgame = vars.gameindicator.Current;
 		byte test = vars.gameindicator.Current;
 		switch (test)
 		{
@@ -1204,8 +1211,10 @@ split
 	byte test = vars.gameindicator.Current;
 	if (vars.varsreset == false)
 	{
-	vars.lasth3mgsplit = 0;
-	vars.lastodstmgsplit = 0;
+		vars.multigametime = TimeSpan.Zero;
+		vars.multigamepause = false;
+		vars.lasth3mgsplit = 0;
+		vars.lastodstmgsplit = 0;
 		vars.ending01a = false; //reset h2 variables
 		vars.ending01b = false;
 		vars.ending03a = false;
@@ -1239,22 +1248,27 @@ split
 		{
 			case 0: //halo 1
 			vars.startedlevel = vars.H1_levelname.Current;
+			vars.startedgame = 0;
 			break;
 			
 			case 1:
 			vars.startedlevel = vars.H2_levelname.Current;
+			vars.startedgame = 1;
 			break;
 			
 			case 2:
 			vars.startedlevel = vars.H3_levelname.Current;
+			vars.startedgame = 2;
 			break;
 			
 			case 5:
 			vars.startedlevel = vars.ODST_levelname.Current;
+			vars.startedgame = 5;
 			break;
 			
 			case 6:
 			vars.startedlevel = vars.HR_levelname.Current;
+			vars.startedgame = 6;
 			break;
 		}
 		vars.odsttimes = 0;
@@ -1263,7 +1277,7 @@ split
 		vars.h2times = 0;
 		vars.addtimes = false;
 		
-	
+		
 		
 		vars.varsreset = true;
 		
@@ -1283,6 +1297,20 @@ split
 	
 	
 	
+	
+	//multigame related - return early if paused between games
+	if (vars.multigamepause)
+	{
+		if (vars.needtosplitending)
+		{
+			vars.dirtybsps_byte.Clear();
+			vars.dirtybsps_int.Clear();
+			vars.dirtybsps_long.Clear();
+			vars.needtosplitending = false;
+			return true;
+		}
+		return false;
+	}
 	
 	
 	
@@ -1332,7 +1360,7 @@ split
 			}
 			
 			checklevel = vars.H1_levelname.Current;
-
+			
 			
 			if (settings["Loopmode"] && vars.H1_levelname.Current == vars.startedlevel && vars.loopsplit == false)
 			{
@@ -1708,6 +1736,7 @@ split
 					if (vars.H1_bspstate.Current == 7 && vars.H1_playerfrozen.Current == true && vars.mawsplit == false)//maw ending
 					{
 						vars.mawsplit = true;
+						vars.multigamepause = true;
 						vars.dirtybsps_byte.Clear();
 						return true;
 					}
@@ -1759,7 +1788,7 @@ split
 			
 			
 			
-
+			
 			
 			
 			
@@ -2025,7 +2054,12 @@ split
 			
 			if ((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && vars.menuindicator.Current == 7) || (vars.H2_levelname.Current == "08b" && vars.H2_CSind.Current == 0x19 && vars.H2_CSind.Old != 0x19))
 			{
+				if (vars.H2_levelname.Current == "08b" && vars.H2_CSind.Current == 0x19 && vars.H2_CSind.Old != 0x19)
+				{
+					vars.multigamepause = true;
+				}
 				vars.dirtybsps_byte.Clear();
+				
 				vars.loopsplit = false;
 				return true;
 			}
@@ -2073,7 +2107,7 @@ split
 			
 			
 			checklevel = vars.H3_levelname.Current;
-
+			
 			
 			if (settings["Loopmode"] && vars.H3_levelname.Current == vars.startedlevel && vars.loopsplit == false)
 			{
@@ -2086,7 +2120,7 @@ split
 				
 			}
 			
-
+			
 			
 			
 			if (settings["bspmode"])
@@ -2282,7 +2316,7 @@ split
 			
 			
 			checklevel = vars.ODST_levelname.Current;
-
+			
 			
 			if (settings["Loopmode"] && vars.ODST_levelname.Current == vars.startedlevel && vars.loopsplit == false)
 			{
@@ -2295,7 +2329,7 @@ split
 				
 			}
 			
-
+			
 			
 			
 			if (settings["bspmode"])
@@ -2472,6 +2506,7 @@ split
 			
 			
 			case 6:
+			
 			//Death counter check
 			if (settings["counters"]) 
 			{
@@ -2499,16 +2534,16 @@ split
 				//Revert counter death check
 				if (settings["revertcounterdeaths"])
 				{
-				if (vars.HR_deathflag.Current && !vars.HR_deathflag.Old)
-				{
-					print ("adding revert-death");
-					vars.RevertCounter += 1;
-					vars.UpdateRevertCounter();
+					if (vars.HR_deathflag.Current && !vars.HR_deathflag.Old)
+					{
+						print ("adding revert-death");
+						vars.RevertCounter += 1;
+						vars.UpdateRevertCounter();
+					}
+					
 				}
-				
-				}
-				}
-				
+			}
+			
 			
 			
 			checklevel = vars.HR_levelname.Current;
@@ -2654,6 +2689,9 @@ split
 				
 			}
 			
+			
+			
+			
 			if (settings["ILmode"])
 			{
 				if ((vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57))
@@ -2669,6 +2707,7 @@ split
 					vars.dirtybsps_int.Clear();
 					return true;
 				} 
+				
 			} 
 			
 			
@@ -2685,7 +2724,7 @@ reset
 		return true;
 	}
 	
-if ((!(settings["Loopmode"])) && vars.menuindicator.Current == 7)
+	if ((!(settings["Loopmode"])) && vars.menuindicator.Current == 7)
 	{
 		
 		byte test = vars.gameindicator.Current;
@@ -2693,7 +2732,7 @@ if ((!(settings["Loopmode"])) && vars.menuindicator.Current == 7)
 		{
 			
 			case 0:
-			if (vars.H1_levelname.Current == vars.startedlevel) //h1
+			if (vars.H1_levelname.Current == vars.startedlevel && vars.startedgame == 0) //h1
 			{
 				if (settings["ILmode"])
 				{
@@ -2720,7 +2759,7 @@ if ((!(settings["Loopmode"])) && vars.menuindicator.Current == 7)
 			break;
 			
 			case 1:
-			if (vars.H2_levelname.Current == vars.startedlevel) //AKA if Halo 2 is loaded
+			if (vars.H2_levelname.Current == vars.startedlevel  && vars.startedgame == 1) //AKA if Halo 2 is loaded
 			{
 				if (settings["ILmode"])
 				{
@@ -2735,7 +2774,7 @@ if ((!(settings["Loopmode"])) && vars.menuindicator.Current == 7)
 			break;
 			
 			case 2:
-			if (vars.H3_levelname.Current == vars.startedlevel) //h3 (guessed val)
+			if (vars.H3_levelname.Current == vars.startedlevel  && vars.startedgame == 2) //h3 (guessed val)
 			{
 				if (settings["ILmode"])
 				{
@@ -2748,20 +2787,20 @@ if ((!(settings["Loopmode"])) && vars.menuindicator.Current == 7)
 			break;
 			
 			case 5:
-			if (vars.ODST_levelname.Current == vars.startedlevel) //odst
+			if (vars.ODST_levelname.Current == vars.startedlevel  && vars.startedgame == 5) //odst
 			{
 				if (settings["ILmode"])
 				{
 					return ( timer.CurrentPhase != TimerPhase.Ended && ( vars.odst_IGT.Current < 10));
 				} else
 				{
-				return ((vars.odst_bspstate.Current == 12884901891) || (vars.ODST_levelname.Current == "c100" && vars.odst_theatertime.Current > 0 && vars.odst_theatertime.Current < 15) );	
+					return ((vars.odst_bspstate.Current == 12884901891) || (vars.ODST_levelname.Current == "c100" && vars.odst_theatertime.Current > 0 && vars.odst_theatertime.Current < 15) );	
 				}
 			} 
 			break;
 			
 			case 6:
-			if (vars.HR_levelname.Current == vars.startedlevel) //hr
+			if (vars.HR_levelname.Current == vars.startedlevel  && vars.startedgame == 6) //hr
 			{
 				if (settings["ILmode"])
 				{
@@ -2782,10 +2821,77 @@ if ((!(settings["Loopmode"])) && vars.menuindicator.Current == 7)
 
 isLoading
 {
+	byte test = vars.gameindicator.Current;
+	
+	
+	if (vars.multigamepause)
+	{
+		//check for restart timer conditions
+		if (vars.menuindicator.Current == 7) 
+		{
+			
+			switch (test)
+			{
+				
+				case 0:
+				if (vars.H1_levelname.Current == "a10" && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+				{	
+					//might need to add a partial vars reset in here
+					vars.multigamepause = false;
+					return false;
+				}
+				break;
+				
+				case 1:
+				if (vars.H2_levelname.Current == "01b" && vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44 && vars.H2_tickcounter.Current < (vars.adjust01b + 30)) //start on cairo
+				{
+					vars.multigamepause = false;
+					return false;
+				} else if (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30) //start on armory
+				{
+					vars.multigamepause = false;
+					return false;
+				}
+				break;
+				
+				case 2:
+				if (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
+				{
+					vars.multigamepause = false;
+					return true;
+				}
+				break;
+				
+				case 5: //ODST
+				if (vars.ODST_levelname.Current == "c100" && vars.odst_theatertime.Current > 15 && vars.odst_theatertime.Current < 30 && vars.odst_bspstate.Current != 12884901891)
+				{
+					vars.multigamepause = false;
+					return true;
+				}
+				break;
+				
+				case 6:
+				if 	(vars.HR_levelname.Current == "m10" && vars.HR_IGT.Current > 10 && vars.HR_IGT.Current < 30)
+				{
+					print ("what");
+					print ("eee: " + vars.HR_IGT.Current);
+					print ("aaa: " + vars.HR_levelname.Current);
+					vars.multigamepause = false;
+					return false;
+				}
+				break;
+			}
+		}
+		
+		
+		
+		
+		
+		return true;
+	}
 	
 	
 	//also should prolly code load removal to work in loading screens when menuindicator isn't == 7 in case of restart/crash
-	byte test = vars.gameindicator.Current;
 	switch (test)
 	{
 		
@@ -2952,7 +3058,14 @@ isLoading
 gameTime
 {
 	
-	if (vars.menuindicator.Current == 7)
+	if (vars.multigamepause)
+	{
+		vars.multigametime = timer.CurrentTime.GameTime;
+		return;
+	}
+	
+	
+	else if (vars.menuindicator.Current == 7)
 	{
 		if (vars.gameindicator.Current == 6) //reach
 		{
@@ -2966,12 +3079,19 @@ gameTime
 					{
 						vars.hrtimes = vars.hrtimes + (vars.HR_IGT.Old - (vars.HR_IGT.Old % 60));
 						
+						if (vars.HR_levelname.Current == "m70") 
+						{
+							vars.multigamepause = true;
+							vars.needtosplitending = true;
+						}
+						
+						
 					}
 					
-					return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.hrtimes)) ));	
+					return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.hrtimes)) )) + vars.multigametime);	
 				}
 				
-				return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.hrtimes + vars.HR_IGT.Current)) ));
+				return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.hrtimes + vars.HR_IGT.Current)) )) + vars.multigametime);
 			}
 		}  else if (vars.gameindicator.Current == 2) //h3
 		{
@@ -2983,18 +3103,28 @@ gameTime
 				{
 					vars.splith3 = true;
 					print ("Adding times");
-					print ("time added: " + vars.H3_theatertime.Old);
+					print ("time added: " + vars.H3_theatertime.Old); 
 					vars.h3times = vars.h3times + (vars.H3_theatertime.Old - (vars.H3_theatertime.Old % 60));
 				}
+				if ((vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57) && (vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && vars.H3_levelname.Old == "120" && vars.multigamepause == false)
+				{
+					print ("doing end of h3 timing");
+					vars.h3times = vars.h3times - (vars.H3_theatertime.Current % 60);
+					
+					vars.multigamepause = true;
+					vars.needtosplitending = true;
+				}
 				
-				return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h3times + vars.H3_theatertime.Current)) ));
 				
+				
+				return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h3times + vars.H3_theatertime.Current)) )) + vars.multigametime);
+				return false;
 			}
 		} else if (vars.gameindicator.Current == 5) //ODST
 		{
-		
+			
 			// bsp value to remove ptd times on 1133871366144
-		
+			
 			if (settings["ILmode"])
 			{return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));}
 			else
@@ -3006,14 +3136,26 @@ gameTime
 					print ("time added: " + vars.odst_theatertime.Old);
 					vars.odsttimes = vars.odsttimes + (vars.odst_theatertime.Old - (vars.odst_theatertime.Old % 60));
 				}
+
+				if ((vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57) && (vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && vars.ODST_levelname.Old == "l300" && vars.multigamepause == false) // by the way, that's L 30, not 1 30.
+				{
+					print ("doing end of odst timing");
+					vars.odsttimes = vars.odsttimes - (vars.odst_theatertime.Current % 60);
+					
+					vars.multigamepause = true;
+					vars.needtosplitending = true;
+				}
+				
+				
+				
 				if (vars.odst_bspstate.Current == 1133871366144 && vars.odst_bspstate.Old != 1133871366144 && vars.ODST_levelname.Current == "c100")
 				{
 					vars.ptdremoval = (vars.odst_theatertime.Old - (vars.odst_theatertime.Old % 60));
 					print ("removing ptd time");
-				print ("time removed: " + ((vars.odst_theatertime.Old - (vars.odst_theatertime.Old % 60)) / 60));
+					print ("time removed: " + ((vars.odst_theatertime.Old - (vars.odst_theatertime.Old % 60)) / 60));
 				}
 				
-				return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_theatertime.Current - vars.ptdremoval)) ));
+				return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_theatertime.Current - vars.ptdremoval)) )) + vars.multigametime);
 				
 			}
 		} else if (settings["ILmode"] && vars.gameindicator.Current == 1) //h2
@@ -3047,7 +3189,7 @@ gameTime
 
 exit
 {
-	timer.IsGameTimePaused = false; //unpause the timer on gamecrash UNLESS it was paused for multi-game-pause option.
+	//timer.IsGameTimePaused = false; //unpause the timer on gamecrash UNLESS it was paused for multi-game-pause option.
 }
 
 
