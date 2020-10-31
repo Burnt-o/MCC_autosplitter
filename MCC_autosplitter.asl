@@ -822,9 +822,9 @@ startup //variable init and settings
 	settings.SetToolTip("ILmode", "Makes the timer start, reset and ending split at the correct IL time for each level. For H2/H3, switches timing to PGCR timer.");
 	
 	settings.Add("Loopmode", false, "Level Loop mode", "ILmode");
-	settings.SetToolTip("Loopmode", "For TBx10 (or similiar memes). Disables resets, and (for H1 and H2 only) adds a split each time you get to the start of the level the run started on. \n" +
+	settings.SetToolTip("Loopmode", "For TBx10 (or similiar memes). Disables resets, and (for H1 only) adds a split each time you get to the start of the level the run started on. \n" +
 		"So for TBx10, you would want 19 splits (10 level ends and 9 level starts in between them). \n" +
-		"But for x10 runs on games besides H1 & H2, you only want 10 splits"
+		"But for x10 runs on games besides H1, you only want 10 splits"
 		
 	);
 	
