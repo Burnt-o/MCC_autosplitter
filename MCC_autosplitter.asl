@@ -822,8 +822,9 @@ startup //variable init and settings
 	settings.SetToolTip("ILmode", "Makes the timer start, reset and ending split at the correct IL time for each level. For H2/H3, switches timing to PGCR timer.");
 	
 	settings.Add("Loopmode", false, "Level Loop mode", "ILmode");
-	settings.SetToolTip("Loopmode", "For TBx10 (or similiar memes). Disables resets, and adds a split each time you get to the start of the level the run started on. \n" +
-		"So for TBx10, you would want 19 splits (10 level ends and 9 level starts in between them)."
+	settings.SetToolTip("Loopmode", "For TBx10 (or similiar memes). Disables resets, and (for H1 and H2 only) adds a split each time you get to the start of the level the run started on. \n" +
+		"So for TBx10, you would want 19 splits (10 level ends and 9 level starts in between them). \n" +
+		"But for x10 runs on games besides H1 & H2, you only want 10 splits"
 		
 	);
 	
@@ -839,7 +840,7 @@ startup //variable init and settings
 		"You probably shouldn't turn this on, unless you're say, practicing a specific segment of a level (from one load to another)."
 	);
 	
-
+	
 	
 	
 	
@@ -1362,7 +1363,7 @@ split
 			checklevel = vars.H1_levelname.Current;
 			
 			
-			if (settings["Loopmode"] && vars.H1_levelname.Current == vars.startedlevel && vars.loopsplit == false)
+			if (settings["Loopmode"] && vars.H1_levelname.Current == vars.startedlevel && vars.loopsplit == false && vars.H1_tickcounter.Current < 1500)
 			{
 				switch (checklevel)
 				{
@@ -1641,86 +1642,121 @@ split
 			}
 			
 			
-			if (settings["ILmode"] && vars.H1_playerfrozen.Current == true && vars.H1_playerfrozen.Old == false)
+			if (settings["ILmode"])
 			{
-				switch (checklevel)
+				if (vars.H1_playerfrozen.Current == true && vars.H1_playerfrozen.Old == false && vars.loopsplit == true)
+				
 				{
 					
-					case "a10":
-					if (vars.H1_bspstate.Current == 6)
+					/* 				if (settings["Loopmode"])
+						{3
+						try
+						{
+						print ("last split was : "+ timer.Run[timer.CurrentSplitIndex - 2].SplitTime.GameTime); 
+						}
+						catch
+						{
+						print ("unable to get last split time");	
+						}
+						print ("current time is: "+ timer.CurrentTime.GameTime);
+						
+						try 
+						{
+						print ("a" + timer.CurrentTime.GameTime.GetType());
+						print ("b" + timer.Run[timer.CurrentSplitIndex - 1].SplitTime.GameTime.GetType());
+						print ("c" + (timer.CurrentTime.GameTime - (timer.Run[timer.CurrentSplitIndex - 2].SplitTime.GameTime)).Value.TotalSeconds.ToString());
+						
+						if ((timer.CurrentTime.GameTime - (timer.Run[timer.CurrentSplitIndex - 2].SplitTime.GameTime)).Value.TotalSeconds < 5)
+						{
+						print ("cancelling split cos too soon");
+						return false;
+						}
+						
+						}
+						catch
+						{
+						print ("blah");
+						}
+					} */
+					
+					switch (checklevel)
 					{
+						
+						case "a10":
+						if (vars.H1_bspstate.Current == 6)
+						{
+							vars.dirtybsps_byte.Clear();
+							vars.loopsplit = false;
+							return true;
+						}
+						break;
+						
+						case "a30": //so we don't false split on lightbridge cs
+						if (vars.H1_bspstate.Current == 1)
+						{
+							vars.dirtybsps_byte.Clear();
+							vars.loopsplit = false;
+							return true;
+						}
+						break;
+						
+						case "a50": 
+						if (vars.H1_bspstate.Current == 2)
+						{
+							vars.dirtybsps_byte.Clear();
+							vars.loopsplit = false;
+							return true;
+						}
+						break;
+						
+						case "b30": //will false split if you go to security button
+						if (vars.H1_bspstate.Current == 0)
+						{
+							vars.dirtybsps_byte.Clear();
+							vars.loopsplit = false;
+							return true;
+						}
+						break;
+						
+						
+						
+						case "c10": //so we don't split on reveal cs
+						if (vars.H1_bspstate.Current != 2)
+						{
+							vars.dirtybsps_byte.Clear();
+							vars.loopsplit = false;
+							return true;
+						}
+						break;
+						
+						
+						case "d20": //keyes -- won't false split on fullpath
+						if (vars.H1_bspstate.Current != 0 && vars.H1_bspstate.Current != 1)
+						{
+							vars.dirtybsps_byte.Clear();
+							vars.loopsplit = false;
+							return true;
+						}
+						break;
+						
+						case "d40": //maw - will false split on bad ending but not bridge cs
+						if (vars.H1_bspstate.Current != 1)
+						{
+							vars.dirtybsps_byte.Clear();
+							vars.loopsplit = false;
+							return true;
+						}
+						break;
+						
+						default: //don't need bsp check for levels without multiple cutscenes
 						vars.dirtybsps_byte.Clear();
 						vars.loopsplit = false;
 						return true;
+						break;
+						
 					}
-					break;
-					
-					case "a30": //so we don't false split on lightbridge cs
-					if (vars.H1_bspstate.Current == 1)
-					{
-						vars.dirtybsps_byte.Clear();
-						vars.loopsplit = false;
-						return true;
-					}
-					break;
-					
-					case "a50": 
-					if (vars.H1_bspstate.Current == 2)
-					{
-						vars.dirtybsps_byte.Clear();
-						vars.loopsplit = false;
-						return true;
-					}
-					break;
-					
-					case "b30": //will false split if you go to security button
-					if (vars.H1_bspstate.Current == 0)
-					{
-						vars.dirtybsps_byte.Clear();
-						vars.loopsplit = false;
-						return true;
-					}
-					break;
-					
-					
-					
-					case "c10": //so we don't split on reveal cs
-					if (vars.H1_bspstate.Current != 2)
-					{
-						vars.dirtybsps_byte.Clear();
-						vars.loopsplit = false;
-						return true;
-					}
-					break;
-					
-					
-					case "d20": //keyes -- won't false split on fullpath
-					if (vars.H1_bspstate.Current != 0 && vars.H1_bspstate.Current != 1)
-					{
-						vars.dirtybsps_byte.Clear();
-						vars.loopsplit = false;
-						return true;
-					}
-					break;
-					
-					case "d40": //maw - will false split on bad ending but not bridge cs
-					if (vars.H1_bspstate.Current != 1)
-					{
-						vars.dirtybsps_byte.Clear();
-						vars.loopsplit = false;
-						return true;
-					}
-					break;
-					
-					default: //don't need bsp check for levels without multiple cutscenes
-					vars.dirtybsps_byte.Clear();
-					vars.loopsplit = false;
-					return true;
-					break;
 					
 				}
-				
-				
 				
 			} else
 			{
@@ -2115,7 +2151,7 @@ split
 				{
 					vars.loopsplit = true;
 					vars.dirtybsps_byte.Clear();
-					return true;
+					//return true;
 				}
 				
 			}
@@ -2259,6 +2295,16 @@ split
 			{
 				if ((vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57))
 				{
+					
+					if ((settings["Loopmode"]))
+					{
+						if (vars.loopsplit == false)
+						{
+							return false;
+						}
+					}
+					
+					
 					vars.dirtybsps_long.Clear();
 					vars.loopsplit = false;
 					return true;
@@ -2324,7 +2370,7 @@ split
 				{
 					vars.loopsplit = true;
 					vars.dirtybsps_byte.Clear();
-					return true; 
+					//return true; 
 				}
 				
 			}
@@ -2482,6 +2528,15 @@ split
 			{
 				if ((vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57))
 				{
+					
+					if ((settings["Loopmode"]))
+					{
+						if (vars.loopsplit == false)
+						{
+							return false;
+						}
+					}
+					
 					vars.dirtybsps_long.Clear();
 					vars.loopsplit = false;
 					return true;
@@ -2549,13 +2604,13 @@ split
 			checklevel = vars.HR_levelname.Current;
 			
 			
-			if (settings["Loopmode"] && vars.HR_levelname == vars.startedlevel)
+			if (settings["Loopmode"] && vars.HR_levelname.Current == vars.startedlevel)
 			{
 				if (vars.HR_IGT.Current > 10 && vars.HR_IGT.Current < 30 && vars.loopsplit == false)
 				{
 					vars.loopsplit = true;
 					vars.dirtybsps_int.Clear();
-					return true;
+					//return true;
 				}
 			}
 			
@@ -2694,8 +2749,15 @@ split
 			
 			if (settings["ILmode"])
 			{
-				if ((vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57))
+				if ((vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57) )
 				{
+					if ((settings["Loopmode"]))
+					{
+						if (vars.loopsplit == false)
+						{
+							return false;
+						}
+					}
 					vars.dirtybsps_int.Clear();
 					vars.loopsplit = false;
 					return true;
@@ -3070,7 +3132,23 @@ gameTime
 		if (vars.gameindicator.Current == 6) //reach
 		{
 			if (settings["ILmode"])
-			{return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.HR_IGT.Current));}
+			{
+				if (settings["Loopmode"])
+				{
+					if (vars.HR_validtimeflag.Current == 19 && vars.HR_validtimeflag.Old != 19)
+					{
+						//adding times
+						vars.hrtimes = vars.hrtimes + (vars.HR_IGT.Old - (vars.HR_IGT.Old % 60));
+					}
+					
+					if (vars.HR_levelname.Current != vars.startedlevel || vars.HR_validtimeflag.Current == 19)
+					return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.hrtimes)) )));	
+					else
+					return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.hrtimes + vars.HR_IGT.Current)) )));
+				}
+				
+				
+			return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.HR_IGT.Current));}
 			else
 			{
 				if (vars.HR_validtimeflag.Current == 19)
@@ -3096,7 +3174,32 @@ gameTime
 		}  else if (vars.gameindicator.Current == 2) //h3
 		{
 			if (settings["ILmode"])
-			{return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H3_IGT.Current));}
+			{
+				if (settings["Loopmode"])
+				{
+					if (vars.H3_IGT.Current < vars.H3_IGT.Old && vars.menuindicator.Old != 11)
+					{
+						//adding times
+						print ("adding h3 times");
+						/* 					print ("stateind1: " + vars.stateindicator.Current);
+							print ("stateind2: " + vars.stateindicator.Old);
+							print ("menuind1: " + vars.menuindicator.Current);
+						print ("menuind2: " + vars.menuindicator.Old); */
+						vars.h3times = vars.h3times + (vars.H3_IGT.Old - (vars.H3_IGT.Old % 60));
+					}
+					if (vars.H3_levelname.Current != vars.startedlevel)
+					{
+						return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h3times)) ));
+					}
+					else
+					{
+						return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h3times + vars.H3_IGT.Current)) ));
+					}
+				}
+				
+				
+				return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H3_IGT.Current));
+			}
 			else
 			{
 				if (vars.H3_theatertime.Old > vars.H3_theatertime.Current && vars.H3_levelname.Current != "")
@@ -3109,8 +3212,8 @@ gameTime
 				if ((vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57) && (vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && vars.H3_levelname.Old == "120" && vars.multigamepause == false)
 				{
 					print ("doing end of h3 timing");
-					vars.h3times = vars.h3times - (vars.H3_theatertime.Current % 60);
-					
+				vars.h3times = (vars.h3times + 1) - (vars.H3_theatertime.Current % 60);
+					//need to add a single tick here cos this check happens a tick (I think) before theater timing actually ends)
 					vars.multigamepause = true;
 					vars.needtosplitending = true;
 				}
@@ -3126,7 +3229,37 @@ gameTime
 			// bsp value to remove ptd times on 1133871366144
 			
 			if (settings["ILmode"])
-			{return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));}
+			{
+				if (settings["Loopmode"])
+				{
+					if (vars.odst_IGT.Current < vars.odst_IGT.Old && vars.menuindicator.Old != 11)
+					{
+						//adding times
+						print ("adding ODST times");
+						/* 					print ("stateind1: " + vars.stateindicator.Current);
+							print ("stateind2: " + vars.stateindicator.Old);
+							print ("menuind1: " + vars.menuindicator.Current);
+						print ("menuind2: " + vars.menuindicator.Old); */
+						vars.odsttimes = vars.odsttimes + (vars.odst_IGT.Old - (vars.odst_IGT.Old % 60));
+					}
+					if (vars.ODST_levelname.Current != vars.startedlevel)
+					{
+						return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes)) ));
+					}
+					else
+					{
+						return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_IGT.Current)) ));
+					}
+				}
+				
+				
+				
+				
+				
+				
+				
+				
+			return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));}
 			else
 			{
 				if (vars.odst_theatertime.Old > vars.odst_theatertime.Current && vars.ODST_levelname.Current != "")
@@ -3136,7 +3269,7 @@ gameTime
 					print ("time added: " + vars.odst_theatertime.Old);
 					vars.odsttimes = vars.odsttimes + (vars.odst_theatertime.Old - (vars.odst_theatertime.Old % 60));
 				}
-
+				
 				if ((vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57) && (vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && vars.ODST_levelname.Old == "l300" && vars.multigamepause == false) // by the way, that's L 30, not 1 30.
 				{
 					print ("doing end of odst timing");
@@ -3162,21 +3295,24 @@ gameTime
 		{
 			if (settings["Loopmode"])
 			{
-				if (vars.stateindicator.Current == 57)
+				if (vars.H2_IGT.Current < vars.H2_IGT.Old && vars.menuindicator.Old != 11)
 				{
-					if (vars.stateindicator.Old != 57)
-					{
-						vars.h2times = vars.h2times + (vars.H2_IGT.Current - (vars.H2_IGT.Current % 60));
-					}
-					
-					return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h2times)) )); 
+					//adding times
+					print ("adding h2 times");
+					/* 					print ("stateind1: " + vars.stateindicator.Current);
+						print ("stateind2: " + vars.stateindicator.Old);
+						print ("menuind1: " + vars.menuindicator.Current);
+					print ("menuind2: " + vars.menuindicator.Old); */
+					vars.h2times = vars.h2times + (vars.H2_IGT.Old - (vars.H2_IGT.Old % 60));
 				}
-				
-				if (vars.stateindicator.Current == 44)
+				if (vars.H2_levelname.Current != vars.startedlevel)
 				{
-					return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h2times)) )); 	
+					return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h2times)) ));
 				}
-				return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h2times + vars.H2_IGT.Current)) ));
+				else
+				{
+					return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h2times + vars.H2_IGT.Current)) ));
+				}
 			}
 			
 			return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H2_IGT.Current));
