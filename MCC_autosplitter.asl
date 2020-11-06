@@ -89,7 +89,8 @@ init //hooking to game to make memorywatchers
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0x28, 0xE342C3), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0x48, 0xB94513B), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0xC8, 0x28478D7), 3)),
-				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0xA8, 0xA942E25), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x038DFE90, 0xA8, 0xA942E25), 4)),
+				(vars.ODST_levelname2 = new StringWatcher(new DeepPointer(0x038DFE90, 0xA8, 0xBC0D757), 4))
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -195,7 +196,8 @@ init //hooking to game to make memorywatchers
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x038CF520, 0x28, 0xE33303), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x038CF520, 0x48, 0xA90A4B), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x038CF520, 0xC8, 0x2AA3277), 3)),
-				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x0), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x0), 4)),
+				(vars.ODST_levelname2 = new StringWatcher(new DeepPointer(0x0), 4))
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -310,7 +312,8 @@ init //hooking to game to make memorywatchers
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03792DA0, 0x28, 0xE342C3), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03792DA0, 0x48, 0xB94513B), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03792DA0, 0xC8, 0x28478D7), 3)),
-				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x03792DA0, 0xA8, 0xA942E25), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x03792DA0, 0xA8, 0xA942E25), 4)),
+				(vars.ODST_levelname2 = new StringWatcher(new DeepPointer(0x03792DA0, 0xA8, 0xBC0D757), 4))
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -424,7 +427,8 @@ init //hooking to game to make memorywatchers
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0x28, 0xE342C3), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0x48, 0xB94513B), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0xC8, 0x28478D7), 3)),
-				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0xA8, 0xA942E25), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x03791DA0, 0xA8, 0xA942E25), 4)),
+				(vars.ODST_levelname2 = new StringWatcher(new DeepPointer(0x03791DA0, 0xA8, 0xBC0D757), 4))
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -532,7 +536,8 @@ init //hooking to game to make memorywatchers
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03780430, 0x28, 0xE33303), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03780430, 0x48, 0xA90A4B), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03780430, 0xC8, 0x2AA3277), 3)),
-				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x0), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x0), 4)),
+				(vars.ODST_levelname2 = new StringWatcher(new DeepPointer(0x0), 4))
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -3281,7 +3286,7 @@ gameTime
 				
 				
 				
-				if (vars.odst_bspstate.Current == 1133871366144 && vars.odst_bspstate.Old != 1133871366144 && vars.ODST_levelname.Current == "c100")
+				if (vars.odst_bspstate.Current == 1133871366144 && vars.odst_bspstate.Old != 1133871366144 && vars.ODST_levelname2.Current == "c100")
 				{
 					vars.ptdremoval = (vars.odst_theatertime.Old - (vars.odst_theatertime.Old % 60));
 					print ("removing ptd time");
