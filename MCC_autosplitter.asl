@@ -28,6 +28,7 @@ init //hooking to game to make memorywatchers
 	vars.ending07a = false;
 	vars.ending08a = false;
 	vars.ending07b = false;
+	vars.pgcrpauseflag = false;
 	
 	
 	
@@ -1729,6 +1730,8 @@ split
 	byte test = vars.gameindicator.Current;
 	if (vars.varsreset == false)
 	{
+		
+	
 		vars.multigametime = TimeSpan.Zero;
 		vars.multigamepause = false;
 		vars.lasth3mgsplit = 0;
@@ -3493,6 +3496,7 @@ isLoading
 				{	
 					//might need to add a partial vars reset in here
 					vars.multigamepause = false;
+					vars.pgcrpauseflag = false;
 					return false;
 				}
 				break;
@@ -3501,10 +3505,12 @@ isLoading
 				if (vars.H2_levelname.Current == "01b" && vars.H2_CSind.Current != 0xD9 && vars.H2_tickcounter.Current > vars.adjust01b && vars.stateindicator.Current != 44 && vars.H2_tickcounter.Current < (vars.adjust01b + 30)) //start on cairo
 				{
 					vars.multigamepause = false;
+					vars.pgcrpauseflag = false;
 					return false;
 				} else if (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30) //start on armory
 				{
 					vars.multigamepause = false;
+					vars.pgcrpauseflag = false;
 					return false;
 				}
 				break;
@@ -3513,6 +3519,8 @@ isLoading
 				if (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
 				{
 					vars.multigamepause = false;
+					vars.pgcrpauseflag = false;
+
 					return true;
 				}
 				break;
@@ -3524,6 +3532,7 @@ isLoading
 					//print ("eee: " + vars.HR_IGT.Current);
 					//print ("aaa: " + vars.HR_levelname.Current);
 					vars.multigamepause = false;
+					vars.pgcrpauseflag = false;
 					return false;
 				}
 				break;
@@ -3532,6 +3541,7 @@ isLoading
 				if (vars.ODST_levelnameBad.Current == "c100" && vars.odst_IGT > 15 && vars.odst_IGT < 30) //there was a bsp check here; do I still need it?
 				{
 					vars.multigamepause = false;
+					vars.pgcrpauseflag = false;
 					return false;
 				}
 				break;
@@ -3543,6 +3553,7 @@ isLoading
 					//print ("eee: " + vars.HR_IGT.Current);
 					//print ("aaa: " + vars.HR_levelname.Current);
 					vars.multigamepause = false;
+					vars.pgcrpauseflag = false;
 					return false;
 				}
 				break;
@@ -3562,7 +3573,17 @@ isLoading
 	{
 		
 		case 0:
-		return (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57);
+		if (vars.stateindicator.Old == 57 && vars.stateindicator.Current != 57)
+		{
+			vars.pgcrpauseflag = true;
+		}
+		
+		if (vars.stateindicator.Current == 44)
+		{
+			vars.pgcrpauseflag = false;
+		}
+		
+		return (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57 || vars.pgcrpauseflag == true);
 		break;
 		
 		case 1: //halo 2
@@ -3571,7 +3592,19 @@ isLoading
 			return true;
 		}
 		
-			return (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57);
+		
+		if (vars.stateindicator.Old == 57 && vars.stateindicator.Current != 57)
+		{
+			vars.pgcrpauseflag = true;
+		}
+		
+		if (vars.stateindicator.Current == 44)
+		{
+			vars.pgcrpauseflag = false;
+		}
+		
+		
+			return (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57  || vars.pgcrpauseflag == true);
 		break;
 		
 		case 2:
