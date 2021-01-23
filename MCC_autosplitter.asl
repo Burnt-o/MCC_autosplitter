@@ -1732,7 +1732,7 @@ split
 	if (vars.varsreset == false)
 	{
 		
-	vars.pgcrpauseflag = false
+	vars.pgcrpauseflag = false;
 		vars.multigametime = TimeSpan.Zero;
 		vars.multigamepause = false;
 		vars.lasth3mgsplit = 0;
