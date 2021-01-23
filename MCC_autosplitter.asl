@@ -1533,6 +1533,7 @@ start 	//starts timer
 		
 		
 		vars.secondreset = false;
+		vars.pgcrpauseflag = false;
 		
 		print("What about second varsreset? Elevensies? Luncheon? Afternoon tea?");
 	}
@@ -1731,7 +1732,7 @@ split
 	if (vars.varsreset == false)
 	{
 		
-	
+	vars.pgcrpauseflag = false
 		vars.multigametime = TimeSpan.Zero;
 		vars.multigamepause = false;
 		vars.lasth3mgsplit = 0;
