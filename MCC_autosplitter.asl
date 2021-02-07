@@ -202,6 +202,10 @@ init //hooking to game to make memorywatchers
 				(vars.H4_validtimeflag = new MemoryWatcher<byte> (new DeepPointer(0x038D3BE0, 0x68, 0x276349E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
+			vars.watchers_h4bsp = new MemoryWatcherList() {
+				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x038D3BE0, 0x68, 0x0243A1C8, -0xD70)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
 			
 		}else if (version == "1.2028.0.0")
 		{
@@ -784,6 +788,10 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4 = new MemoryWatcherList() {
 				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03780678, 0x68, 0x0243A2A8, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H4_validtimeflag = new MemoryWatcher<byte> (new DeepPointer(0x03780678, 0x68, 0x276349E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h4bsp = new MemoryWatcherList() {
+				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03780678, 0x68, 0x0243A1C8, -0xD70)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
 			
@@ -1496,6 +1504,17 @@ startup //variable init and settings
 	vars.h4times = 0;
 	vars.dawnsplit = false;
 	
+	vars.nosplitbsp_m10 = new ulong[3] { 0, 0x0000000001800000, 0x000000000700000F };
+	vars.nosplitbsp_m02 = new ulong[2] { 0, 0x0000000080000C02 };
+	vars.nosplitbsp_m30 = new ulong[2] { 0, 0x0000000072001902 };
+	vars.nosplitbsp_m40 = new ulong[3] { 0, 0x00000040000C0001, 0x00000000013C0001 };
+	vars.nosplitbsp_m60 = new ulong[3] { 0, 0x0000C00002100001, 0x0000400006000001 };
+	vars.nosplitbsp_m70 = new ulong[2] { 0, 0x0000000100100004};
+	vars.nosplitbsp_m80 = new ulong[4] { 0, 0x0020000080000006, 0x0000000080400006, 0x0000000180C0000E};
+	vars.nosplitbsp_m90 = new ulong[3] { 0, 0x0000010000000006, 0x0000000000A00006};
+	
+	
+	
 	//HALO ODST
 	vars.ptdsplit = false;
 	vars.splitodst = false;
@@ -1712,6 +1731,8 @@ update {
 			
 			case 3:
 			vars.watchers_h4.UpdateAll(game);
+						if (settings["bspmode"])
+			{ vars.watchers_h4bsp.UpdateAll(game); }
 			break;
 			
 			case 5:
@@ -3103,6 +3124,142 @@ split
 					//return true;
 				}
 			}
+			
+			
+			if (settings["bspmode"])
+			{
+				
+				if (settings["bsp_cache"])
+				{
+					switch (checklevel)
+					{
+						case "m10":
+						return (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m10, x => x == vars.H4_bspstate.Current));
+						break;
+						
+						case "m02":
+						return (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m02, x => x == vars.H4_bspstate.Current));
+						break;
+						
+						case "m30":
+						return (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m30, x => x == vars.H4_bspstate.Current));
+						break;
+						
+						case "m40":
+						return (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m40, x => x == vars.H4_bspstate.Current));
+						break;
+						
+						case "m50":
+						return (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m50, x => x == vars.H4_bspstate.Current));
+						break;
+						
+						case "m60":
+						return (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m60, x => x == vars.H4_bspstate.Current));
+						break;
+						
+						case "m70":
+						return (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m70, x => x == vars.H4_bspstate.Current));
+						break;
+						
+						case "m80":
+						return (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m80, x => x == vars.H4_bspstate.Current));
+						break;
+						
+						case "m90":
+						return (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m90, x => x == vars.H4_bspstate.Current));
+						break;
+						
+						
+						default:
+						return false;
+						break;
+						
+					}
+					
+				}
+				
+				switch (checklevel)
+				{
+					case "m10":
+					if (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m10, x => x == vars.H4_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H4_bspstate.Current)))
+					{
+						//reset bug fix
+						//actually can't think of a good way to fix it rn
+				
+						vars.dirtybsps_long.Add(vars.H4_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "m02":
+					if (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m02, x => x == vars.H4_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H4_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H4_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "m30":
+					if (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m30, x => x == vars.H4_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H4_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H4_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "m40":
+					if (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m40, x => x == vars.H4_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H4_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H4_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "m50":
+					if (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m50, x => x == vars.H4_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H4_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H4_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "m60":
+					if (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m60, x => x == vars.H4_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H4_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H4_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					
+					case "m70":
+					if (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m70, x => x == vars.H4_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H4_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H4_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "m80":
+					if (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m80, x => x == vars.H4_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H4_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H4_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					case "m90":
+					if (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.nosplitbsp_m90, x => x == vars.H4_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H4_bspstate.Current)))
+					{
+						vars.dirtybsps_long.Add(vars.H4_bspstate.Current);
+						return true;
+					}
+					break;
+					
+					default:
+					break;
+				} 
+			} 
 			
 			
 			
