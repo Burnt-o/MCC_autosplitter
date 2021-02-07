@@ -3677,9 +3677,9 @@ reset
 			break;
 			
 			case 5:
-			print ("ah1: " + vars.ODST_levelnameBad2.Current);
-			print ("ah2: " + vars.startedlevel);
-			print ("ah2: " + vars.startedgame);
+			//print ("ah1: " + vars.ODST_levelnameBad2.Current);
+			//print ("ah2: " + vars.startedlevel);
+			//print ("ah2: " + vars.startedgame);
 			if (vars.ODST_levelnameBad2.Current == vars.startedlevel && vars.startedgame == 5) //odst
 			{
 				if (settings["ILmode"])
@@ -3773,7 +3773,7 @@ isLoading
 				break;
 				
 				case 5: //ODST
-				if (vars.ODST_levelnameBad.Current == "c100" && vars.odst_IGT > 15 && vars.odst_IGT < 30) //there was a bsp check here; do I still need it?
+				if (vars.ODST_levelnameBad.Current == "c100" && vars.odst_IGT.Current > 15 && vars.odst_IGT.Current < 30) //there was a bsp check here; do I still need it?
 				{
 					vars.multigamepause = false;
 					vars.pgcrpauseflag = false;
@@ -4029,13 +4029,6 @@ gameTime
 						return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_IGT.Current)) ));
 					}
 				}
-				
-				
-				
-				
-				
-				
-				
 				
 			return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));}
 			else
