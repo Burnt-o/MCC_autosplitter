@@ -10,7 +10,7 @@
 
 state("MCC-Win64-Shipping") {}
 state("MCC-Win64-Shipping-WinStore") {} 
-state("MCCWinStore-Win64-Shipping.exe") {} //what the fuck 343?!
+state("MCCWinStore-Win64-Shipping") {} //what the fuck 343?!
 
 
 
