@@ -129,7 +129,7 @@ if (version == "1.2398.0.0")
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03A21078, 0x8, 0x2B58A24)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03A21078, 0x8, 0x19F0400)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03A21078, 0x8, 0x2AED5E8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03A21078, 0x8, 0x2AEC640)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1xy = new MemoryWatcherList() {
@@ -1076,7 +1076,7 @@ if (version == "1.2398.0.0")
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x038C49C0, 0x8, 0x2B58A24)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x038C49C0, 0x8, 0x19F0400)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x038C49C0, 0x8, 0x2AED5E8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x038C49C0, 0x8, 0x2AEC640)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1xy = new MemoryWatcherList() {
@@ -4520,7 +4520,19 @@ reset
 					))); 
 				} else
 				{
-					return (vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == true); //reset on PoA
+					if(vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == true )
+					{
+
+							vars.watchers_h1xy.UpdateAll(game);
+							print ("x: " + vars.H1_xpos.Current);
+							print ("y: " + vars.H1_ypos.Current);
+							
+							return(vars.H1_xpos.Current < -40);
+
+						
+					}
+					
+					//reset on PoA
 				}
 				
 				
