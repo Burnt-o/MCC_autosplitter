@@ -72,19 +72,19 @@ init //hooking to game to make memorywatchers
 		version = "1.2241.0.0";
 		break;
 		
-				case "1.2282.0.0":
+		case "1.2282.0.0":
 		version = "1.2282.0.0";
 		break;
 		
-						case "1.2398.0.0":
+		case "1.2398.0.0":
 		version = "1.2398.0.0";
 		break;
 		
-								case "1.2406.0.0":
+		case "1.2406.0.0":
 		version = "1.2406.0.0";
 		break;
 		
-										case "1.2448.0.0":
+		case "1.2448.0.0":
 		version = "1.2448.0.0";
 		break;
 		
@@ -113,9 +113,9 @@ init //hooking to game to make memorywatchers
 	// STEAM !!!!!!!!!!!!!!!!!!!! 
 	if (modules.First().ToString() == "MCC-Win64-Shipping.exe")
 	{
-
-
-if (version == "1.2448.0.0")
+		
+		
+		if (version == "1.2448.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
 				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x38EF0A9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
@@ -131,7 +131,7 @@ if (version == "1.2448.0.0")
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0xC8, 0x2868777), 3)),
 				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(0x3A24FF8, 0xA8, 0xA84485), 4)), 
 				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(0x3A24FF8, 0xA8, 0x1D25187), 4)), 
-				 
+				
 				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0x68, 0x276ACA3), 3))
 			};
 			
@@ -156,7 +156,7 @@ if (version == "1.2448.0.0")
 			vars.watchers_h2 = new MemoryWatcherList() {
 				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0x28, 0x1694754)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_cutsceneflag = new MemoryWatcher<byte>(new DeepPointer(0x3A24FF8, 0x28, 0x13E9540)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H2_CSind = new MemoryWatcher<byte>(new DeepPointer(0x3A24FF8, 0x28, 0x01D0A4A8, 0x38, 0x78, 0x1E8, 0xE8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H2_CSind = new MemoryWatcher<byte>(new DeepPointer(0x3A24FF8, 0x28, 0x01D0A4B8, 0x38, 0x78, 0x1E8, 0xE8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h2bsp = new MemoryWatcherList() {
@@ -235,8 +235,8 @@ if (version == "1.2448.0.0")
 			};
 			
 		}
-
- else if (version == "1.2398.0.0" || version == "1.2406.0.0")
+		
+		else if (version == "1.2398.0.0" || version == "1.2406.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
 				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x38EB129)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
@@ -252,7 +252,7 @@ if (version == "1.2448.0.0")
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03A21078, 0xC8, 0x2868777), 3)),
 				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(0x03A21078, 0xA8, 0xA84485), 4)), 
 				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(0x03A21078, 0xA8, 0x1D25187), 4)), 
-				 
+				
 				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03A21078, 0x68, 0x276ACA3), 3))
 			};
 			
@@ -356,8 +356,8 @@ if (version == "1.2448.0.0")
 			};
 			
 		}
-
- else if (version == "1.2282.0.0")
+		
+		else if (version == "1.2282.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
 				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x38D1D39)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
@@ -3857,8 +3857,13 @@ split
 				
 			}
 			
+			//print("levelname" + vars.H2_levelname.Current);
+			//print("csindcurr" + vars.H2_CSind.Current);
+			//print("csindoldd" + vars.H2_CSind.Old);
 			
-			if ((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && vars.menuindicator.Current == 7) || (vars.H2_levelname.Current == "08b" && vars.H2_CSind.Current == 0x19 && vars.H2_CSind.Old != 0x19))
+			if ((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && vars.menuindicator.Current == 7) 
+			|| 
+				(vars.H2_levelname.Current == "08b" && vars.H2_CSind.Current == 0x19 && vars.H2_CSind.Old != 0x19))
 			{
 				if (vars.H2_levelname.Current == "08b" && vars.H2_CSind.Current == 0x19 && vars.H2_CSind.Old != 0x19)
 				{
@@ -4772,13 +4777,13 @@ reset
 				{
 					if(vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == true )
 					{
-
-							vars.watchers_h1xy.UpdateAll(game);
-							print ("x: " + vars.H1_xpos.Current);
-							print ("y: " + vars.H1_ypos.Current);
-							
-							return(vars.H1_xpos.Current < -40);
-
+						
+						vars.watchers_h1xy.UpdateAll(game);
+						print ("x: " + vars.H1_xpos.Current);
+						print ("y: " + vars.H1_ypos.Current);
+						
+						return(vars.H1_xpos.Current < -40);
+						
 						
 					}
 					
@@ -5074,7 +5079,7 @@ gameTime
 			}
 			else
 			{
-		//print ("eh");
+				//print ("eh");
 				if (vars.H4_validtimeflag.Current == 1 || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
 				{
 					if (vars.H4_validtimeflag.Old != 1 && vars.H4_validtimeflag.Current == 1)
@@ -5206,44 +5211,43 @@ gameTime
 				}
 				
 				return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_IGT.Current)) )) + vars.multigametime);
-				}
-				} else if (settings["ILmode"] && vars.gameindicator.Current == 1) //h2
+			}
+		} else if (settings["ILmode"] && vars.gameindicator.Current == 1) //h2
+		{
+			if (settings["Loopmode"])
+			{
+				if (vars.H2_IGT.Current < vars.H2_IGT.Old && vars.menuindicator.Old != 11)
 				{
-					if (settings["Loopmode"])
-					{
-						if (vars.H2_IGT.Current < vars.H2_IGT.Old && vars.menuindicator.Old != 11)
-						{
-							//adding times
-							print ("adding h2 times");
-							/* 					print ("stateind1: " + vars.stateindicator.Current);
-								print ("stateind2: " + vars.stateindicator.Old);
-								print ("menuind1: " + vars.menuindicator.Current);
-							print ("menuind2: " + vars.menuindicator.Old); */
-							vars.h2times = vars.h2times + (vars.H2_IGT.Old - (vars.H2_IGT.Old % 60));
-						}
-						if (vars.H2_levelname.Current != vars.startedlevel)
-						{
-							return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h2times)) ));
-						}
-						else
-						{
-							return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h2times + vars.H2_IGT.Current)) ));
-						}
-					}
-					
-					return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H2_IGT.Current));
+					//adding times
+					print ("adding h2 times");
+					/* 					print ("stateind1: " + vars.stateindicator.Current);
+						print ("stateind2: " + vars.stateindicator.Old);
+						print ("menuind1: " + vars.menuindicator.Current);
+					print ("menuind2: " + vars.menuindicator.Old); */
+					vars.h2times = vars.h2times + (vars.H2_IGT.Old - (vars.H2_IGT.Old % 60));
+				}
+				if (vars.H2_levelname.Current != vars.startedlevel)
+				{
+					return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h2times)) ));
+				}
+				else
+				{
+					return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h2times + vars.H2_IGT.Current)) ));
 				}
 			}
+			
+			return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H2_IGT.Current));
 		}
-		
-		
-		
-		
-		exit
-		{
-			//timer.IsGameTimePaused = false; //unpause the timer on gamecrash UNLESS it was paused for multi-game-pause option.
-		}
-		
-		
-		
-		
+	}
+}
+
+
+
+
+exit
+{
+	//timer.IsGameTimePaused = false; //unpause the timer on gamecrash UNLESS it was paused for multi-game-pause option.
+}
+
+
+
