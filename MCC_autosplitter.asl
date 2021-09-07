@@ -3074,6 +3074,7 @@ split
 	{
 		if (vars.needtosplitending)
 		{
+		print("444444444444444444444");
 			vars.dirtybsps_byte.Clear();
 			vars.dirtybsps_int.Clear();
 			vars.dirtybsps_long.Clear();
@@ -5007,6 +5008,7 @@ gameTime
 	//print ("e");
 	if (vars.multigamepause)
 	{
+	print("13333333333333333");
 		vars.multigametime = timer.CurrentTime.GameTime;
 		return;
 	}
@@ -5187,11 +5189,12 @@ gameTime
 				
 				if (vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57)
 				{
-					
+					print("11111111111111111111111");
 					vars.odsttimes = vars.odsttimes + (vars.odst_IGT.Old - (vars.odst_IGT.Old % 60));
 					
-					if (vars.ODST_levelnameBad.Current == "L300") 
+					if (vars.ODST_levelnameBad2.Current == "l300") 
 					{
+					print("222222222222222222");
 						vars.multigamepause = true;
 						vars.needtosplitending = true;
 					} else
