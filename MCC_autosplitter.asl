@@ -2397,7 +2397,7 @@ startup //variable init and settings
 	vars.splitbsp_c10 = new byte[4] { 1, 3, 4, 5};
 	vars.splitbsp_c20 = new byte[3] { 1, 2, 3};
 	vars.splitbsp_c40 = new byte[8] { 12, 10, 1, 9, 8, 6, 0, 5 };
-	vars.splitbsp_d20 = new byte[2] { 4, 3 };
+	vars.splitbsp_d20 = new byte[3] { 4, 3, 2 };
 	vars.splitbsp_d40 = new byte[7] { 1, 2, 3, 4, 5, 6, 7 };
 	vars.poasplit = false;
 	vars.mawsplit = false;
@@ -3501,7 +3501,7 @@ split
 						
 						
 						case "d20": //keyes -- won't false split on fullpath
-						if (vars.H1_bspstate.Current != 0 && vars.H1_bspstate.Current != 1)
+						if (vars.H1_bspstate.Current == 3)
 						{
 							vars.dirtybsps_byte.Clear();
 							vars.loopsplit = false;
