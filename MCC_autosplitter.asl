@@ -3074,7 +3074,7 @@ split
 	{
 		if (vars.needtosplitending)
 		{
-		print("444444444444444444444");
+			//print("444444444444444444444");
 			vars.dirtybsps_byte.Clear();
 			vars.dirtybsps_int.Clear();
 			vars.dirtybsps_long.Clear();
@@ -3863,8 +3863,8 @@ split
 			//print("csindoldd" + vars.H2_CSind.Old);
 			
 			if ((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && vars.menuindicator.Current == 7) 
-			|| 
-				(vars.H2_levelname.Current == "08b" && vars.H2_CSind.Current == 0x19 && vars.H2_CSind.Old != 0x19))
+				|| 
+			(vars.H2_levelname.Current == "08b" && vars.H2_CSind.Current == 0x19 && vars.H2_CSind.Old != 0x19))
 			{
 				if (vars.H2_levelname.Current == "08b" && vars.H2_CSind.Current == 0x19 && vars.H2_CSind.Old != 0x19)
 				{
@@ -4762,8 +4762,13 @@ reset
 			{
 				if (settings["ILmode"])
 				{
+					if (vars.H1_levelname.Current == "a10" && vars.H1_playerfrozen.Current == true)
+					{
+						vars.watchers_h1xy.UpdateAll(game);
+					}
+					
 					return (timer.CurrentPhase != TimerPhase.Ended &&( (
-						(vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == true) 
+					(vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == true && vars.H1_xpos.Current > -55.7115 && vars.H1_xpos.Current < -53.7115) 
 						|| (vars.H1_levelname.Current == "a30" && vars.H1_tickcounter.Current < 50) 
 						|| (vars.H1_levelname.Current == "a50" && vars.H1_tickcounter.Current < 500) 
 						|| (vars.H1_levelname.Current == "b30" && vars.H1_tickcounter.Current < 500) 
@@ -4783,7 +4788,7 @@ reset
 						print ("x: " + vars.H1_xpos.Current);
 						print ("y: " + vars.H1_ypos.Current);
 						
-						return(vars.H1_xpos.Current < -40);
+						return(vars.H1_xpos.Current > -55.7115 && vars.H1_xpos.Current < -53.7115);
 						
 						
 					}
@@ -5008,7 +5013,7 @@ gameTime
 	//print ("e");
 	if (vars.multigamepause)
 	{
-	print("13333333333333333");
+		//print("13333333333333333");
 		vars.multigametime = timer.CurrentTime.GameTime;
 		return;
 	}
@@ -5189,12 +5194,12 @@ gameTime
 				
 				if (vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57)
 				{
-					print("11111111111111111111111");
+					//print("11111111111111111111111");
 					vars.odsttimes = vars.odsttimes + (vars.odst_IGT.Old - (vars.odst_IGT.Old % 60));
 					
 					if (vars.ODST_levelnameBad2.Current == "l300") 
 					{
-					print("222222222222222222");
+						//print("222222222222222222");
 						vars.multigamepause = true;
 						vars.needtosplitending = true;
 					} else
