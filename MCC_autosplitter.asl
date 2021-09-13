@@ -5062,8 +5062,20 @@ isLoading
 				break;
 				
 				case "03a": //Outskirts
-				if (vars.ending01b == true &&  vars.H2_CSind.Current != 0xB1 && vars.H2_CSind.Old == 0xB1 && vars.stateindicator.Current != 44) 
-				vars.ending01b = false;
+				
+				if (vars.ending01b == true && vars.stateindicator.Current != 44)
+				{
+					
+					vars.watchers_h2xy.UpdateAll(game);
+					if (vars.H2_xpos.Current < -592.15)
+					{
+						vars.ending01b = false;
+					}
+				}
+				
+				
+				
+				
 				if (vars.ending01b == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) //outskirts has no outro cs
 				vars.ending03a = true;
 				return (vars.ending01b || vars.ending03a);
