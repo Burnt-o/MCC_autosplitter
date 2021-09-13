@@ -2836,7 +2836,7 @@ start 	//starts timer
 				switch (checklevel)
 				{
 					case "a10":
-					if (vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					if (vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true) //unchanged
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -2845,7 +2845,7 @@ start 	//starts timer
 					break;
 					
 					case "a30":
-					if (vars.H1_tickcounter.Current == 183)
+					if (vars.H1_tickcounter.Current == 182) //was 183 pre timing change
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -2854,7 +2854,7 @@ start 	//starts timer
 					break;
 					
 					case "a50":
-					if (vars.H1_tickcounter.Current == 850)
+					if (vars.H1_tickcounter.Current == 849) //was 850 pre timing change
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -2863,7 +2863,7 @@ start 	//starts timer
 					break;
 					
 					case "b30":
-					if (vars.H1_tickcounter.Current == 1093)
+					if (vars.H1_tickcounter.Current == 1051) //was 1093 (-42) pre timing change
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -2872,7 +2872,7 @@ start 	//starts timer
 					break;
 					
 					case "b40":
-					if (vars.H1_tickcounter.Current == 966)
+					if (vars.H1_tickcounter.Current == 914) //was 966 (-52)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -2881,7 +2881,7 @@ start 	//starts timer
 					break;
 					
 					case "c10":
-					if (vars.H1_tickcounter.Current == 717)
+					if (vars.H1_tickcounter.Current == 663) //was 717 (-54)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
