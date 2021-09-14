@@ -5038,6 +5038,7 @@ isLoading
 		{
 			return true;
 		}
+	
 		
 		if (vars.menuindicator.Current == 7) 
 		{
@@ -5067,7 +5068,9 @@ isLoading
 				{
 					
 					vars.watchers_h2xy.UpdateAll(game);
-					if (vars.H2_xpos.Current < -592.15)
+					
+
+					if (vars.H2_xpos.Current != (float)-592.146973 && vars.H2_xpos.Current != (float)0)
 					{
 						vars.ending01b = false;
 					}
