@@ -4866,7 +4866,8 @@ reset
 				}
 				else
 				{
-					return (vars.H2_CSind.Current == 0xD9 || (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current <20)); //reset on Cairo & armory
+				return (vars.H2_tickcounter.Current < 10 && ((vars.H2_levelname.Current == "01a") || (vars.H2_levelname.Current == "01b"))); //reset on Cairo & armory
+					//return (vars.H2_CSind.Current == 0xD9 || (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current < 20)); //reset on Cairo & armory
 				} 
 				
 			} 
