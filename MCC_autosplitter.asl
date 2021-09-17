@@ -3911,7 +3911,7 @@ split
 			
 			if ((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && vars.menuindicator.Current == 7) 
 				|| 
-			(vars.H2_levelname.Current == "08b" && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)))
+			(vars.H2_levelname.Current == "08b" && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96)))
 			{
 				
 				
@@ -5058,7 +5058,7 @@ isLoading
 				case "01b": //Cairo Station
 				if (vars.ending01a == true && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 44)   //intro cutscene over check 
 				vars.ending01a = false; 
-				if (vars.ending01a == false && ((vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.8)))    //outro cutscene started check
+				if (vars.ending01a == false && ((vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96)))    //outro cutscene started check
 				vars.ending01b = true;
 				return (vars.ending01a || vars.ending01b);
 				break;
@@ -5080,7 +5080,7 @@ isLoading
 				
 				
 				
-				if (vars.ending01b == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) //outskirts has no outro cs
+				if (vars.ending01b == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.563 && vars.H2_letterbox.Old <= 0.563)) //outskirts has no outro cs
 				vars.ending03a = true;
 				return (vars.ending01b || vars.ending03a);
 				break;
@@ -5088,7 +5088,7 @@ isLoading
 				case "03b": //Metropolis
 				if (vars.ending03a == true && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 44) //4 variations of intro cs for difficulties
 				vars.ending03a = false;
-				if (vars.ending03a == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) 
+				if (vars.ending03a == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.887 && vars.H2_letterbox.Old <= 0.887)) 
 				vars.ending03b = true;	
 				return (vars.ending03a || vars.ending03b);
 				break;
@@ -5096,7 +5096,7 @@ isLoading
 				case "04a": //The Arbiter
 				if (vars.ending03b == true && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 44) 
 				vars.ending03b = false;
-				if (vars.ending03b == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) //the arbiter has no outro cs
+				if (vars.ending03b == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96)) //the arbiter has no outro cs
 				vars.ending04a = true;	
 				return (vars.ending03b || vars.ending04a);
 				break;
@@ -5108,7 +5108,7 @@ isLoading
 					vars.lastinternal04b = false;
 				}
 				
-				if ( vars.lastinternal04b == false &&(vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) 
+				if ( vars.lastinternal04b == false &&(vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.947 && vars.H2_letterbox.Old <= 0.947)) 
 				{
 					vars.watchers_h2bsp.UpdateAll(game);
 					print ("testing for penultimate cutscene on Oracle");
@@ -5122,7 +5122,7 @@ isLoading
 				}
 				
 				
-				if (vars.ending04a == false && vars.lastinternal04b == true && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) 
+				if (vars.ending04a == false && vars.lastinternal04b == true && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.947 && vars.H2_letterbox.Old <= 0.947)) 
 				{
 					vars.ending04b = true;	
 					vars.lastinternal04b = false;
@@ -5133,7 +5133,7 @@ isLoading
 				case "05a": //Delta Halo
 				if (vars.ending04b == true && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 44) 
 				vars.ending04b = false;
-				if (vars.ending04b == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) //delta halo has no outro cs
+				if (vars.ending04b == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.947 && vars.H2_letterbox.Old <= 0.947)) //delta halo has no outro cs
 				vars.ending05a = true;	
 				return (vars.ending04b || vars.ending05a);
 				break;
@@ -5170,7 +5170,7 @@ isLoading
 				case "06a": //Sacred Icon
 				if (vars.ending05b == true && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 44) 
 				vars.ending05b = false;
-				if (vars.ending05b == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) //sacred icon has no outro cs
+				if (vars.ending05b == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.95 && vars.H2_letterbox.Old <= 0.95)) //sacred icon has no outro cs
 				vars.ending06a = true;	
 				return (vars.ending05b || vars.ending06a);
 				break;
@@ -5183,7 +5183,7 @@ isLoading
 					
 				}
 				
-				if (vars.ending06a == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) 
+				if (vars.ending06a == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96)) 
 				{
 					vars.watchers_h2bsp.UpdateAll(game);
 					if (vars.H2_bspstate.Current == 4)
@@ -5198,7 +5198,7 @@ isLoading
 				case "07a": //Gravemind
 				if (vars.ending06b == true && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 44) 
 				vars.ending06b = false;
-				if (vars.ending06b == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) 
+				if (vars.ending06b == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96)) 
 				vars.ending07a = true;	
 				return (vars.ending06b || vars.ending07a);
 				break;
@@ -5206,7 +5206,7 @@ isLoading
 				case "08a": //Uprising
 				if (vars.ending07a == true && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 44) 
 				vars.ending07a = false;
-				if (vars.ending07a == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) 
+				if (vars.ending07a == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96)) 
 				vars.ending08a = true;	
 				return (vars.ending07a || vars.ending08a);
 				break;
@@ -5214,7 +5214,7 @@ isLoading
 				case "07b": //High Charity
 				if (vars.ending08a == true && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 44) 
 				vars.ending08a = false;
-				if (vars.ending08a == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.9 && vars.H2_letterbox.Old <= 0.9)) 
+				if (vars.ending08a == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96)) 
 				vars.ending07b = true;	
 				return (vars.ending08a || vars.ending07b);
 				break;
