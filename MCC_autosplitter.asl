@@ -2607,12 +2607,18 @@ startup //variable init and settings
 	settings.Add("ILmode", false, "Individual Level mode");
 	settings.SetToolTip("ILmode", "Makes the timer start, reset and ending split at the correct IL time for each level. For H2/H3, switches timing to PGCR timer.");
 	
+	
+	
+	
+	
+	
 	settings.Add("Loopmode", false, "Level Loop mode", "ILmode");
 	settings.SetToolTip("Loopmode", "For TBx10 (or similiar memes). Disables resets, and (for H1 only) adds a split each time you get to the start of the level the run started on. \n" +
 		"So for TBx10, you would want 19 splits (10 level ends and 9 level starts in between them). \n" +
 		"But for x10 runs on games besides H1, you only want 10 splits"
 		
 	);
+	
 	
 	settings.Add("bspmode", false, "Split on unique \"Loading... Done\"'s ");
 	settings.SetToolTip("bspmode", "Split on unique bsp loads (\"Loading... Done\") within levels. \n" +
@@ -2627,7 +2633,7 @@ startup //variable init and settings
 	);
 	
 	
-	
+	settings.Add("anylevel", false, "Start full-game runs on any level (breaks auto-resets & multi-game runs)");
 	
 	
 	settings.Add("counters", false, "Counters and fun stuff");
@@ -2927,6 +2933,53 @@ start 	//starts timer
 					
 				}
 				
+			} else if (settings["anylevel"])
+			{
+				
+				checklevel = vars.H1_levelname.Current;
+				
+				switch (checklevel)
+				{
+					case "a10":
+					if (vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true) //unchanged
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					
+					//levels with skippable intro cutscenes
+					case "a30":
+					case "c20":
+					case "c40":
+					case "d20":
+					case "d40":
+					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					//levels with unskippable intro cutscenes
+					case "a50":
+					case "b30":
+					case "b40":
+					case "c10":
+					if (vars.H1_tickcounter.Current > 1 && vars.H1_tickcounter.Current < 15) //was 183 pre timing change
+					{
+						vars.startedlevel = checklevel;
+						vars.varsreset = false;
+						return true;
+					}
+					break;
+					
+					
+				}
+				
 			} else if (vars.H1_levelname.Current == "a10" && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
 			{
 				vars.startedlevel = "a10";
@@ -2941,6 +2994,17 @@ start 	//starts timer
 				vars.startedlevel = vars.H2_levelname.Current;
 				vars.varsreset = false;
 				return true;
+			} else if (settings["anylevel"])
+			{
+				
+				
+				if (vars.stateindicator.Current != 44 && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.H2_tickcounter < 50)
+				{
+					vars.startedlevel = vars.H2_levelname.Current;
+					vars.varsreset = false;
+					return true;
+				}
+				
 			} else if (vars.H2_levelname.Current == "01b" && vars.H2_CSind.Current != 0xD9 && vars.stateindicator.Current != 44 && vars.H2_tickcounter.Current > (10) && vars.H2_tickcounter.Current < (20)) //start on cairo
 			{
 				vars.startedlevel = "01b";
@@ -2960,6 +3024,16 @@ start 	//starts timer
 				vars.startedlevel = vars.H3_levelname.Current;
 				vars.varsreset = false;
 				return true;
+			} else if (settings["anylevel"])
+			{
+				
+				if (vars.stateindicator.Current != 44 && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
+				{
+					vars.startedlevel = vars.H3_levelname.Current;
+					vars.varsreset = false;
+					return true;
+				}
+				
 			} else if (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
 			{
 				vars.startedlevel = "010";
@@ -2977,6 +3051,17 @@ start 	//starts timer
 				vars.startedlevel = vars.H4_levelname.Current;
 				vars.varsreset = false;
 				return true;
+			} else if (settings["anylevel"])
+			{
+				
+				
+				if (vars.stateindicator.Current != 44 && vars.H4_IGT.Current > 10 && vars.H4_IGT.Current < 30)
+				{
+					vars.startedlevel = vars.H4_levelname.Current;
+					vars.varsreset = false;
+					return true;
+				}
+				
 			}
 			break;
 			
@@ -2986,7 +3071,18 @@ start 	//starts timer
 				vars.startedlevel = vars.ODST_levelnameBad2.Current;
 				vars.varsreset = false;
 				return true;
-			} 
+			} else if (settings["anylevel"])
+			{
+				
+				
+				if (vars.stateindicator.Current != 44 && vars.odst_IGT.Current > 10 && vars.odst_IGT.Current < 30)
+				{
+					vars.startedlevel = vars.ODST_levelnameBad2.Current;
+					vars.varsreset = false;
+					return true;
+				}
+				
+			}
 			break;
 			
 			case 6:
@@ -2998,6 +3094,17 @@ start 	//starts timer
 				vars.startedlevel = vars.HR_levelname.Current;
 				vars.varsreset = false;
 				return true;
+			} else if (settings["anylevel"])
+			{
+				
+				
+				if (vars.stateindicator.Current != 44 && vars.HR_IGT.Current > 10 && vars.HR_IGT.Current < 30)
+				{
+					vars.startedlevel = vars.HR_levelname.Current;
+					vars.varsreset = false;
+					return true;
+				}
+				
 			}
 			break;
 		}
@@ -3017,7 +3124,7 @@ split
 	if (vars.varsreset == false)
 	{
 		
-				vars.lastinternal04b = false;
+		vars.lastinternal04b = false;
 		vars.lastinternal05b = false;
 		
 		vars.pgcrpauseflag = false;
@@ -3129,6 +3236,13 @@ split
 			return true;
 		}
 		return false;
+	} else if (vars.needtosplitending && (settings["anylevel"]))
+	{
+		vars.dirtybsps_byte.Clear();
+		vars.dirtybsps_int.Clear();
+		vars.dirtybsps_long.Clear();
+		vars.needtosplitending = false;
+		return true;
 	}
 	
 	
@@ -3587,10 +3701,13 @@ split
 					}
 				} else
 				{
-					if (vars.H1_bspstate.Current == 7 && vars.H1_playerfrozen.Current == true && vars.mawsplit == false)//maw ending
+					if (vars.H1_bspstate.Current == 7 && vars.H1_playerfrozen.Current == true && vars.mawsplit == false )//maw ending
 					{
 						vars.mawsplit = true;
-						vars.multigamepause = true;
+						if (!(settings["anylevel"]))
+						{
+							vars.multigamepause = true;
+						}
 						vars.dirtybsps_byte.Clear();
 						return true;
 					}
@@ -3924,7 +4041,10 @@ split
 					{
 						return false;
 					}
-					vars.multigamepause = true;
+					if (!(settings["anylevel"]))
+					{
+						vars.multigamepause = true;
+					}
 				}
 				vars.dirtybsps_byte.Clear();
 				
@@ -4866,7 +4986,7 @@ reset
 				}
 				else
 				{
-				return (vars.H2_tickcounter.Current < 10 && ((vars.H2_levelname.Current == "01a") || (vars.H2_levelname.Current == "01b"))); //reset on Cairo & armory
+					return (vars.H2_tickcounter.Current < 10 && ((vars.H2_levelname.Current == "01a") || (vars.H2_levelname.Current == "01b"))); //reset on Cairo & armory
 					//return (vars.H2_CSind.Current == 0xD9 || (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current < 20)); //reset on Cairo & armory
 				} 
 				
@@ -5039,7 +5159,7 @@ isLoading
 		{
 			return true;
 		}
-	
+		
 		
 		if (vars.menuindicator.Current == 7) 
 		{
@@ -5070,7 +5190,7 @@ isLoading
 					
 					vars.watchers_h2xy.UpdateAll(game);
 					
-
+					
 					if (vars.H2_xpos.Current != (float)-592.146973 && vars.H2_xpos.Current != (float)0)
 					{
 						vars.ending01b = false;
@@ -5141,8 +5261,8 @@ isLoading
 				case "05b": //Regret
 				if (vars.ending05a == true && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 44) 
 				{
-				vars.ending05a = false;
-				vars.lastinternal05b = false;
+					vars.ending05a = false;
+					vars.lastinternal05b = false;
 				}
 				
 				
@@ -5308,9 +5428,12 @@ gameTime
 					{
 						vars.hrtimes = vars.hrtimes + (vars.HR_IGT.Old - (vars.HR_IGT.Old % 60));
 						
-						if (vars.HR_levelname.Current == "m70") 
+						if (vars.HR_levelname.Current == "m70" ) 
 						{
-							vars.multigamepause = true;
+							if (!(settings["anylevel"]))
+							{
+								vars.multigamepause = true;
+							}
 							vars.needtosplitending = true;
 						}
 						
@@ -5354,7 +5477,10 @@ gameTime
 						
 						if (vars.H4_levelname.Current == "m90") 
 						{
-							vars.multigamepause = true;
+							if (!(settings["anylevel"]))
+							{
+								vars.multigamepause = true;
+							}
 							vars.needtosplitending = true;
 						}
 						
@@ -5404,12 +5530,15 @@ gameTime
 					print ("time added: " + vars.H3_theatertime.Old); 
 					vars.h3times = vars.h3times + (vars.H3_theatertime.Old - (vars.H3_theatertime.Old % 60));
 				}
-				if ((vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57) && (vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && vars.H3_levelname.Old == "120" && vars.multigamepause == false)
+				if ((vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57) && (vars.stateindicator.Old != 44 && vars.stateindicator.Old != 57) && vars.H3_levelname.Old == "120" && vars.multigamepause == false )
 				{
 					print ("doing end of h3 timing");
 					vars.h3times = (vars.h3times + 1) - (vars.H3_theatertime.Current % 60);
 					//need to add a single tick here cos this check happens a tick (I think) before theater timing actually ends)
-					vars.multigamepause = true;
+					if (!(settings["anylevel"]))
+					{
+						vars.multigamepause = true;
+					}
 					vars.needtosplitending = true;
 				}
 				
@@ -5436,62 +5565,65 @@ gameTime
 							print ("menuind1: " + vars.menuindicator.Current);
 						print ("menuind2: " + vars.menuindicator.Old); */
 						vars.odsttimes = vars.odsttimes + (vars.odst_IGT.Old - (vars.odst_IGT.Old % 60));
-						}
-						if (vars.ODST_levelnameBad.Current != vars.startedlevel)
-						{
-							return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes)) ));
-						}
-						else
-						{
-							return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_IGT.Current)) ));
-						}
 					}
-					
-				return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));}
-				else
-				{
-					
-					if (vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57)
+					if (vars.ODST_levelnameBad.Current != vars.startedlevel)
 					{
-						//print("11111111111111111111111");
-						vars.odsttimes = vars.odsttimes + (vars.odst_IGT.Old - (vars.odst_IGT.Old % 60));
-						
-						if (vars.ODST_levelnameBad2.Current == "l300") 
-						{
-							//print("222222222222222222");
-							vars.multigamepause = true;
-							vars.needtosplitending = true;
-						} else
-						{
-							vars.splitodst = true;
-						}
-						
-						
-						
-						return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes)) )) + vars.multigametime);	
+						return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes)) ));
 					}
-					
-					
-					if (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
+					else
 					{
-						return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes)) )) + vars.multigametime);	
+						return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_IGT.Current)) ));
 					}
-					
-					return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_IGT.Current)) )) + vars.multigametime);
 				}
-			} else if (settings["ILmode"] && vars.gameindicator.Current == 1) //h2
+				
+			return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));}
+			else
 			{
-				if (settings["Loopmode"])
+				
+				if (vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57)
 				{
-					if (vars.H2_IGT.Current < vars.H2_IGT.Old && vars.menuindicator.Old != 11)
+					//print("11111111111111111111111");
+					vars.odsttimes = vars.odsttimes + (vars.odst_IGT.Old - (vars.odst_IGT.Old % 60));
+					
+					if (vars.ODST_levelnameBad2.Current == "l300") 
 					{
-						//adding times
-						print ("adding h2 times");
-						/* 					print ("stateind1: " + vars.stateindicator.Current);
-							print ("stateind2: " + vars.stateindicator.Old);
-							print ("menuind1: " + vars.menuindicator.Current);
-						print ("menuind2: " + vars.menuindicator.Old); */
-						vars.h2times = vars.h2times + (vars.H2_IGT.Old - (vars.H2_IGT.Old % 60));
+						//print("222222222222222222");
+						if (!(settings["anylevel"]))
+						{
+							vars.multigamepause = true;
+						}
+						vars.needtosplitending = true;
+					} else
+					{
+						vars.splitodst = true;
+					}
+					
+					
+					
+					return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes)) )) + vars.multigametime);	
+				}
+				
+				
+				if (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
+				{
+					return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes)) )) + vars.multigametime);	
+				}
+				
+				return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_IGT.Current)) )) + vars.multigametime);
+			}
+		} else if (settings["ILmode"] && vars.gameindicator.Current == 1) //h2
+		{
+			if (settings["Loopmode"])
+			{
+				if (vars.H2_IGT.Current < vars.H2_IGT.Old && vars.menuindicator.Old != 11)
+				{
+					//adding times
+					print ("adding h2 times");
+					/* 					print ("stateind1: " + vars.stateindicator.Current);
+						print ("stateind2: " + vars.stateindicator.Old);
+						print ("menuind1: " + vars.menuindicator.Current);
+					print ("menuind2: " + vars.menuindicator.Old); */
+					vars.h2times = vars.h2times + (vars.H2_IGT.Old - (vars.H2_IGT.Old % 60));
 					}
 					if (vars.H2_levelname.Current != vars.startedlevel)
 					{
@@ -5501,20 +5633,21 @@ gameTime
 					{
 						return (TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.h2times + vars.H2_IGT.Current)) ));
 					}
+					}
+					
+					return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H2_IGT.Current));
 				}
-				
-				return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.H2_IGT.Current));
 			}
 		}
-	}
-	
-	
-	
-	
-	exit
-	{
-		//timer.IsGameTimePaused = false; //unpause the timer on gamecrash UNLESS it was paused for multi-game-pause option.
-	}
-	
-	
-	
+		
+		
+		
+		
+		exit
+		{
+			//timer.IsGameTimePaused = false; //unpause the timer on gamecrash UNLESS it was paused for multi-game-pause option.
+		}
+		
+		
+		
+		
