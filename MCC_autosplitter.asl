@@ -133,8 +133,8 @@ init //hooking to game to make memorywatchers
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03B7FC88, 0x28, 0x14741DB), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03B7FC88, 0x48, 0xA98F37), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03B7FC88, 0xC8, 0x2907107), 3)),
-				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(0x03B7FC88, 0xA8, 0xAAFC05), 4)), 
-				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(0x03B7FC88, 0xA8, 0x1DDB2EF), 4)), 
+				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(0x03B7FC88, 0xA8, 0xAAF901), 4)), 
+				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(0x03B7FC88, 0xA8, 0x2079508), 4)), 
 				
 				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03B7FC88, 0x68, 0x2836433), 3))
 			};
