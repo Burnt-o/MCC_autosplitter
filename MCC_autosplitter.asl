@@ -88,20 +88,24 @@ init //hooking to game to make memorywatchers
 		version = "1.2448.0.0";
 		break;
 		
-				case "1.2580.0.0":
+		case "1.2580.0.0":
 		version = "1.2580.0.0";
+		break;
+
+		case "1.2589.0.0":
+		version = "1.2589.0.0";
 		break;
 		
 		
 		default: 
-		version = "1.2580.0.0";
+		version = "1.2589.0.0";
 		if (vars.brokenupdateshowed == false)
 		{
 			vars.brokenupdateshowed = true;
 			var brokenupdateMessage = MessageBox.Show(
 				"It looks like MCC has recieved a new patch that will "+
 				"probably break me (the autosplitter). \n"+
-				"Autosplitter was made for version: "+ "1.2580.0.0" + "\n" + 
+				"Autosplitter was made for version: "+ "1.2589.0.0" + "\n" + 
 				"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
 				"If I'm broken, you'll just have to wait for Burnt to update me. "+
 				"You won't need to do anything except restart Livesplit once I'm updated.",
@@ -119,7 +123,7 @@ init //hooking to game to make memorywatchers
 	{
 		
 		
-		if (version == "1.2580.0.0")
+		if (version == "1.2580.0.0" || version == "1.2589.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
 				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3A496C9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
@@ -1329,7 +1333,7 @@ init //hooking to game to make memorywatchers
 
 
 
-		if (version == "1.2580.0.0")
+		if (version == "1.2580.0.0" || version == "1.2589.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
 				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x36ADD10)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
