@@ -3344,7 +3344,7 @@ start 	//starts timer
 			break;
 			
 			case 6:
-			if ((settings["ILmode"] || vars.HR_levelname.Current == "m10")  && vars.HR_IGT.Current > 10 && vars.HR_IGT.Current < 30)
+			if ((settings["ILmode"] || vars.HR_levelname.Current == "m10")  && vars.HR_IGT.Current > 21 && vars.HR_IGT.Current < 30)
 			{
 				//print ("what");
 				//print ("eee: " + vars.HR_IGT.Current);
@@ -3356,7 +3356,7 @@ start 	//starts timer
 			{
 				
 				
-				if (vars.stateindicator.Current != 44 && vars.HR_IGT.Current > 10 && vars.HR_IGT.Current < 30)
+				if (vars.stateindicator.Current != 44 && vars.HR_IGT.Current > 21 && vars.HR_IGT.Current < 30)
 				{
 					vars.startedlevel = vars.HR_levelname.Current;
 					vars.varsreset = false;
@@ -5362,10 +5362,10 @@ reset
 							
 														if (settings["anylevel"]) //reset on all levels
 							{
-						return (vars.HR_IGT.Current < 30 && vars.HR_IGT.Current > 10);
+						return (vars.HR_IGT.Current < 20 && vars.HR_IGT.Current > 10);
 							}
 			
-					return ( vars.HR_levelname.Current == "m10" && timer.CurrentPhase != TimerPhase.Ended && vars.HR_IGT.Current < 30 && vars.HR_IGT.Current > 10);
+					return ( vars.HR_levelname.Current == "m10" && timer.CurrentPhase != TimerPhase.Ended && vars.HR_IGT.Current < 20 && vars.HR_IGT.Current > 10);
 				}
 			}
 			break;
