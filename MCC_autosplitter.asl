@@ -1336,7 +1336,7 @@ init //hooking to game to make memorywatchers
 		if (version == "1.2580.0.0" || version == "1.2589.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
-				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x36ADD10)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
+				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x38ED5C9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
 				(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x39E37E9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
@@ -3043,6 +3043,9 @@ update {
 			
 		}
 	}
+	
+	//print ("1: " + vars.ODST_levelnameBad.Current);
+	//print ("2: " + vars.ODST_levelnameBad2.Current);
 }
 
 
