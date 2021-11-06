@@ -138,7 +138,7 @@ init //hooking to game to make memorywatchers
 			vars.watchers_slow = new MemoryWatcherList() {
 				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x03B81260, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03B80E88, 0x8, 0x2AF8258), 3)),
-				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03B80E88, 0x28, 0x14741DB), 3)),
+				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03B80E88, 0x28, 0xD42E68), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03B80E88, 0x48, 0x1e0d358), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03B80E88, 0xC8, 0x2907107), 3)),
 				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(0x03B80E88, 0xA8, 0xAAF373), 4)), 
@@ -1470,7 +1470,7 @@ init //hooking to game to make memorywatchers
 			vars.watchers_slow = new MemoryWatcherList() {
 				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3A23c28, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x8, 0x2AF8258), 3)),
-				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x28, 0x14741DB), 3)),
+				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x28, 0xD42E68), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x48, 0x1e0d358), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0xC8, 0x2907107), 3)),
 				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(0x03A23830, 0xA8, 0xAAF373), 4)), 
