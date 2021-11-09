@@ -225,7 +225,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.odst_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03B80E88, 0xA8, 0x210631C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.odst_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03B80E88, 0xA8, 0xA03C40)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				
 			};
 			
@@ -1557,7 +1557,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.odst_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03A23830, 0xA8, 0x210631C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.odst_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03A23830, 0xA8, 0xA03C40)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				
 			};
 			
