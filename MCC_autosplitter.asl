@@ -91,12 +91,12 @@ init //hooking to game to make memorywatchers
 		case "1.2580.0.0":
 		version = "1.2580.0.0";
 		break;
-
+		
 		case "1.2589.0.0":
 		version = "1.2589.0.0";
 		break;
 		
-				case "1.2611.0.0":
+		case "1.2611.0.0":
 		version = "1.2611.0.0";
 		break;
 		
@@ -1456,13 +1456,13 @@ init //hooking to game to make memorywatchers
 		// WINSTORE !!!!!!!!!!!!!!!!!!!!
 	} else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe" || modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe")
 	{
-
-
-
+		
+		
+		
 		if (version == "1.2611.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
-				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x36ADD10)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
+				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x38ED549)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
 				(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x39E3865)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
@@ -2905,6 +2905,7 @@ startup //variable init and settings
 { 
 	
 	
+	vars.ultradebug = false;
 	
 	//MOVED VARIABLE INIT TO STARTUP TO PREVENT BUGS WHEN RESTARTING (/CRASHING) MCC MID RUN
 	
@@ -2924,6 +2925,8 @@ startup //variable init and settings
 	vars.multigamepause = false;
 	vars.multigametime = TimeSpan.Zero;
 	vars.needtosplitending = false;
+	vars.H2_tgjreadyflag = false;
+	vars.H2_tgjreadytime = 0;
 	
 	vars.startedgame = 0;
 	
@@ -3136,7 +3139,7 @@ startup //variable init and settings
 	
 	
 	settings.Add("anylevel", false, "Start full-game runs on any level (breaks multi-game runs)");
-		settings.Add("menupause", true, "Pause when in Main Menu", "anylevel");
+	settings.Add("menupause", true, "Pause when in Main Menu", "anylevel");
 	
 	
 	settings.Add("counters", false, "Counters and fun stuff");
@@ -3320,6 +3323,8 @@ start 	//starts timer
 		vars.RevertCounter = 0;
 		if (settings["deathcounter"])
 		vars.UpdateDeathCounter();
+	vars.H2_tgjreadyflag = false;
+	vars.H2_tgjreadytime = 0;
 		
 		if (settings["revertcounter"])
 		vars.UpdateRevertCounter();
@@ -3625,6 +3630,8 @@ split
 { 
 	
 	
+	
+	
 	//print ("h4: " + vars.H4_IGT.Current);
 	byte test = vars.gameindicator.Current;
 	if (vars.varsreset == false)
@@ -3654,6 +3661,9 @@ split
 		vars.ending07b = false;
 		vars.ptdremoval = 0;
 		vars.ending01a = false; 
+		
+	vars.H2_tgjreadyflag = false;
+	vars.H2_tgjreadytime = 0;
 		
 		vars.loopsplit = true;
 		
@@ -4532,26 +4542,35 @@ split
 			//print("csindcurr" + vars.H2_CSind.Current);
 			//print("csindoldd" + vars.H2_CSind.Old);
 			
+			
+			if (vars.H2_levelname.Current == "08b" && vars.H2_tgjreadyflag == false)
+			{
+				vars.watchers_h2bsp.UpdateAll(game);
+				if (vars.H2_bspstate.Current == 3)
+				{
+					vars.H2_tgjreadyflag = true;
+					vars.H2_tgjreadytime = vars.H2_tickcounter.Current;
+					print ("H2 tgj ready flag set");
+				} 
+				
+				
+
+			}
+			
 			if ((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && vars.menuindicator.Current == 7) 
 				|| 
-			(vars.H2_levelname.Current == "08b" && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96  && vars.H2_letterbox.Old != 0)))
+			(vars.H2_levelname.Current == "08b" && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96  && vars.H2_letterbox.Old != 0 && vars.H2_tgjreadyflag && ( vars.H2_tickcounter.Current > (vars.H2_tgjreadytime + 300)))))
 			{
 				
 				
 				
 				
-				if (vars.H2_levelname.Current == "08b")
+				
+				if (!(settings["anylevel"]))
 				{
-					vars.watchers_h2bsp.UpdateAll(game);
-					if (vars.H2_bspstate.Current != 3)
-					{
-						return false;
-					}
-					if (!(settings["anylevel"]))
-					{
-						vars.multigamepause = true;
-					}
+					vars.multigamepause = true;
 				}
+				
 				vars.dirtybsps_byte.Clear();
 				
 				vars.loopsplit = false;
@@ -5522,19 +5541,19 @@ reset
 				}
 				else
 				{
-			
-				if (settings["anylevel"]) //reset on all levels
+					
+					if (settings["anylevel"]) //reset on all levels
 					{
 						return (vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.H2_tickcounter < 50);
 					}
-			
-			
+					
+					
 					return (vars.H2_tickcounter.Current < 10 && ((vars.H2_levelname.Current == "01a") || (vars.H2_levelname.Current == "01b"))); //reset on Cairo & armory
 					//return (vars.H2_CSind.Current == 0xD9 || (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current < 20)); //reset on Cairo & armory
-				
-				
-				
-				
+					
+					
+					
+					
 				} 
 				
 			} 
@@ -5548,11 +5567,11 @@ reset
 					return ( timer.CurrentPhase != TimerPhase.Ended && ( vars.H3_IGT.Current < 10));
 				} else
 				{
-								if (settings["anylevel"]) //reset on all levels
-								{
+					if (settings["anylevel"]) //reset on all levels
+					{
 						return (vars.H3_theatertime.Current > 0 && vars.H3_theatertime.Current < 15);
-							}
-			
+					}
+					
 					return (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 0 && vars.H3_theatertime.Current < 15);	
 				}
 			} 
@@ -5566,12 +5585,12 @@ reset
 					return ( timer.CurrentPhase != TimerPhase.Ended && ( vars.H4_IGT.Current < 10));
 				} else
 				{
-			
-											if (settings["anylevel"]) //reset on all levels
-								{
+					
+					if (settings["anylevel"]) //reset on all levels
+					{
 						return (vars.H4_IGT.Current < 10);
-							}
-			
+					}
+					
 					return ( vars.H4_levelname.Current == "m10" && timer.CurrentPhase != TimerPhase.Ended && vars.H4_IGT.Current < 10);
 				}
 			}
@@ -5588,12 +5607,12 @@ reset
 					return ( timer.CurrentPhase != TimerPhase.Ended && ( vars.odst_IGT.Current < 10));
 				} else
 				{
-			
-														if (settings["anylevel"]) //reset on all levels
-								{
+					
+					if (settings["anylevel"]) //reset on all levels
+					{
 						return (vars.odst_IGT.Current < vars.odst_IGT.Old || vars.odst_IGT.Current < 3);
-							}
-			
+					}
+					
 					return (vars.ODST_levelnameBad2.Current == "c100" && (vars.odst_IGT.Current < vars.odst_IGT.Old || vars.odst_IGT.Current < 3) );	
 				}
 			} 
@@ -5607,12 +5626,12 @@ reset
 					return ( timer.CurrentPhase != TimerPhase.Ended && ( vars.HR_IGT.Current < 10));
 				} else
 				{
-							
-														if (settings["anylevel"]) //reset on all levels
-							{
+					
+					if (settings["anylevel"]) //reset on all levels
+					{
 						return (vars.HR_IGT.Current < 20 && vars.HR_IGT.Current > 10);
-							}
-			
+					}
+					
 					return ( vars.HR_levelname.Current == "m10" && timer.CurrentPhase != TimerPhase.Ended && vars.HR_IGT.Current < 20 && vars.HR_IGT.Current > 10);
 				}
 			}
@@ -5629,7 +5648,7 @@ isLoading
 {
 	byte test = vars.gameindicator.Current;
 	
-
+	
 	
 	
 	if (vars.multigamepause)
@@ -5718,10 +5737,10 @@ isLoading
 	}
 	
 	
-		if (settings["menupause"] && (vars.stateindicator.Current == 44 || vars.menuindicator.Current != 7))
-		{
+	if (settings["menupause"] && (vars.stateindicator.Current == 44 || vars.menuindicator.Current != 7))
+	{
 		return true;
-		}
+	}
 	
 	
 	//also should prolly code load removal to work in loading screens when menuindicator isn't == 7 in case of restart/crash
@@ -5778,7 +5797,7 @@ isLoading
 				
 				
 				
-			if (vars.ending01b == false && ((vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.563 && vars.H2_letterbox.Old <= 0.563 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //outskirts has no outro cs
+				if (vars.ending01b == false && ((vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.563 && vars.H2_letterbox.Old <= 0.563 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) //outskirts has no outro cs
 				vars.ending03a = true;
 				return (vars.ending01b || vars.ending03a);
 				break;
@@ -5786,7 +5805,7 @@ isLoading
 				case "03b": //Metropolis
 				if (vars.ending03a == true && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 44) //4 variations of intro cs for difficulties
 				vars.ending03a = false;
-			if (vars.ending03a == false && ((vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.887 && vars.H2_letterbox.Old <= 0.887 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) 
+				if (vars.ending03a == false && ((vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.887 && vars.H2_letterbox.Old <= 0.887 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)) 
 				vars.ending03b = true;	
 				return (vars.ending03a || vars.ending03b);
 				break;
@@ -6154,7 +6173,8 @@ gameTime
 					}
 				}
 				
-			return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));}
+			return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));
+			}
 			else
 			{
 				
