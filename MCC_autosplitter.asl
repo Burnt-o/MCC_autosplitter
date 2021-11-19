@@ -3323,8 +3323,8 @@ start 	//starts timer
 		vars.RevertCounter = 0;
 		if (settings["deathcounter"])
 		vars.UpdateDeathCounter();
-	vars.H2_tgjreadyflag = false;
-	vars.H2_tgjreadytime = 0;
+		vars.H2_tgjreadyflag = false;
+		vars.H2_tgjreadytime = 0;
 		
 		if (settings["revertcounter"])
 		vars.UpdateRevertCounter();
@@ -3662,8 +3662,8 @@ split
 		vars.ptdremoval = 0;
 		vars.ending01a = false; 
 		
-	vars.H2_tgjreadyflag = false;
-	vars.H2_tgjreadytime = 0;
+		vars.H2_tgjreadyflag = false;
+		vars.H2_tgjreadytime = 0;
 		
 		vars.loopsplit = true;
 		
@@ -4554,12 +4554,23 @@ split
 				} 
 				
 				
-
+				
 			}
 			
-			if ((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && vars.menuindicator.Current == 7) 
-				|| 
-			(vars.H2_levelname.Current == "08b" && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96  && vars.H2_letterbox.Old != 0 && vars.H2_tgjreadyflag && ( vars.H2_tickcounter.Current > (vars.H2_tgjreadytime + 300)))))
+			if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && vars.menuindicator.Current == 7) 
+			{
+				vars.dirtybsps_byte.Clear();
+				
+				vars.loopsplit = false;
+				return true;
+			}
+			
+			
+			
+			
+			
+			if 
+			(vars.H2_levelname.Current == "08b" && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96  && vars.H2_letterbox.Old != 0 && vars.H2_tgjreadyflag && ( vars.H2_tickcounter.Current > (vars.H2_tgjreadytime + 300))))
 			{
 				
 				
@@ -6173,7 +6184,7 @@ gameTime
 					}
 				}
 				
-			return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));
+				return TimeSpan.FromMilliseconds(((1000.0 / 60.0) * vars.odst_IGT.Current));
 			}
 			else
 			{
