@@ -4006,13 +4006,8 @@ split
 					{
 						if (vars.H1_bspstate.Current == 0)
 						{
-							print ("hi");
-							//update xy, check for match
-							vars.watchers_h1xy.UpdateAll(game);
-							print ("x: " + vars.H1_xpos.Current);
-							print ("y: " + vars.H1_ypos.Current);
-							
-							if (vars.H1_xpos.Current > 39.23589 && vars.H1_xpos.Current < 47.319897 && vars.H1_ypos.Current > -24.960575 && vars.H1_ypos.Current < -18.383484)
+
+							if (vars.H1_tickcounter.Current > 900)
 							{
 								vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
 								return true;
