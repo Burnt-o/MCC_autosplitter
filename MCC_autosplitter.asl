@@ -402,7 +402,8 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03B7FC88, 0x8, 0x2B5FBE4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03B7FC88, 0x8, 0x19F748C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03B7FC88, 0x8, 0x2AF3790)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03B7FC88, 0x8, 0x2AF3790)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+							(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x03B7FC88, 0x8, 0x2af89b8, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1xy = new MemoryWatcherList() {
