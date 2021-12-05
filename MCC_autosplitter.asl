@@ -1609,6 +1609,8 @@ start 	//starts timer
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
+						vars.tnrsplit = false; //I feel like there is somewhere better to put this?
+						vars.tnrtick = 0;
 						return true;
 					}
 					break;
@@ -2072,6 +2074,8 @@ split
 					{
 						vars.dirtybsps_byte.Clear();
 						vars.loopsplit = true;
+						vars.tnrsplit = false; //maybe unecessary here?
+						vars.tnrtick = 0;
 						return true;
 					}
 					break;
@@ -2377,7 +2381,7 @@ split
 						}
 						break;
 						
-						case "a50": //so we don't false split on prison cs. Ok this is pretty jank. but it works :)
+						case "a50": //so we don't false split on prison cs. Ok this is pretty jank. A better solution would be to use the Captain_Rescued flag but eh. Might break in some loop mode edge cases.
 						if (vars.H1_bspstate.Current == 3)
 						{
 							if(vars.tnrsplit == true && vars.H1_tickcounter.Current > vars.tnrtick)
@@ -2390,7 +2394,7 @@ split
 							} else if (vars.H1_playerfrozen.Current == true && vars.H1_cutsceneskip.Current == true)
 							{
 								vars.tnrsplit = true;
-								vars.tnrtick = vars.H1_tickcounter.Current;
+								vars.tnrtick = vars.H1_tickcounter.Current + 60;
 							}
 						}
 						break;
