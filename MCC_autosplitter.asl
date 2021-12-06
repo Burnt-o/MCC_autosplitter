@@ -403,7 +403,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03B7FC88, 0x8, 0x2B5FBE4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03B7FC88, 0x8, 0x19F748C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03B7FC88, 0x8, 0x2AF3790)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-							(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x03B7FC88, 0x8, 0x2af89b8, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x03B7FC88, 0x8, 0x2af89b8, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1xy = new MemoryWatcherList() {
@@ -905,7 +905,8 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03A237B0, 0x8, 0x2B5FBE4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03A237B0, 0x8, 0x19F748C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03A237B0, 0x8, 0x2AF3790)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03A237B0, 0x8, 0x2AF3790)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x03A237B0, 0x8, 0x2af89b8, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1xy = new MemoryWatcherList() {
@@ -1026,7 +1027,8 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x038C7940, 0x8, 0x2B58A24)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x038C7940, 0x8, 0x19F0400)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x038C7940, 0x8, 0x2AEC640)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x038C7940, 0x8, 0x2AEC640)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x038C7940, 0x8, 0x2AF1868, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1xy = new MemoryWatcherList() {
@@ -1174,6 +1176,8 @@ startup //variable init and settings
 	vars.splitbsp_d40 = new byte[7] { 1, 2, 3, 4, 5, 6, 7 };
 	vars.poasplit = false;
 	vars.mawsplit = false;
+	vars.tnrsplit = false;
+	vars.tnrtick = 0;
 	
 	//HALO 2
 	vars.splitbsp_01b = new byte[3] { 2, 0, 3 }; //cairo
@@ -1592,7 +1596,7 @@ start 	//starts timer
 					break;
 					
 					case "a30":
-					if (vars.H1_tickcounter.Current == 181) //was 183 pre timing change
+					if (vars.H1_tickcounter.Current == 181 && vars.H1_cutsceneskip.Current == false)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -1605,6 +1609,8 @@ start 	//starts timer
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
+						vars.tnrsplit = false; //I feel like there is somewhere better to put this?
+						vars.tnrtick = 0;
 						return true;
 					}
 					break;
@@ -1637,7 +1643,7 @@ start 	//starts timer
 					break;
 					
 					case "c20":
-					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -1646,7 +1652,7 @@ start 	//starts timer
 					break;
 					
 					case "c40":
-					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -1655,7 +1661,7 @@ start 	//starts timer
 					break;
 					
 					case "d20":
-					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -1664,7 +1670,7 @@ start 	//starts timer
 					break;
 					
 					case "d40":
-					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -1697,7 +1703,7 @@ start 	//starts timer
 					case "c40":
 					case "d20":
 					case "d40":
-					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -2055,7 +2061,7 @@ split
 					break;
 					
 					case "a30":
-					if (vars.H1_tickcounter.Current == 181)
+					if (vars.H1_tickcounter.Current == 181 && vars.H1_cutsceneskip.Current == false)
 					{
 						vars.dirtybsps_byte.Clear();
 						vars.loopsplit = true;
@@ -2068,6 +2074,8 @@ split
 					{
 						vars.dirtybsps_byte.Clear();
 						vars.loopsplit = true;
+						vars.tnrsplit = false; //maybe unecessary here?
+						vars.tnrtick = 0;
 						return true;
 					}
 					break;
@@ -2100,7 +2108,7 @@ split
 					break;
 					
 					case "c20":
-					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
 						vars.dirtybsps_byte.Clear();
 						vars.loopsplit = true;
@@ -2109,7 +2117,7 @@ split
 					break;
 					
 					case "c40":
-					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
 						vars.dirtybsps_byte.Clear();
 						vars.loopsplit = true;
@@ -2118,7 +2126,7 @@ split
 					break;
 					
 					case "d20":
-					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
 						vars.dirtybsps_byte.Clear();
 						vars.loopsplit = true;
@@ -2127,7 +2135,7 @@ split
 					break;
 					
 					case "d40":
-					if (vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
+					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
 						vars.dirtybsps_byte.Clear();
 						vars.loopsplit = true;
@@ -2373,17 +2381,26 @@ split
 						}
 						break;
 						
-						case "a50": //splits slightly late still (around 0.1 secs)
-						if (vars.H1_bspstate.Current == 2)
+						case "a50": //so we don't false split on prison cs. Ok this is pretty jank. A better solution would be to use the Captain_Rescued flag but eh. Might break in some loop mode edge cases.
+						if (vars.H1_bspstate.Current == 3)
 						{
-							vars.dirtybsps_byte.Clear();
-							vars.loopsplit = false;
-							return true;
+							if(vars.tnrsplit == true && vars.H1_tickcounter.Current > vars.tnrtick)
+							{
+								vars.dirtybsps_byte.Clear();
+								vars.loopsplit = false;
+								vars.tnrsplit = false;
+								vars.tnrtick = 0;
+								return true;
+							} else if (vars.H1_playerfrozen.Current == true && vars.H1_cutsceneskip.Current == true)
+							{
+								vars.tnrsplit = true;
+								vars.tnrtick = vars.H1_tickcounter.Current + 60;
+							}
 						}
 						break;
 						
-						case "b30": //will false split if you go to security button. is fixable but will break compat with older versions without cutsceneskip flag pointer
-						if (vars.H1_bspstate.Current == 0)
+						case "b30": //no longer false splits on the security button
+						if (vars.H1_bspstate.Current == 0 && vars.H1_playerfrozen.Current == false)
 						{
 							vars.dirtybsps_byte.Clear();
 							vars.loopsplit = false;
