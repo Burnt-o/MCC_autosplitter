@@ -2408,6 +2408,15 @@ split
 						}
 						break;
 						
+						case "b40": 
+						if (vars.H1_bspstate.Current == 2) //mandatory bsp load for any category
+						{
+							vars.dirtybsps_byte.Clear();
+							vars.loopsplit = false;
+							return true;
+						}
+						break;
+						
 						case "c10": //so we don't split on reveal cs
 						if (vars.H1_bspstate.Current != 2)
 						{
