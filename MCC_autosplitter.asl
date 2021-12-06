@@ -2241,8 +2241,8 @@ split
 					{
 						if (vars.H1_bspstate.Current == 0)
 						{
-
-							if (vars.H1_tickcounter.Current > 900)
+								vars.watchers_h1xy.UpdateAll(game);
+						if (vars.H1_ypos.Current > (-19.344 - 0.2) && vars.H1_ypos.Current < (-19.344 + 0.2))
 							{
 								vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
 								return true;
