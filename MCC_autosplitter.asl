@@ -141,7 +141,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_slow = new MemoryWatcherList() {
 				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x03B81270, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
-				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x8, 0x2AF8288), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x28, 0xD42E68), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x48, 0x1e0d358), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0xC8, 0x2907107), 3)),
@@ -154,6 +153,7 @@ init //hooking to game to make memorywatchers
 			
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x8, 0x2AF8288), 3)),
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03B80E98, 0x8, 0x2B5FCE8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03B80E98, 0x8, 0x19F748C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03B80E98, 0x8, 0x2AF37C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -264,7 +264,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_slow = new MemoryWatcherList() {
 				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x03B81260, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
-				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x8, 0x2AF8258), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x28, 0xD42E68), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x48, 0x1e0d358), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0xC8, 0x2907107), 3)),
@@ -277,6 +276,7 @@ init //hooking to game to make memorywatchers
 			
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x8, 0x2AF8258), 3)),
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03B80E98, 0x8, 0x2B5FC88)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03B80E98, 0x8, 0x19F748C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03B80E98, 0x8, 0x2AF3790)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -387,7 +387,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_slow = new MemoryWatcherList() {
 				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x03B80060, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
-				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03B7FC88, 0x8, 0x2af8268), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03B7FC88, 0x28, 0xD42E68), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03B7FC88, 0x48, 0x1e0d358), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03B7FC88, 0xC8, 0x2907107), 3)),
@@ -400,6 +399,7 @@ init //hooking to game to make memorywatchers
 			
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03B7FC88, 0x8, 0x2af8268), 3)),
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03B7FC88, 0x8, 0x2B5FBE4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03B7FC88, 0x8, 0x19F748C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03B7FC88, 0x8, 0x2AF3790)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -510,7 +510,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_slow = new MemoryWatcherList() {
 				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3A253A0, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
-				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0x8, 0x2AF111C), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0x28, 0xE63FB3), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0x48, 0x1D2C460), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0xC8, 0x2868777), 3)),
@@ -523,6 +522,7 @@ init //hooking to game to make memorywatchers
 			
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0x8, 0x2AF111C), 3)),
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0x8, 0x2B58A24)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x3A24FF8, 0x8, 0x19F0400)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0x8, 0x2AEC640)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -644,7 +644,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_slow = new MemoryWatcherList() {
 				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3A23c28, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
-				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x8, 0x2AF8288), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x28, 0xD42E68), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x48, 0x1e0d358), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0xC8, 0x2907107), 3)),
@@ -657,6 +656,7 @@ init //hooking to game to make memorywatchers
 			
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x8, 0x2AF8288), 3)),
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03A23830, 0x8, 0x2B5FCE8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03A23830, 0x8, 0x19F748C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03A23830, 0x8, 0x2AF37C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -767,7 +767,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_slow = new MemoryWatcherList() {
 				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3A23c28, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
-				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x8, 0x2AF8258), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x28, 0xD42E68), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x48, 0x1e0d358), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0xC8, 0x2907107), 3)),
@@ -780,6 +779,7 @@ init //hooking to game to make memorywatchers
 			
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03A23830, 0x8, 0x2AF8258), 3)),
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03A23830, 0x8, 0x2B5FC88)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03A23830, 0x8, 0x19F748C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03A23830, 0x8, 0x2AF3790)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -890,7 +890,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_slow = new MemoryWatcherList() {
 				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3A23Ba8, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
-				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03A237B0, 0x8, 0x2af8268), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03A237B0, 0x28, 0xD42E68), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03A237B0, 0x48, 0x1e0d358), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03A237B0, 0xC8, 0x2907107), 3)),
@@ -903,6 +902,7 @@ init //hooking to game to make memorywatchers
 			
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03A237B0, 0x8, 0x2af8268), 3)),
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03A237B0, 0x8, 0x2B5FBE4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03A237B0, 0x8, 0x19F748C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03A237B0, 0x8, 0x2AF3790)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -1013,7 +1013,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_slow = new MemoryWatcherList() {
 				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x038C7D28, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
-				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x038C7940, 0x8, 0x2AF111C), 3)),
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x038C7940, 0x28, 0xE63FB3), 3)),
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x038C7940, 0x48, 0x1D2C460), 3)), 
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x038C7940, 0xC8, 0x2868777), 3)),
@@ -1025,6 +1024,7 @@ init //hooking to game to make memorywatchers
 			
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x038C7940, 0x8, 0x2AF111C), 3)),
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x038C7940, 0x8, 0x2B58A24)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x038C7940, 0x8, 0x19F0400)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x038C7940, 0x8, 0x2AEC640)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -1178,6 +1178,9 @@ startup //variable init and settings
 	vars.mawsplit = false;
 	vars.tnrsplit = false;
 	vars.tnrtick = 0;
+	vars.loading = false;
+	vars.levelloaded = "000";
+	vars.split = false;
 	
 	//HALO 2
 	vars.splitbsp_01b = new byte[3] { 2, 0, 3 }; //cairo
@@ -1587,10 +1590,11 @@ start 	//starts timer
 				switch (checklevel)
 				{
 					case "a10":
-					if (vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true) //unchanged
+					if (vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
+						vars.loading = false;
 						return true;
 					}
 					break;
@@ -1600,80 +1604,62 @@ start 	//starts timer
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
+						vars.loading = false;
 						return true;
 					}
 					break;
 					
 					case "a50":
-					if (vars.H1_tickcounter.Current == 848) //was 850 pre timing change
+					if (vars.H1_tickcounter.Current == 848)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
 						vars.tnrsplit = false; //I feel like there is somewhere better to put this?
 						vars.tnrtick = 0;
+						vars.loading = false;
 						return true;
 					}
 					break;
 					
 					case "b30":
-					if (vars.H1_tickcounter.Current == 1050) //was 1093 (-43) pre timing change
+					if (vars.H1_tickcounter.Current == 1050)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
+						vars.loading = false;
 						return true;
 					}
 					break;
 					
 					case "b40":
-					if (vars.H1_tickcounter.Current == 913) //was 966 (-53)
+					if (vars.H1_tickcounter.Current == 913)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
+						vars.loading = false;
 						return true;
 					}
 					break;
 					
 					case "c10":
-					if (vars.H1_tickcounter.Current == 662) //was 717 (-55)
+					if (vars.H1_tickcounter.Current == 662)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
+						vars.loading = false;
 						return true;
 					}
 					break;
 					
 					case "c20":
-					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
-					{
-						vars.startedlevel = checklevel;
-						vars.varsreset = false;
-						return true;
-					}
-					break;
-					
 					case "c40":
-					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
-					{
-						vars.startedlevel = checklevel;
-						vars.varsreset = false;
-						return true;
-					}
-					break;
-					
 					case "d20":
-					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
-					{
-						vars.startedlevel = checklevel;
-						vars.varsreset = false;
-						return true;
-					}
-					break;
-					
 					case "d40":
 					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
+						vars.loading = false;
 						return true;
 					}
 					break;
@@ -1691,6 +1677,8 @@ start 	//starts timer
 					if (vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true) //unchanged
 					{
 						vars.startedlevel = checklevel;
+						vars.levelloaded = checklevel;
+						vars.loading = false;
 						vars.varsreset = false;
 						return true;
 					}
@@ -1706,6 +1694,8 @@ start 	//starts timer
 					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
 						vars.startedlevel = checklevel;
+						vars.levelloaded = checklevel;
+						vars.loading = false;
 						vars.varsreset = false;
 						return true;
 					}
@@ -1716,9 +1706,11 @@ start 	//starts timer
 					case "b30":
 					case "b40":
 					case "c10":
-					if (vars.H1_tickcounter.Current > 1 && vars.H1_tickcounter.Current < 15) //was 183 pre timing change
+					if (vars.H1_tickcounter.Current > 1 && vars.H1_tickcounter.Current < 15) 
 					{
 						vars.startedlevel = checklevel;
+						vars.levelloaded = checklevel;
+						vars.loading = false;
 						vars.varsreset = false;
 						return true;
 					}
@@ -1730,6 +1722,8 @@ start 	//starts timer
 			} else if (vars.H1_levelname.Current == "a10" && vars.H1_tickcounter.Current > 280 && vars.H1_playerfrozen.Current == false && vars.H1_playerfrozen.Old == true)
 			{
 				vars.startedlevel = "a10";
+				vars.levelloaded = "a10";
+				vars.loading = false;
 				vars.varsreset = false;
 				return true;
 			}
@@ -2108,32 +2102,8 @@ split
 					break;
 					
 					case "c20":
-					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
-					{
-						vars.dirtybsps_byte.Clear();
-						vars.loopsplit = true;
-						return true;
-					}
-					break;
-					
 					case "c40":
-					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
-					{
-						vars.dirtybsps_byte.Clear();
-						vars.loopsplit = true;
-						return true;
-					}
-					break;
-					
 					case "d20":
-					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
-					{
-						vars.dirtybsps_byte.Clear();
-						vars.loopsplit = true;
-						return true;
-					}
-					break;
-					
 					case "d40":
 					if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
 					{
@@ -2476,9 +2446,10 @@ split
 			{
 				if (!(vars.H1_levelname.Current == "d40" && vars.H1_bspstate.Current == 7)) //!= maw last bsp
 				{
-					if(vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44) //split on loading screen
+					if((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44) || vars.split == true) //split on loading screen
 					{
 						vars.dirtybsps_byte.Clear();
+						vars.split = false;
 						return true;
 					}
 				} else
@@ -4024,8 +3995,60 @@ isLoading
 	switch (test)
 	{
 		
-		case 0:
-		return (vars.stateindicator.Current == 44); //removed pgcrpauseflag check here because reasons
+		case 0: //halo 1
+		if (vars.loading == false) //if not currently loading, determine whether we need to be.
+			{
+			if (vars.menuindicator.Current == 7) //between level loads.
+			{
+				if (vars.H1_levelname.Current != vars.levelloaded && vars.H1_levelname.Current != vars.startedlevel && 
+				(vars.H1_levelname.Current == "a10" 
+				|| vars.H1_levelname.Current == "a30" 
+				|| vars.H1_levelname.Current == "a50" 
+				|| vars.H1_levelname.Current == "b30" 
+				|| vars.H1_levelname.Current == "b40" 
+				|| vars.H1_levelname.Current == "c10" 
+				|| vars.H1_levelname.Current == "c20" 
+				|| vars.H1_levelname.Current == "c40" 
+				|| vars.H1_levelname.Current == "d20" 
+				|| vars.H1_levelname.Current == "d40")) //why does .contains not work for strings? eee.
+				{
+					vars.loading = true;
+					vars.levelloaded = vars.H1_levelname.Current;
+				}
+			}
+			else if (vars.stateindicator.Current == 44) //main menu to level loads.
+			{
+				vars.loading = true;
+			}
+		}
+		else //if currently loading, determine whether we need to not be.
+		{
+			if (vars.split == false && (vars.H1_levelname.Current != vars.levelloaded) && 
+			(vars.H1_levelname.Current == "a10" 
+			|| vars.H1_levelname.Current == "a30" 
+			|| vars.H1_levelname.Current == "a50" 
+			|| vars.H1_levelname.Current == "b30" 
+			|| vars.H1_levelname.Current == "b40" 
+			|| vars.H1_levelname.Current == "c10" 
+			|| vars.H1_levelname.Current == "c20" 
+			|| vars.H1_levelname.Current == "c40" 
+			|| vars.H1_levelname.Current == "d20" 
+			|| vars.H1_levelname.Current == "d40")) //determine if there is a level swap thus a split required
+			{
+				if (vars.H1_levelname.Current != vars.startedlevel) //dont split if loading the starting level, probably a reset/loopmode. Otherwise split.
+				{
+					vars.levelloaded = vars.H1_levelname.Current;
+					vars.split = true;
+				}
+			}
+		
+			if (vars.H1_tickcounter.Current == (vars.H1_tickcounter.Old + 1)) //determine whether to unpause the timer, ie tick counter starts incrementing again.
+			{
+					vars.loading = false;
+			}
+		}
+
+		return vars.loading;
 		break;
 		
 		case 1: //halo 2
