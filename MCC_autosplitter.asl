@@ -1376,7 +1376,8 @@ startup //variable init and settings
     
     settings.Add("all_bsps", false, "Split on every generic loading done", "bspmode");
     settings.SetToolTip("all_bsps", "Splits on every single instance of loading done. Even those not part of the usual speed path.\n" +
-        "Used if doing non-standard speed pathing (ex: AotCR Hunter%)\nWARNING: If you revert checkpoint into a prior BSP, it will split."
+        "Used if doing non-standard speed pathing (ex: AotCR Hunter%)\nWARNING: If you revert checkpoint into a prior BSP, it will split.\n" +
+        "WARNING: Must manually reset before restarting the level else it will erroneously split"
 	);
 	
 	
@@ -2126,8 +2127,8 @@ split
 			if (settings["bspmode"])
 			{   
                 // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
-                if (settings["all_bsps"] && vars.H1_bspstate.Current != vars.H1_bspstate.Old && vars.H1_bspstate.Current != 255 && vars.H1_tickcounter.Current > 60)
-				{   
+                if (settings["all_bsps"] && vars.H1_bspstate.Current != vars.H1_bspstate.Old && vars.H1_bspstate.Current != 255)
+                {   
                     return true;
                 }
             
