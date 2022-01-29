@@ -1373,6 +1373,11 @@ startup //variable init and settings
 		"This is so that if you hit a load, then die and revert to before the load, and hit again, you won't get duplicate splits. \n" +
 		"You probably shouldn't turn this on, unless you're say, practicing a specific segment of a level (from one load to another)."
 	);
+    
+    settings.Add("all_bsps", false, "Split on every loading done", "bspmode");
+    settings.SetToolTip("all_bsps", "Splits on every instance of loading done. Even those not part of the usual speed path.\n" +
+        "Used if doing non-standard speed pathing (ex: AotCR Hunter%)"
+	);
 	
 	
 	settings.Add("anylevel", false, "Start full-game runs on any level (breaks multi-game runs)");
@@ -2119,8 +2124,13 @@ split
 			}
 			
 			if (settings["bspmode"])
-			{
-				
+			{   
+                // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
+                if (settings["all_bsps"] && vars.H1_bspstate.Current != vars.H1_bspstate.Old && vars.H1_bspstate.Current != 255)
+				{   
+                    return true;
+                }
+            
 				if (settings["bsp_cache"])
 				{
 					switch (checklevel)
@@ -2171,124 +2181,123 @@ split
 					}
 				}
 				
-				
-				switch (checklevel)
-				{
-					case "a10":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_a10, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
-					{
-						vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-						return true;
-					}
-					break;
-					
-					case "a30":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_a30, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
-					{
-						vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-						return true;
-					}
-					break;
-					
-					case "a50":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_a50, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
-					{
-						vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-						return true;
-					}
-					break;
-					
-					case "b30":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_b30, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
-					{
-						vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-						return true;
-					}
-					break;
-					
-					case "b40":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_b40, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
-					{
-						if (vars.H1_bspstate.Current == 0)
-						{
-								vars.watchers_h1xy.UpdateAll(game);
-						if (vars.H1_ypos.Current > (-19.344 - 0.2) && vars.H1_ypos.Current < (-19.344 + 0.2))
-							{
-								vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-								return true;
-							} else
-							{
-								return false;
-							}
-						} 
-						else
-						{
-							vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-							return true;
-						}
-					}
-					break;
-					
-					case "c10":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_c10, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
-					{
-						vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-						return true;
-					}
-					break;
-					
-					case "c20":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_c20, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
-					{
-						vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-						return true;
-					}
-					break;
-					
-					case "c40":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_c40, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)) && vars.H1_tickcounter.Current > 30)
-					{
-						if (vars.H1_bspstate.Current == 0)
-						{
-							//update xy, check for match
-							vars.watchers_h1xy.UpdateAll(game);
-							if (vars.H1_xpos.Current > 171.87326 && vars.H1_xpos.Current < 185.818526 && vars.H1_ypos.Current > -295.3629 && vars.H1_ypos.Current < -284.356986)
-							{
-								vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-								return true;
-							} else
-							{
-								return false;
-							}
-						} 
-						else
-						{
-							vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-							return true;
-						}
-					}
-					break;
-					
-					
-					case "d20":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_d20, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
-					{
-						vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-						return true;
-					}
-					break;
-					
-					case "d40":
-					if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_d40, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
-					{
-						vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-						return true;
-					}
-					break;
-					
-					default:
-					break;
-				}
+                switch (checklevel)
+                {
+                    case "a10":
+                    if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_a10, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
+                    {
+                        vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                        return true;
+                    }
+                    break;
+                    
+                    case "a30":
+                    if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_a30, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
+                    {
+                        vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                        return true;
+                    }
+                    break;
+                    
+                    case "a50":
+                    if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_a50, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
+                    {
+                        vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                        return true;
+                    }
+                    break;
+                    
+                    case "b30":
+                    if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_b30, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
+                    {
+                        vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                        return true;
+                    }
+                    break;
+                    
+                    case "b40":
+                    if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_b40, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
+                    {
+                        if (vars.H1_bspstate.Current == 0)
+                        {
+                                vars.watchers_h1xy.UpdateAll(game);
+                        if (vars.H1_ypos.Current > (-19.344 - 0.2) && vars.H1_ypos.Current < (-19.344 + 0.2))
+                            {
+                                vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                                return true;
+                            } else
+                            {
+                                return false;
+                            }
+                        } 
+                        else
+                        {
+                            vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                            return true;
+                        }
+                    }
+                    break;
+                    
+                    case "c10":
+                    if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_c10, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
+                    {
+                        vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                        return true;
+                    }
+                    break;
+                    
+                    case "c20":
+                    if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_c20, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
+                    {
+                        vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                        return true;
+                    }
+                    break;
+                    
+                    case "c40":
+                    if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_c40, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)) && vars.H1_tickcounter.Current > 30)
+                    {
+                        if (vars.H1_bspstate.Current == 0)
+                        {
+                            //update xy, check for match
+                            vars.watchers_h1xy.UpdateAll(game);
+                            if (vars.H1_xpos.Current > 171.87326 && vars.H1_xpos.Current < 185.818526 && vars.H1_ypos.Current > -295.3629 && vars.H1_ypos.Current < -284.356986)
+                            {
+                                vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                                return true;
+                            } else
+                            {
+                                return false;
+                            }
+                        } 
+                        else
+                        {
+                            vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                            return true;
+                        }
+                    }
+                    break;
+                    
+                    
+                    case "d20":
+                    if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_d20, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
+                    {
+                        vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                        return true;
+                    }
+                    break;
+                    
+                    case "d40":
+                    if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.splitbsp_d40, x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
+                    {
+                        vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+                        return true;
+                    }
+                    break;
+                    
+                    default:
+                    break;
+                }
 				
 			}
 			
@@ -2531,6 +2540,12 @@ split
 			
 			if (settings["bspmode"])
 			{
+                // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
+                if (settings["all_bsps"] && vars.H2_bspstate.Current != vars.H2_bspstate.Old && vars.H2_bspstate.Current != 255)
+				{   
+                    return true;
+                }
+            
 				if (settings["bsp_cache"])
 				{
 					switch (checklevel)
@@ -2886,7 +2901,12 @@ split
 			
 			if (settings["bspmode"])
 			{
-				
+                // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
+                if (settings["all_bsps"] && vars.H3_bspstate.Current != vars.H3_bspstate.Old && vars.H3_bspstate.Current != 255)
+				{   
+                    return true;
+                }
+                
 				if (settings["bsp_cache"])
 				{
 					switch (checklevel)
@@ -3069,7 +3089,12 @@ split
 			
 			if (settings["bspmode"])
 			{
-				
+                // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
+                if (settings["all_bsps"] && vars.H4_bspstate.Current != vars.H4_bspstate.Old && vars.H4_bspstate.Current != 255)
+				{   
+                    return true;
+                }
+                
 				if (settings["bsp_cache"])
 				{
 					switch (checklevel)
@@ -3292,6 +3317,11 @@ split
 			
 			if (settings["bspmode"])
 			{
+                // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
+                if (settings["all_bsps"] && vars.odst_bspstate.Current != vars.odst_bspstate.Old && vars.odst_bspstate.Current != 255)
+				{   
+                    return true;
+                }
 				
 				if (settings["bsp_cache"])
 				{
@@ -3529,7 +3559,12 @@ split
 			
 			if (settings["bspmode"])
 			{
-				
+                // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
+                if (settings["all_bsps"] && vars.HR_bspstate.Current != vars.HR_bspstate.Old && vars.HR_bspstate.Current != 255)
+				{   
+                    return true;
+                }
+                
 				if (settings["bsp_cache"])
 				{
 					switch (checklevel)
