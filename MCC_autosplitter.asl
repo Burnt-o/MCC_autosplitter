@@ -1374,8 +1374,8 @@ startup //variable init and settings
 		"You probably shouldn't turn this on, unless you're say, practicing a specific segment of a level (from one load to another)."
 	);
     
-    settings.Add("all_bsps", false, "Split on every loading done", "bspmode");
-    settings.SetToolTip("all_bsps", "Splits on every instance of loading done. Even those not part of the usual speed path.\n" +
+    settings.Add("all_bsps", false, "Split on every generic loading done", "bspmode");
+    settings.SetToolTip("all_bsps", "Splits on every single instance of loading done. Even those not part of the usual speed path.\n" +
         "Used if doing non-standard speed pathing (ex: AotCR Hunter%)"
 	);
 	
