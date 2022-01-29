@@ -2126,7 +2126,7 @@ split
 			if (settings["bspmode"])
 			{   
                 // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
-                if (settings["all_bsps"] && vars.H1_bspstate.Current != vars.H1_bspstate.Old && vars.H1_bspstate.Current != 255 && !vars.varsreset)
+                if (settings["all_bsps"] && vars.H1_bspstate.Current != vars.H1_bspstate.Old && vars.H1_bspstate.Current != 255 && vars.H1_tickcounter.Current > 60)
 				{   
                     return true;
                 }
@@ -2541,7 +2541,7 @@ split
 			if (settings["bspmode"])
 			{
                 // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
-                if (settings["all_bsps"] && vars.H2_bspstate.Current != vars.H2_bspstate.Old && vars.H2_bspstate.Current != 255 && !vars.varsreset)
+                if (settings["all_bsps"] && vars.H2_bspstate.Current != vars.H2_bspstate.Old && vars.H2_bspstate.Current != 255 && vars.H1_tickcounter.Current > 60)
 				{   
                     return true;
                 }
@@ -2902,7 +2902,7 @@ split
 			if (settings["bspmode"])
 			{
                 // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
-                if (settings["all_bsps"] && vars.H3_bspstate.Current != vars.H3_bspstate.Old && vars.H3_bspstate.Current != 255 && !vars.varsreset)
+                if (settings["all_bsps"] && vars.H3_bspstate.Current != vars.H3_bspstate.Old && vars.H3_bspstate.Current != 255 && vars.H1_tickcounter.Current > 60)
 				{   
                     return true;
                 }
@@ -3090,7 +3090,7 @@ split
 			if (settings["bspmode"])
 			{
                 // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
-                if (settings["all_bsps"] && vars.H4_bspstate.Current != vars.H4_bspstate.Old && vars.H4_bspstate.Current != 255 && !vars.varsreset)
+                if (settings["all_bsps"] && vars.H4_bspstate.Current != vars.H4_bspstate.Old && vars.H4_bspstate.Current != 255 && vars.H1_tickcounter.Current > 60)
 				{   
                     return true;
                 }
@@ -3318,7 +3318,7 @@ split
 			if (settings["bspmode"])
 			{
                 // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
-                if (settings["all_bsps"] && vars.odst_bspstate.Current != vars.odst_bspstate.Old && vars.odst_bspstate.Current != 255 && !vars.varsreset)
+                if (settings["all_bsps"] && vars.odst_bspstate.Current != vars.odst_bspstate.Old && vars.odst_bspstate.Current != 255 && vars.H1_tickcounter.Current > 60)
 				{   
                     return true;
                 }
@@ -3560,7 +3560,7 @@ split
 			if (settings["bspmode"])
 			{
                 // BSP 255 is not a valid BSP. It likely happens when we poll a tick in the middle of a load (so ignore it else you double split).
-                if (settings["all_bsps"] && vars.HR_bspstate.Current != vars.HR_bspstate.Old && vars.HR_bspstate.Current != 255 && !vars.varsreset)
+                if (settings["all_bsps"] && vars.HR_bspstate.Current != vars.HR_bspstate.Old && vars.HR_bspstate.Current != 255 && vars.H1_tickcounter.Current > 60)
 				{   
                     return true;
                 }
