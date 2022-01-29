@@ -1376,7 +1376,7 @@ startup //variable init and settings
     
     settings.Add("all_bsps", false, "Split on every generic loading done", "bspmode");
     settings.SetToolTip("all_bsps", "Splits on every single instance of loading done. Even those not part of the usual speed path.\n" +
-        "Used if doing non-standard speed pathing (ex: AotCR Hunter%)"
+        "Used if doing non-standard speed pathing (ex: AotCR Hunter%)\nWARNING: If you revert checkpoint into a prior BSP, it will split."
 	);
 	
 	
