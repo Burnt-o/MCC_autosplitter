@@ -1083,7 +1083,7 @@ start 	//starts timer
 					break;
 					
 					case "a30":
-					if (vars.H1_tickcounter.Current >= 181 && vars.H1_cutsceneskip.Current == false)
+					if (vars.H1_tickcounter.Current == 181 && vars.H1_cutsceneskip.Current == false)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
@@ -1096,7 +1096,7 @@ start 	//starts timer
 					case "b30":
 					case "b40":
 					case "c10":
-					if (vars.H1_tickcounter.Current > 30 && vars.H1_tickcounter.Current < 1090 && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true)
+					if (vars.H1_tickcounter.Current > 30 && vars.H1_tickcounter.Current < 1060 && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true)
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
