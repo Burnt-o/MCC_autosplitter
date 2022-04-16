@@ -1221,6 +1221,7 @@ startup //variable init and settings
 	vars.splitbsp_07b = new byte[3] { 1, 2, 4 }; //HC -- none if doing HC skip
 	vars.splitbsp_08b = new byte[3] { 0, 1, 3 }; //TGJ -- starts 0 and in cs, then goes to 1, then 0, then 1, then 0, then 3 (skipping 2 cos it's skippable)
 	//so tgjs actual count is 5
+	vars.oldtick = 0;
 	
 	
 	
@@ -4060,6 +4061,11 @@ isLoading
 		
 		if (vars.menuindicator.Current == 7) 
 		{
+			if (vars.H2_tickcounter.Current == vars.oldtick && vars.stateindicator.Current == 255) 	//Duct tape graphics swap load removal
+			{
+				return true;
+			} else vars.oldtick = vars.H2_tickcounter.Old;
+
 			string H2_checklevel = vars.H2_levelname.Current;
 			switch (H2_checklevel)
 			{
