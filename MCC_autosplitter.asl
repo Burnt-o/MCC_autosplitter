@@ -4061,10 +4061,14 @@ isLoading
 		
 		if (vars.menuindicator.Current == 7) 
 		{
-			if (vars.H2_tickcounter.Current == vars.oldtick && vars.stateindicator.Current == 255) 	//Duct tape graphics swap load removal
+
+			if (timer.CurrentPhase == TimerPhase.Running)
 			{
-				return true;
-			} else vars.oldtick = vars.H2_tickcounter.Old;
+				if (vars.H2_tickcounter.Current == vars.oldtick && vars.stateindicator.Current == 255) 	//Duct tape graphics swap load removal
+				{
+					return true;
+				} else vars.oldtick = vars.H2_tickcounter.Old;
+			}
 
 			string H2_checklevel = vars.H2_levelname.Current;
 			switch (H2_checklevel)
