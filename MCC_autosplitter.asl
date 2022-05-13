@@ -106,7 +106,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03F7BAD0, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03F7BAD0, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03F7BAD0, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03F7BAD0, 0x8, 0x02E773D8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03F7BAD0, 0x8, 0x02E773E8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x03F7BAD0, 0x8, 0x02E773E8, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
@@ -132,7 +132,8 @@ init //hooking to game to make memorywatchers
 				(vars.H2_cutsceneflag = new MemoryWatcher<byte>(new DeepPointer(0x03F7BAD0, 0x28, 0x14CFAE8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_CSind = new MemoryWatcher<byte>(new DeepPointer(0x03F7BAD0, 0x28, 0x01D37C20, 0x38, 0x78, 0x1E8, 0xE8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x03F7BAD0, 0x28, 0x01520498, -0x92E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(0x03F7BAD0, 0x28, 0x01520498, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(0x03F7BAD0, 0x28, 0x01520498, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_graphics = new MemoryWatcher<byte>(new DeepPointer(0x03F7BAD0, 0x28, 0xCCF280)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //scan for FF FF FF FF 2A 0A 00 0D on outskirts. Should be around here somewhere
 			};
 			
 			vars.watchers_h2bsp = new MemoryWatcherList() {
@@ -239,7 +240,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x003FB1FD0, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x003FB1FD0, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x003FB1FD0, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x003FB1FD0, 0x8, 0x02E773D8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x003FB1FD0, 0x8, 0x02E773E8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x003FB1FD0, 0x8, 0x02E773E8, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
@@ -918,7 +919,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x02E773D8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x02E773E8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x02E773E8, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
@@ -944,7 +945,9 @@ init //hooking to game to make memorywatchers
 				(vars.H2_cutsceneflag = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0x14CFAE8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_CSind = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0x01D37C20, 0x38, 0x78, 0x1E8, 0xE8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0x01520498, -0x92E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x28, 0x01520498, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x28, 0x01520498, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_graphics = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0xCCF280)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //scan for FF FF FF FF 2A 0A 00 0D on outskirts. Should be around here somewhere
+
 			};
 			
 			vars.watchers_h2bsp = new MemoryWatcherList() {
@@ -1049,7 +1052,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E54A40, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03E54A40, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03E54A40, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03E54A40, 0x8, 0x02E773D8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03E54A40, 0x8, 0x02E773E8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x03E54A40, 0x8, 0x02E773E8, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
