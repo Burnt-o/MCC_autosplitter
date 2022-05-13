@@ -48,16 +48,20 @@ init //hooking to game to make memorywatchers
 		version = "1.2845.0.0";
 		break;
 		
+				case "1.2862.0.0":
+		version = "1.2862.0.0";
+		break;
+		
 		
 		default: 
-		version = "1.2845.0.0";
+		version = "1.2862.0.0";
 		if (vars.brokenupdateshowed == false)
 		{
 			vars.brokenupdateshowed = true;
 			var brokenupdateMessage = MessageBox.Show(
 				"It looks like MCC has recieved a new patch that will "+
 				"probably break me (the autosplitter). \n"+
-				"Autosplitter was made for version: "+ "1.2845.0.0" + "\n" + 
+				"Autosplitter was made for version: "+ "1.2862.0.0" + "\n" + 
 				"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
 				"If I'm broken, you'll just have to wait for Burnt to update me. "+
 				"You won't need to do anything except restart Livesplit once I'm updated.",
