@@ -1779,6 +1779,7 @@ startup //variable init and settings
 	vars.adjust08b = 10 + 109;
 	
 	vars.lastinternal = false;
+	vars.oldtick = -2;
 	
 	
 	//HALO 3
@@ -2255,10 +2256,11 @@ start 	//starts timer
 			{
 				
 				
-				if (vars.stateindicator.Current != 44 && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.H2_tickcounter < 50)
+				if (vars.stateindicator.Current != 44 && vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.H2_tickcounter.Current < 50)
 				{
 					vars.startedlevel = vars.H2_levelname.Current;
 					vars.varsreset = false;
+					vars.loading = false;
 					return true;
 				}
 				
@@ -3335,7 +3337,7 @@ split
 				if (!(settings["anylevel"]))
 				{
 					vars.multigamepause = true;
-				}
+				} else vars.loading = true;
 				
 				vars.dirtybsps_byte.Clear();
 				
@@ -4298,7 +4300,7 @@ reset
 					
 					if (settings["anylevel"]) //reset on all levels
 					{
-						return (vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.H2_tickcounter < 50);
+						return (vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.H2_tickcounter.Current < 50);
 					}
 					
 					
@@ -4627,9 +4629,16 @@ isLoading
 					break;
 				}
 
-				if (vars.H2_graphics.Current == 1 && vars.H2_tickcounter.Current == vars.H2_tickcounter.Old && vars.stateindicator.Current == 255)
+				if (vars.H2_graphics.Current == 1 && vars.stateindicator.Current == 255)
 				{
-					return true;
+					if ((vars.H2_tickcounter.Current == vars.oldtick) || (vars.H2_tickcounter.Current == vars.oldtick + 1))
+					{
+						return true;
+					} else vars.oldtick = -2;
+					if (vars.H2_graphics.Old == 0)
+					{
+						vars.oldtick = vars.H2_tickcounter.Current;
+					}
 				}
 
 			}
