@@ -2136,12 +2136,16 @@ start 	//starts timer
 				switch (checklevel)
 				{
 					case "a10":
-					if (vars.H1_bspstate.Current == 0 && ((vars.H1_tickcounter.Current > 280 && vars.H1_tickcounter.Current < 400) || vars.H1_tickcounter.Current > 7200) && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true)
+					if (vars.H1_bspstate.Current == 0 && vars.H1_tickcounter.Current > 280 && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true)
 					{
-						vars.startedlevel = checklevel;
-						vars.varsreset = false;
-						vars.loading = false;
-						return true;
+						vars.watchers_h1xy.UpdateAll(game);
+						if (vars.H1_xpos.Current < -55)
+						{
+							vars.startedlevel = checklevel;
+							vars.varsreset = false;
+							vars.loading = false;
+							return true;
+						}
 					}
 					break;
 					
@@ -2191,13 +2195,17 @@ start 	//starts timer
 				switch (checklevel)
 				{
 					case "a10":
-					if (vars.H1_bspstate.Current == 0 && ((vars.H1_tickcounter.Current > 280 && vars.H1_tickcounter.Current < 400) || vars.H1_tickcounter.Current > 7200) && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true) //unchanged
+					if (vars.H1_bspstate.Current == 0 && vars.H1_tickcounter.Current > 280 && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true) //unchanged
 					{
-						vars.startedlevel = checklevel;
-						vars.levelloaded = checklevel;
-						vars.loading = false;
-						vars.varsreset = false;
-						return true;
+						vars.watchers_h1xy.UpdateAll(game);
+						if (vars.H1_xpos.Current < -55)
+						{
+							vars.startedlevel = checklevel;
+							vars.levelloaded = checklevel;
+							vars.loading = false;
+							vars.varsreset = false;
+							return true;
+						}
 					}
 					break;
 					
@@ -2236,13 +2244,17 @@ start 	//starts timer
 					
 				}
 				
-			} else if (vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && ((vars.H1_tickcounter.Current > 280 && vars.H1_tickcounter.Current < 400) || vars.H1_tickcounter.Current > 7200) && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true)
+			} else if (vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_tickcounter.Current > 280 && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true)
 			{
-				vars.startedlevel = "a10";
-				vars.levelloaded = "a10";
-				vars.loading = false;
-				vars.varsreset = false;
-				return true;
+				vars.watchers_h1xy.UpdateAll(game);
+				if (vars.H1_xpos.Current < -55)
+				{
+					vars.startedlevel = "a10";
+					vars.levelloaded = "a10";
+					vars.loading = false;
+					vars.varsreset = false;
+					return true;
+				}
 			}
 			break;
 			
