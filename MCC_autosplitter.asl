@@ -111,8 +111,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_h1xy = new MemoryWatcherList() {
-				(vars.H1_xpos = new MemoryWatcher<float>(new DeepPointer(0x03F7BAD0, 0x8, 0x2D73144)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_ypos = new MemoryWatcher<float>(new DeepPointer(0x03F7BAD0, 0x8, 0x2D73148)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H1_xpos = new MemoryWatcher<float>(new DeepPointer(0x03F7BAD0, 0x8, 0x2D7313C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_ypos = new MemoryWatcher<float>(new DeepPointer(0x03F7BAD0, 0x8, 0x2D73140)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1death = new MemoryWatcherList(){
@@ -924,8 +924,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_h1xy = new MemoryWatcherList() {
-				(vars.H1_xpos = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x8, 0x2D73144)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_ypos = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x8, 0x2D73148)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H1_xpos = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x8, 0x2D7313C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_ypos = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x8, 0x2D73140)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1death = new MemoryWatcherList(){
