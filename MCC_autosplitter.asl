@@ -4692,10 +4692,10 @@ isLoading
 					case "03a": // Outskirts
 					if (vars.stateindicator.Current != 44)
 					{
-						vars.watchers_h2xy.UpdateAll(game);
-						if (vars.H2_tickcounter.Current < 30 && vars.H2_xpos.Current != (float)-592.146973 && vars.H2_xpos.Current != (float)0)
+						if (vars.H2_fadebyte.Current == 1 && vars.H2_tickcounter.Current < 10 && vars.H2_tickcounter.Current > 0)
 						{
-							vars.loading = false;
+							vars.watchers_h2bsp.UpdateAll(game);
+							if (vars.H2_bspstate.Current == 0)	vars.loading = false;
 						} else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old)
 						{
 							vars.loading = false;
