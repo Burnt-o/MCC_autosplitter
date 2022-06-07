@@ -3805,10 +3805,10 @@ split
 			
 			
 			
-			checklevel = vars.ODST_levelnameBad.Current;
+			checklevel = vars.ODST_levelnameBad2.Current;
 			
 			
-			if (settings["Loopmode"] && vars.ODST_levelnameBad.Current == vars.startedlevel && vars.loopsplit == false)
+			if (settings["Loopmode"] && vars.ODST_levelnameBad2.Current == vars.startedlevel && vars.loopsplit == false)
 			{
 				if (vars.odst_IGT.Current > 10 && vars.odst_IGT.Current < 30)
 				{
@@ -4475,7 +4475,7 @@ isLoading
 				break;
 				
 				case 5: //ODST
-				if (vars.ODST_levelnameBad.Current == "c100" && vars.odst_IGT.Current > 15 && vars.odst_IGT.Current < 30) //there was a bsp check here; do I still need it?
+				if (vars.ODST_levelnameBad2.Current == "c100" && vars.odst_IGT.Current > 15 && vars.odst_IGT.Current < 30) //there was a bsp check here; do I still need it?
 				{
 					vars.multigamepause = false;
 					vars.pgcrpauseflag = false;
