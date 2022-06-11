@@ -2963,29 +2963,26 @@ split
 				
 			} else
 			{
-				if (!(vars.H1_levelname.Current == "d40" && vars.H1_bspstate.Current == 7)) //!= maw last bsp
+				if((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44) || (vars.split == true && settings["sqsplit"])) //split on loading screen
 				{
-					if((vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44) || (vars.split == true && settings["sqsplit"])) //split on loading screen
-					{
-						vars.dirtybsps_byte.Clear();
-						vars.split = false;
-						return true;
-					}
-				} else
+					vars.dirtybsps_byte.Clear();
+					vars.split = false;
+					return true;
+				
+				} 
+				
+				if (vars.H1_levelname.Current == "d40" && vars.H1_cinematic.Old == false && vars.H1_cinematic.Current == true && vars.H1_cutsceneskip.Current == false && vars.mawsplit == false )//maw ending
 				{
-					if (vars.H1_cinematic.Old == false && vars.H1_cinematic.Current == true && vars.H1_cutsceneskip.Current == false && vars.mawsplit == false )//maw ending
+					vars.watchers_h1death.UpdateAll(game);
+					if (vars.H1_deathflag.Current == false)
 					{
-						vars.watchers_h1death.UpdateAll(game);
-						if (vars.H1_deathflag.Current == false)
+						vars.mawsplit = true;
+						if (!(settings["anylevel"]))
 						{
-							vars.mawsplit = true;
-							if (!(settings["anylevel"]))
-							{
-								vars.multigamepause = true;
-							} else vars.loading = true;
-							vars.dirtybsps_byte.Clear();
-							return true;
-						}
+							vars.multigamepause = true;
+						} else vars.loading = true;
+						vars.dirtybsps_byte.Clear();
+						return true;
 					}
 				}
 			}
