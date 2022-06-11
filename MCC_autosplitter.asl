@@ -48,7 +48,7 @@ init //hooking to game to make memorywatchers
 		version = "1.2845.0.0";
 		break;
 		
-				case "1.2862.0.0":
+		case "1.2862.0.0":
 		version = "1.2862.0.0";
 		break;
 		
@@ -2116,6 +2116,8 @@ start 	//starts timer
 		
 		vars.secondreset = false;
 		vars.pgcrpauseflag = false;
+
+		vars.loading = false;
 		
 		print("What about second varsreset? Elevensies? Luncheon? Afternoon tea?");
 	}
@@ -2143,7 +2145,6 @@ start 	//starts timer
 						{
 							vars.startedlevel = checklevel;
 							vars.varsreset = false;
-							vars.loading = false;
 							return true;
 						}
 					}
@@ -2154,7 +2155,6 @@ start 	//starts timer
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
-						vars.loading = false;
 						return true;
 					}
 					break;
@@ -2167,7 +2167,6 @@ start 	//starts timer
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
-						vars.loading = false;
 						return true;
 					}
 					break;
@@ -2180,7 +2179,6 @@ start 	//starts timer
 					{
 						vars.startedlevel = checklevel;
 						vars.varsreset = false;
-						vars.loading = false;
 						return true;
 					}
 					break;
@@ -2202,7 +2200,6 @@ start 	//starts timer
 						{
 							vars.startedlevel = checklevel;
 							vars.levelloaded = checklevel;
-							vars.loading = false;
 							vars.varsreset = false;
 							return true;
 						}
@@ -2220,7 +2217,6 @@ start 	//starts timer
 					{
 						vars.startedlevel = checklevel;
 						vars.levelloaded = checklevel;
-						vars.loading = false;
 						vars.varsreset = false;
 						return true;
 					}
@@ -2235,7 +2231,6 @@ start 	//starts timer
 					{
 						vars.startedlevel = checklevel;
 						vars.levelloaded = checklevel;
-						vars.loading = false;
 						vars.varsreset = false;
 						return true;
 					}
@@ -2251,7 +2246,6 @@ start 	//starts timer
 				{
 					vars.startedlevel = "a10";
 					vars.levelloaded = "a10";
-					vars.loading = false;
 					vars.varsreset = false;
 					return true;
 				}
@@ -2272,7 +2266,6 @@ start 	//starts timer
 				{
 					vars.startedlevel = vars.H2_levelname.Current;
 					vars.varsreset = false;
-					vars.loading = false;
 					return true;
 				}
 				
@@ -2280,13 +2273,11 @@ start 	//starts timer
 			{
 				vars.startedlevel = "01b";
 				vars.varsreset = false;
-				vars.loading = false;
 				return true;
 			} else if (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30) //start on armory
 			{
 				vars.startedlevel = "01a";
 				vars.varsreset = false;
-				vars.loading = false;
 				return true;
 			}
 			break;
@@ -2950,7 +2941,7 @@ split
 					break;
 					
 					case "d40": //maw - will false split on bad ending but not bridge cs or death in end fadeout
-					if (vars.H1_bspstate.Current == 7 && vars.H1_cinematic.Old == false && vars.H1_cinematic.Current == true)
+					if (vars.H1_cinematic.Old == false && vars.H1_cinematic.Current == true && vars.H1_cutsceneskip.Current == false)
 					{
 						vars.watchers_h1death.UpdateAll(game);
 						if (vars.H1_deathflag.Current == false)
@@ -2982,7 +2973,7 @@ split
 					}
 				} else
 				{
-					if (vars.H1_bspstate.Current == 7 && vars.H1_cinematic.Old == false && vars.H1_cinematic.Current == true && vars.mawsplit == false )//maw ending
+					if (vars.H1_cinematic.Old == false && vars.H1_cinematic.Current == true && vars.H1_cutsceneskip.Current == false && vars.mawsplit == false )//maw ending
 					{
 						vars.watchers_h1death.UpdateAll(game);
 						if (vars.H1_deathflag.Current == false)
@@ -2991,7 +2982,7 @@ split
 							if (!(settings["anylevel"]))
 							{
 								vars.multigamepause = true;
-							}
+							} else vars.loading = true;
 							vars.dirtybsps_byte.Clear();
 							return true;
 						}
@@ -4245,23 +4236,20 @@ reset
 				if (settings["ILmode"])
 				{			
 					return (timer.CurrentPhase != TimerPhase.Ended &&( (
-						(vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true) 
-						|| (vars.H1_levelname.Current == "a30" && vars.H1_tickcounter.Current < 50) 
+						(vars.H1_levelname.Current == "a10" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295)
+						|| (vars.H1_levelname.Current == "a30" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295) 
 						|| (vars.H1_levelname.Current == "a50" && vars.H1_tickcounter.Current < 500) 
 						|| (vars.H1_levelname.Current == "b30" && vars.H1_tickcounter.Current < 500) 
 						|| (vars.H1_levelname.Current == "b40" && vars.H1_tickcounter.Current < 500) 
 						|| (vars.H1_levelname.Current == "c10" && vars.H1_tickcounter.Current < 500) 
-						|| (vars.H1_levelname.Current == "c20" && vars.H1_cinematic.Current == true && vars.H1_tickcounter.Current < 50)
-						|| (vars.H1_levelname.Current == "c40" && vars.H1_cinematic.Current == true && vars.H1_tickcounter.Current < 50)
-						|| (vars.H1_levelname.Current == "d20" && vars.H1_cinematic.Current == true && vars.H1_tickcounter.Current < 50)
-						|| (vars.H1_levelname.Current == "d40" && vars.H1_cinematic.Current == true && vars.H1_tickcounter.Current < 50)
+						|| (vars.H1_levelname.Current == "c20" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295)
+						|| (vars.H1_levelname.Current == "c40" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295)
+						|| (vars.H1_levelname.Current == "d20" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295)
+						|| (vars.H1_levelname.Current == "d40" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295)
 					))); 
 				} else
 				{
-					if(vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true)
-					{		
-						return true;				
-					}
+					return (vars.H1_levelname.Current == "a10" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295);
 					
 					//reset on PoA
 					
@@ -4277,7 +4265,7 @@ reset
 							case "c40":
 							case "d20":
 							case "d40":
-							return (vars.H1_tickcounter.Old < 30 && vars.H1_cinematic.Current == true && vars.H1_cinematic.Old == false); //flipped logic of start
+							return (vars.H1_tickcounter.Old < 30 && vars.H1_cutsceneskip.Current == true && vars.H1_cutsceneskip.Old == false && vars.H1_tickcounter.Old == 4294967295); //flipped logic of start
 							
 							break;
 							
