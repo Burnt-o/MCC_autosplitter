@@ -103,7 +103,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03F7BAD0, 0x8, 0x2B611EC), 3)),
-				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03F7BAD0, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03F7BAD0, 0x8, 0x2B88848)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	//take the one near camera angle that flicks to FF FF FF FF on mission restart plz burnt :)
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03F7BAD0, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03F7BAD0, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03F7BAD0, 0x8, 0x02E773E8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -237,7 +237,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x003FB1FD0, 0x8, 0x2B611EC), 3)),
-				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x003FB1FD0, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x003FB1FD0, 0x8, 0x2B88848)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x003FB1FD0, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x003FB1FD0, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x003FB1FD0, 0x8, 0x02E773E8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -371,7 +371,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x003FB1FD0, 0x8, 0x2B611EC), 3)),
-				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x003FB1FD0, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x003FB1FD0, 0x8, 0x2B88848)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x003FB1FD0, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x003FB1FD0, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x003FB1FD0, 0x8, 0x02E773D8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -505,7 +505,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03FB20D0, 0x8, 0x2B611EC), 3)),
-				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03FB20D0, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03FB20D0, 0x8, 0x2B88848)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03FB20D0, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03FB20D0, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03FB20D0, 0x8, 0x02E773E8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -773,7 +773,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0x8, 0x2AF111C), 3)),
-				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0x8, 0x2B58A24)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0x8, 0x2B58B08)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x3A24FF8, 0x8, 0x19F0400)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0x8, 0x2AEC640)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0x8, 0x2AF1868, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -916,7 +916,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0x8, 0x2B611EC), 3)),
-				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x8, 0x2B88848)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x02E773E8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -1049,7 +1049,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03E54A40, 0x8, 0x2B611EC), 3)),
-				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E54A40, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E54A40, 0x8, 0x2B88848)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03E54A40, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03E54A40, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03E54A40, 0x8, 0x02E773E8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -1183,7 +1183,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03E54940, 0x8, 0x2B611EC), 3)),
-				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E54940, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E54940, 0x8, 0x2B88848)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03E54940, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03E54940, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03E54940, 0x8, 0x02E773D8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -1317,7 +1317,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03E54A40, 0x8, 0x2B611EC), 3)),
-				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E54A40, 0x8, 0x2B88764)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E54A40, 0x8, 0x2B88848)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03E54A40, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03E54A40, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03E54A40, 0x8, 0x02E773E8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -1582,7 +1582,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x038C7940, 0x8, 0x2AF111C), 3)),
-				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x038C7940, 0x8, 0x2B58A24)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x038C7940, 0x8, 0x2B58B08)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x038C7940, 0x8, 0x19F0400)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x038C7940, 0x8, 0x2AEC640)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x038C7940, 0x8, 0x2AF1868, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
