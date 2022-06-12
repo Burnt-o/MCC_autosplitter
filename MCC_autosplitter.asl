@@ -4233,20 +4233,20 @@ reset
 				if (settings["ILmode"])
 				{			
 					return (timer.CurrentPhase != TimerPhase.Ended &&( (
-						(vars.H1_levelname.Current == "a10" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295)
-						|| (vars.H1_levelname.Current == "a30" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295) 
+						(vars.H1_levelname.Current == "a10" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30)
+						|| (vars.H1_levelname.Current == "a30" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30) 
 						|| (vars.H1_levelname.Current == "a50" && vars.H1_tickcounter.Current < 500) 
 						|| (vars.H1_levelname.Current == "b30" && vars.H1_tickcounter.Current < 500) 
 						|| (vars.H1_levelname.Current == "b40" && vars.H1_tickcounter.Current < 500) 
 						|| (vars.H1_levelname.Current == "c10" && vars.H1_tickcounter.Current < 500) 
-						|| (vars.H1_levelname.Current == "c20" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295)
-						|| (vars.H1_levelname.Current == "c40" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295)
-						|| (vars.H1_levelname.Current == "d20" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295)
-						|| (vars.H1_levelname.Current == "d40" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295)
+						|| (vars.H1_levelname.Current == "c20" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30)
+						|| (vars.H1_levelname.Current == "c40" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30)
+						|| (vars.H1_levelname.Current == "d20" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30)
+						|| (vars.H1_levelname.Current == "d40" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30)
 					))); 
 				} else
 				{
-					return (vars.H1_levelname.Current == "a10" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30 && vars.H1_tickcounter.Old == 4294967295);
+					return (vars.H1_levelname.Current == "a10" && vars.H1_cutsceneskip.Current == true && vars.H1_tickcounter.Current < 30);
 					
 					//reset on PoA
 					
@@ -4262,7 +4262,7 @@ reset
 							case "c40":
 							case "d20":
 							case "d40":
-							return (vars.H1_tickcounter.Old < 30 && vars.H1_cutsceneskip.Current == true && vars.H1_cutsceneskip.Old == false && vars.H1_tickcounter.Old == 4294967295); //flipped logic of start
+							return (vars.H1_tickcounter.Old < 30 && vars.H1_cutsceneskip.Current == true && vars.H1_cutsceneskip.Old == false); //flipped logic of start
 							
 							break;
 							
