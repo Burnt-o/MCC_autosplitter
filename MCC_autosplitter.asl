@@ -52,7 +52,7 @@ init //hooking to game to make memorywatchers
 			testversion = test3;
 		}
 		
-		if (version == "") //if our code didn't find the version, modify the error message to display below
+		if (testversion == null) //if our code didn't find the version, modify the error message to display below
 		{
 			message = "An issue with newer releases of WinStore MCC " + "\n" +
 			"has broken some of my version checking code." + "\n" +
