@@ -21,12 +21,49 @@ init //hooking to game to make memorywatchers
 	//need to clear pause flags incase of restart/crash
 	vars.loading = false;
 	vars.pgcrpauseflag = false;
-
 	
+	var message = "It looks like MCC has received a new patch that will "+
+	"probably break me (the autosplitter). \n"+
+	"Autosplitter was made for version: "+ "1.2904.0.0" + "\n" + 
+	"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
+	"If I'm broken, you'll just have to wait for Burnt to update me. "+
+	"You won't need to do anything except restart Livesplit once I'm updated.";
+	
+	
+	
+	//so the latest version of winstore (as of v2904), has a fun issue where you can't get the FileVersion from the module like you normally can
+	//so this backup code will check for that failure and attempt to get it from the filepath
+	
+	//first check for the failure
+	string testversion = modules.First().FileVersionInfo.FileVersion; 
+	var winstorefileversioncheck = (testversion == null && (modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe" || modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe"));
+	if (winstorefileversioncheck) 
+	{
+		print ("dear god why");
+		print (modules.First().FileName.ToString());
+		var test = modules.First().FileName.ToString(); //get the filepath of the winstore exe
+		var test2 = test.IndexOf("Chelan"); //check where the index of the word "Chelan" is in the filepath 
+		if (test2 != -1) //-1 if it didn't find "Chelan"
+		{
+			var test3 = test.Substring(test2 + 7, 10); //move to the right of the filepath to get the version number
+			print (test3);
+			
+			if (test3.Substring(1, 1) == ".") //sanity check
+			testversion = test3;
+		}
+		
+		if (testversion == null) //if our code didn't find the version, modify the error message to display below
+		{
+			message = "An issue with newer releases of WinStore MCC " + "\n" +
+			"has broken some of my version checking code." + "\n" +
+			"For now I'll assume you're on the latest patch and try to work anyway.";
+		}
+		
+	}
 	
 	
 	//version check and warning message for invalid version  
-	switch(modules.First().FileVersionInfo.FileVersion)
+	switch(testversion)
 	{
 		case "1.2448.0.0":
 		version = "1.2448.0.0";
@@ -39,11 +76,11 @@ init //hooking to game to make memorywatchers
 		case "1.2819.0.0":
 		version = "1.2819.0.0";
 		break;
-
+		
 		case "1.2835.0.0":
 		version = "1.2835.0.0";
 		break;
-
+		
 		case "1.2845.0.0":
 		version = "1.2845.0.0";
 		break;
@@ -51,7 +88,7 @@ init //hooking to game to make memorywatchers
 		case "1.2862.0.0":
 		version = "1.2862.0.0";
 		break;
-
+		
 		case "1.2904.0.0":
 		version = "1.2904.0.0";
 		break;
@@ -62,17 +99,10 @@ init //hooking to game to make memorywatchers
 		if (vars.brokenupdateshowed == false)
 		{
 			vars.brokenupdateshowed = true;
-			var brokenupdateMessage = MessageBox.Show(
-				"It looks like MCC has recieved a new patch that will "+
-				"probably break me (the autosplitter). \n"+
-				"Autosplitter was made for version: "+ "1.2904.0.0" + "\n" + 
-				"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
-				"If I'm broken, you'll just have to wait for Burnt to update me. "+
-				"You won't need to do anything except restart Livesplit once I'm updated.",
+			var brokenupdateMessage = MessageBox.Show(message,
 				vars.aslName+" | LiveSplit",
 				MessageBoxButtons.OK 
 			);
-			
 		}
 		break;
 	}
@@ -121,7 +151,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03F7BA50, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03F7BA50, 0x8, 0x2E7F868, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
@@ -212,10 +242,10 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4bsp = new MemoryWatcherList() {
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03F7BA50, 0x68, 0x25DC188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
-
-
-
-
+			
+			
+			
+			
 		} else if (version == "1.2862.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
@@ -255,7 +285,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03F7BAD0, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03F7BAD0, 0x8, 0x2E7F878, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
@@ -348,8 +378,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			
-
-
+			
+			
 		} else if (version == "1.2845.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
@@ -389,7 +419,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x003FB1FD0, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x003FB1FD0, 0x8, 0x2E7F878, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
@@ -480,10 +510,10 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4bsp = new MemoryWatcherList() {
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x003FB1FD0, 0x68, 0x25DC188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
-
-
-		
-		 
+			
+			
+			
+			
 		} else if (version == "1.2835.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
@@ -523,7 +553,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x003FB1FD0, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x003FB1FD0, 0x8, 0x2E7F868, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
@@ -614,10 +644,10 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4bsp = new MemoryWatcherList() {
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x003FB1FD0, 0x68, 0x25DC188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
-
-
-
-
+			
+			
+			
+			
 		} else if (version == "1.2819.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
@@ -657,7 +687,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03FB20D0, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03FB20D0, 0x8, 0x2E7F878, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
@@ -748,10 +778,10 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4bsp = new MemoryWatcherList() {
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03FB20D0, 0x68, 0x25DC188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
-
-
-
-
+			
+			
+			
+			
 		} else if (version == "1.2645.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
@@ -791,7 +821,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03B80E98, 0x8, 0x2AF8257)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03B80E98, 0x8, 0x2B88E58, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
@@ -884,8 +914,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			
-
-
+			
+			
 		} else if (version == "1.2448.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
@@ -925,7 +955,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0x8, 0x2AF10E7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0x8, 0x2B81CE8, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
@@ -1028,8 +1058,141 @@ init //hooking to game to make memorywatchers
 		
 		
 		
-		
-		if (version == "1.2862.0.0")
+		if (version == "1.2904.0.0")
+		{
+			vars.watchers_fast = new MemoryWatcherList() {
+				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3CE9329)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
+				(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3DD36E9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			
+			vars.watchers_slow = new MemoryWatcherList() {
+				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x03E1FE60, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
+				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0x28, 0xD4ABF8), 3)),
+				(vars.H3_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0x48, 0x1E092E8), 3)), 
+				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0xC8, 0x290BDA7), 3)),
+				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(0x03E1F540, 0xA8, 0xABD8E3), 4)), 
+				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(0x03E1F540, 0xA8, 0x20872f5), 4)), 
+				
+				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0x68, 0x29A3743), 3))
+			};
+			
+			
+			
+			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0x8, 0x2B611EC), 3)),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x8, 0x2B88848)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	//take the one near camera angle that flicks to FF FF FF FF on mission restart plz burnt :)
+				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				//(vars.H1_playerfrozen = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x2E12600)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x02E773D8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x02E773D8, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h1xy = new MemoryWatcherList() {
+				(vars.H1_xpos = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x8, 0x2D7313C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_ypos = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x8, 0x2D73140)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h1death = new MemoryWatcherList(){
+				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
+			vars.watchers_h1fade = new MemoryWatcherList(){
+				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x8, 0x2E7F868, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
+				(vars.H1_fadelength = new MemoryWatcher<ushort>(new DeepPointer(0x03E1F540, 0x8, 0x2E7F868, 0x3C4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x8, 0x2E7F868, 0x3C6)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h2 = new MemoryWatcherList() {
+				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x28, 0x1776D04)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_cutsceneflag = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0x14CFAE8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_CSind = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0x01D37C20, 0x38, 0x78, 0x1E8, 0xE8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0x01520498, -0x92E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x28, 0x01520498, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_graphics = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0xCCF280)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //scan for FF FF FF FF 2A 0A 00 0D on outskirts. Should be around here somewhere
+			};
+			
+			vars.watchers_h2bsp = new MemoryWatcherList() {
+				(vars.H2_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0xCACD74)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h2xy = new MemoryWatcherList() {
+				(vars.H2_xpos = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x28, 0xD5A148)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_ypos = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x28, 0xD5A14C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h2IL = new MemoryWatcherList() {
+				(vars.H2_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x28, 0x147D9F0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h2death = new MemoryWatcherList(){
+				(vars.H2_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x28, 0x00D5A5A0, -0xEF)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			
+			vars.watchers_h3 = new MemoryWatcherList() {
+				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x48, 0x1EF61E8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				//(vars.H3_validtimeflag = new MemoryWatcher<byte>(new DeepPointer(0x038CF520, 0x48, 0xD64296)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //not using anymore
+			};
+			
+			vars.watchers_h3bsp = new MemoryWatcherList() {
+				(vars.H3_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03E1F540, 0x48, 0x99FCA0, 0x2C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_h3IL = new MemoryWatcherList() {
+				(vars.H3_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x48, 0x9AD720)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_h3death = new MemoryWatcherList(){
+				(vars.H3_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x48, 0x1D8DF48, 0x1073D)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H3_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_hr = new MemoryWatcherList() {
+				(vars.HR_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03E1F540, 0xC8, 0x023CC768, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.HR_validtimeflag = new MemoryWatcher<byte> (new DeepPointer(0x03E1F540, 0xC8, 0x00EF2010, 0x12E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_hrbsp = new MemoryWatcherList() {
+				(vars.HR_bspstate = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0xC8, 0x3719E24)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_hrdeath = new MemoryWatcherList(){
+				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0xC8, 0x00EEF330, 0xEF2010)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.HR_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_odst = new MemoryWatcherList() {
+				(vars.odst_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0xA8, 0xA11C20)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				
+			};
+			
+			vars.watchers_odstbsp = new MemoryWatcherList() {
+				(vars.odst_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03E1F540, 0xA8, 0x2F9FD5C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			
+			vars.watchers_odstdeath = new MemoryWatcherList(){
+				(vars.odst_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0xA8, 0x00F3EB8C, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.odst_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h4 = new MemoryWatcherList() {
+				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03E1F540, 0x68, 0x0267C478, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H4_validtimeflag = new MemoryWatcher<byte> (new DeepPointer(0x03E1F540, 0x68, 0x29A383E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h4bsp = new MemoryWatcherList() {
+				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03E1F540, 0x68, 0x25DC188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			
+			
+			
+		} else if (version == "1.2862.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
 				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3CE9329)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //behaviour changed to 07 and 0B, instead of 07 and 0C
@@ -1068,7 +1231,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x8, 0x2E7F878, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
@@ -1083,7 +1246,7 @@ init //hooking to game to make memorywatchers
 				(vars.H2_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0x01520498, -0x92E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x28, 0x01520498, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_graphics = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0xCCF280)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //scan for FF FF FF FF 2A 0A 00 0D on outskirts. Should be around here somewhere
-
+				
 			};
 			
 			vars.watchers_h2bsp = new MemoryWatcherList() {
@@ -1201,7 +1364,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03E54A40, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03E54A40, 0x8, 0x2E7F878, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
@@ -1292,10 +1455,10 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4bsp = new MemoryWatcherList() {
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03E54A40, 0x68, 0x25DC188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
-
-
-
-
+			
+			
+			
+			
 		} else if (version == "1.2835.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
@@ -1335,7 +1498,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03E54940, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03E54940, 0x8, 0x2E7F868, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
@@ -1428,8 +1591,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			
-
-
+			
+			
 		} else if (version == "1.2819.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
@@ -1469,7 +1632,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03E54A40, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03E54A40, 0x8, 0x2E7F878, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
@@ -1562,8 +1725,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			
-
-
+			
+			
 		} else if (version == "1.2645.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
@@ -1603,7 +1766,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03A23830, 0x8, 0x2AF8257)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_revertcount = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03A23830, 0x8, 0x2B88E58, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
 				(vars.H1_fadelength = new MemoryWatcher<ushort>(new DeepPointer(0x03A23830, 0x8, 0x2B88E58, 0x3C4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -1693,9 +1856,9 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4bsp = new MemoryWatcherList() {
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03A23830, 0x68, 0x2472A88)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
-
-
-
+			
+			
+			
 		} else if (version == "1.2448.0.0")
 		{
 			vars.watchers_fast = new MemoryWatcherList() {
@@ -1729,7 +1892,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_xpos = new MemoryWatcher<float>(new DeepPointer(0x038C7940, 0x8, 0x2A57E74)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_ypos = new MemoryWatcher<float>(new DeepPointer(0x038C7940, 0x8, 0x2A57E78)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-
+			
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x038C7940, 0x8, 0x2B81CE8, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
 				(vars.H1_fadelength = new MemoryWatcher<ushort>(new DeepPointer(0x038C7940, 0x8, 0x2B81CE8, 0x3C4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -2059,7 +2222,7 @@ startup //variable init and settings
 	
 	settings.Add("anylevel", false, "Start full-game runs on any level (breaks multi-game runs)");
 	settings.Add("menupause", true, "Pause when in Main Menu", "anylevel");
-
+	
 	settings.Add("sqsplit", true, "Split when save & quitting and loading a new level. Useful for categories like Hunter%. Only works for Halo CE");
 	
 	settings.Add("counters", false, "Counters and fun stuff");
@@ -2142,6 +2305,12 @@ startup //variable init and settings
 
 
 update {
+	
+	//var guh = modules.First().FileName;
+	
+	//print ("test " + FileVersionInfo.GetVersionInfo(guh)); 
+	
+	
 	vars.watchers_fast.UpdateAll(game);
 	if (vars.loopcount == 60)
 	{
@@ -2252,7 +2421,7 @@ start 	//starts timer
 		
 		vars.secondreset = false;
 		vars.pgcrpauseflag = false;
-
+		
 		vars.loading = false;
 		
 		print("What about second varsreset? Elevensies? Luncheon? Afternoon tea?");
@@ -2854,8 +3023,8 @@ split
 					{
 						if (vars.H1_bspstate.Current == 0)
 						{
-								vars.watchers_h1xy.UpdateAll(game);
-						if (vars.H1_ypos.Current > (-19.344 - 0.2) && vars.H1_ypos.Current < (-19.344 + 0.2))
+							vars.watchers_h1xy.UpdateAll(game);
+							if (vars.H1_ypos.Current > (-19.344 - 0.2) && vars.H1_ypos.Current < (-19.344 + 0.2))
 							{
 								vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
 								return true;
@@ -2938,7 +3107,7 @@ split
 			
 			if (settings["ILmode"])
 			{				
-
+				
 				//What even is this?
 				/* 				if (settings["Loopmode"])
 					{3
@@ -3031,7 +3200,7 @@ split
 						return true;
 					}
 					break;
-
+					
 					case "c20":
 					vars.watchers_h1fade.UpdateAll(game);
 					if (vars.H1_fadebyte.Current == 1)
@@ -3057,7 +3226,7 @@ split
 						}
 					}
 					break;
-
+					
 					case "d20": //keyes -- won't false split on fullpath
 					vars.watchers_h1fade.UpdateAll(game);
 					if (vars.H1_fadebyte.Current == 1)
@@ -3094,7 +3263,7 @@ split
 					break;
 					
 				}
-					
+				
 				
 				
 			} else
@@ -3104,7 +3273,7 @@ split
 					vars.dirtybsps_byte.Clear();
 					vars.split = false;
 					return true;
-				
+					
 				} 
 				
 				if (vars.H1_levelname.Current == "d40" && vars.H1_cinematic.Old == false && vars.H1_cinematic.Current == true && vars.H1_cutsceneskip.Current == false && vars.mawsplit == false )//maw ending
@@ -4638,24 +4807,24 @@ isLoading
 		
 		case 0: //halo 1
 		if (vars.loading == false) //if not currently loading, determine whether we need to be.
-			{
+		{
 			if (vars.menuindicator.Current == 7) //between level loads.
 			{
 				if (vars.H1_levelname.Current != vars.levelloaded && vars.H1_levelname.Current != vars.startedlevel && 
-				(vars.H1_levelname.Current == "a10" 
-				|| vars.H1_levelname.Current == "a30" 
-				|| vars.H1_levelname.Current == "a50" 
-				|| vars.H1_levelname.Current == "b30" 
-				|| vars.H1_levelname.Current == "b40" 
-				|| vars.H1_levelname.Current == "c10" 
-				|| vars.H1_levelname.Current == "c20" 
-				|| vars.H1_levelname.Current == "c40" 
-				|| vars.H1_levelname.Current == "d20" 
-				|| vars.H1_levelname.Current == "d40")) //why does .contains not work for strings? eee.
-				{
-					vars.loading = true;
-					vars.levelloaded = vars.H1_levelname.Current;
-				}
+					(vars.H1_levelname.Current == "a10" 
+						|| vars.H1_levelname.Current == "a30" 
+						|| vars.H1_levelname.Current == "a50" 
+						|| vars.H1_levelname.Current == "b30" 
+						|| vars.H1_levelname.Current == "b40" 
+						|| vars.H1_levelname.Current == "c10" 
+						|| vars.H1_levelname.Current == "c20" 
+						|| vars.H1_levelname.Current == "c40" 
+						|| vars.H1_levelname.Current == "d20" 
+					|| vars.H1_levelname.Current == "d40")) //why does .contains not work for strings? eee.
+					{
+						vars.loading = true;
+						vars.levelloaded = vars.H1_levelname.Current;
+					}
 			}
 			else if (vars.stateindicator.Current == 44) //main menu to level loads.
 			{
@@ -4667,30 +4836,30 @@ isLoading
 			if (settings["sqsplit"])
 			{
 				if (vars.split == false && (vars.H1_levelname.Current != vars.levelloaded) && 
-				(vars.H1_levelname.Current == "a10" 
-				|| vars.H1_levelname.Current == "a30" 
-				|| vars.H1_levelname.Current == "a50" 
-				|| vars.H1_levelname.Current == "b30" 
-				|| vars.H1_levelname.Current == "b40" 
-				|| vars.H1_levelname.Current == "c10" 
-				|| vars.H1_levelname.Current == "c20" 
-				|| vars.H1_levelname.Current == "c40" 
-				|| vars.H1_levelname.Current == "d20" 
-				|| vars.H1_levelname.Current == "d40")) //determine if there is a level swap thus a split required
-				{
-					if (vars.H1_levelname.Current != vars.startedlevel) //dont split if loading the starting level, probably a reset/loopmode. Otherwise split.
+					(vars.H1_levelname.Current == "a10" 
+						|| vars.H1_levelname.Current == "a30" 
+						|| vars.H1_levelname.Current == "a50" 
+						|| vars.H1_levelname.Current == "b30" 
+						|| vars.H1_levelname.Current == "b40" 
+						|| vars.H1_levelname.Current == "c10" 
+						|| vars.H1_levelname.Current == "c20" 
+						|| vars.H1_levelname.Current == "c40" 
+						|| vars.H1_levelname.Current == "d20" 
+					|| vars.H1_levelname.Current == "d40")) //determine if there is a level swap thus a split required
 					{
-						vars.levelloaded = vars.H1_levelname.Current;
-						vars.split = true;
+						if (vars.H1_levelname.Current != vars.startedlevel) //dont split if loading the starting level, probably a reset/loopmode. Otherwise split.
+						{
+							vars.levelloaded = vars.H1_levelname.Current;
+							vars.split = true;
+						}
 					}
-				}
 			}
 			if (vars.H1_tickcounter.Current == (vars.H1_tickcounter.Old + 1)) //determine whether to unpause the timer, ie tick counter starts incrementing again.
 			{
-					vars.loading = false;
+				vars.loading = false;
 			}
 		}
-
+		
 		return vars.loading;
 		break;
 		
@@ -4710,7 +4879,7 @@ isLoading
 					case "01a": //Armory
 					if (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57) vars.loading = true;
 					break;
-
+					
 					case "01b": //Cairo
 					case "03a": //Outskirts
 					case "03b": //Metropolis
@@ -4725,7 +4894,7 @@ isLoading
 						vars.loading = true;
 					}
 					break;
-
+					
 					case "04b": //Oracle
 					case "05b": //Regret
 					if (vars.lastinternal == false && (vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96 && vars.H2_letterbox.Old != 0))
@@ -4741,7 +4910,7 @@ isLoading
 							vars.lastinternal = true;
 							return false;
 						}
-
+						
 					}
 					else if ((vars.H2_tickcounter.Current > 60 && vars.H2_tickcounter.Current < 4294967295 && vars.lastinternal == true && vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
 					{
@@ -4749,7 +4918,7 @@ isLoading
 						vars.lastinternal = false;
 					}
 					break;
-
+					
 					case "06b":	//Quarantine Zone
 					if ((vars.H2_tickcounter.Current > 60 && vars.H2_tickcounter.Current < 4294967295 && vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
 					{
@@ -4761,7 +4930,7 @@ isLoading
 					}
 					break;
 				}
-
+				
 				if (vars.H2_graphics.Current == 1 && vars.stateindicator.Current == 255)
 				{
 					if ((vars.H2_tickcounter.Current == vars.oldtick) || (vars.H2_tickcounter.Current == vars.oldtick + 1))
@@ -4773,7 +4942,7 @@ isLoading
 						vars.oldtick = vars.H2_tickcounter.Current;
 					}
 				}
-
+				
 			}
 			else if (vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57) //main menu to level loads.
 			{
@@ -4809,7 +4978,7 @@ isLoading
 						vars.loading = false;
 					}
 					break;
-
+					
 					case "03a": // Outskirts
 					if (vars.stateindicator.Current != 44)
 					{
@@ -4823,7 +4992,7 @@ isLoading
 						}
 					}
 					break;	
-
+					
 				}
 			}
 		}
