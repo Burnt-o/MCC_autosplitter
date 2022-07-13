@@ -4973,7 +4973,7 @@ isLoading
 					{
 						vars.loading = false;
 						vars.lastinternal = false;
-					} else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old && vars.stateindicator.Current != 44)
+					} else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old && vars.H2_tickcounter.Current > 10 && vars.stateindicator.Current != 44)
 					{
 						vars.loading = false;
 					}
