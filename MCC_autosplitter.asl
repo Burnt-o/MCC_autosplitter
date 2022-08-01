@@ -2025,7 +2025,6 @@ startup //variable init and settings
 	vars.H2_tgjreadytime = 0;
 	vars.loading = false;
 	vars.startedgame = 0;
-	vars.funnything = false;
 	
 	
 	//HALO 1
@@ -2240,9 +2239,6 @@ startup //variable init and settings
 	settings.Add("revertcounterdeaths", false, "Include deaths", "revertcounter");
 	settings.SetToolTip("revertcounterdeaths", "Makes dying also count as a revert"
 	);
-
-	settings.Add("pepelaugh", true, "PepeLaugh");
-	settings.SetToolTip("pepelaugh", "Hurry up strimmer :P");
 	
 	
 	
@@ -2341,7 +2337,6 @@ update {
 			
 			case 1:
 			vars.watchers_h2.UpdateAll(game);
-			if (vars.H2_levelname.Old =="00a" && vars.H2_levelname.Current == "01a" && settings["pepelaugh"]) {vars.funnything = true;}
 			if (settings["deathcounter"] || settings["revertcounter"])
 			{vars.watchers_h2death.UpdateAll(game); }
 			if (settings["bspmode"])
@@ -2387,7 +2382,7 @@ update {
 			
 			
 		}
-	} else if (timer.CurrentPhase == TimerPhase.NotRunning) {vars.funnything = false;}
+	}
 	
 	//print ("1: " + vars.ODST_levelnameBad.Current);
 	//print ("2: " + vars.ODST_levelnameBad2.Current);
@@ -2428,7 +2423,6 @@ start 	//starts timer
 		vars.pgcrpauseflag = false;
 		
 		vars.loading = false;
-		vars.funnything = false;
 		
 		print("What about second varsreset? Elevensies? Luncheon? Afternoon tea?");
 	}
@@ -4870,7 +4864,7 @@ isLoading
 		break;
 		
 		case 1: //halo 2
-		if (settings["ILmode"] || vars.funnything)
+		if (settings["ILmode"])
 		{
 			return true;
 		}
@@ -5241,14 +5235,9 @@ gameTime
 				
 				return ((TimeSpan.FromMilliseconds(((1000.0 / 60.0) * (vars.odsttimes + vars.odst_IGT.Current)) )) + vars.multigametime);
 			}
-		} else if ((settings["ILmode"] || vars.funnything) && vars.gameindicator.Current == 1) //h2
+		} else if (settings["ILmode"] && vars.gameindicator.Current == 1) //h2
 		{
-			if (vars.funnything)
-			{
-				//print ("yep");
-				return (timer.CurrentTime.GameTime + TimeSpan.FromSeconds(2.0 / 60.0));
-			}
-			 else if (settings["Loopmode"])
+			if (settings["Loopmode"])
 			{
 				if (vars.H2_IGT.Current < vars.H2_IGT.Old && vars.menuindicator.Old != 11)
 				{
