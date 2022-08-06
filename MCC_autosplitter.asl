@@ -4982,7 +4982,7 @@ isLoading
 					case "03a": // Outskirts
 					if (vars.stateindicator.Current != 44)
 					{
-						if (vars.H2_fadebyte.Current == 1 && vars.H2_tickcounter.Current < 85 && vars.H2_tickcounter.Current > 75)
+						if (vars.H2_fadebyte.Current == 1 && vars.H2_tickcounter.Current < 40 && vars.H2_tickcounter.Current >= 30)
 						{
 							vars.watchers_h2bsp.UpdateAll(game);
 							if (vars.H2_bspstate.Current == 0)	vars.loading = false;
