@@ -20,47 +20,10 @@ init //hooking to game to make memorywatchers
 	vars.loading = false;
 
 	if (settings["perfmode"]) {refreshRate = 30;} else {refreshRate = 60;}	//Set autosplitter refresh rate. Probably doesn't help much. Whatever
-
-
-	var message = "It looks like MCC has received a new patch that will "+
-	"probably break me (the autosplitter). \n"+
-	"Autosplitter was made for version: "+ "1.2904.0.0" + "\n" + 
-	"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
-	"If I'm broken, you'll just have to wait for Burnt to update me. "+
-	"You won't need to do anything except restart Livesplit once I'm updated.";
-	
-	//so the latest version of winstore (as of v2904), has a fun issue where you can't get the FileVersion from the module like you normally can
-	//so this backup code will check for that failure and attempt to get it from the filepath
-	
-	//first check for the failure
-	string testversion = modules.First().FileVersionInfo.FileVersion; 
-	var winstorefileversioncheck = (testversion == null && (modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe" || modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe"));
-	if (winstorefileversioncheck) 
-	{
-		print ("dear god why");
-		print (modules.First().FileName.ToString());
-		var test = modules.First().FileName.ToString(); //get the filepath of the winstore exe
-		var test2 = test.IndexOf("Chelan"); //check where the index of the word "Chelan" is in the filepath 
-		if (test2 != -1) //-1 if it didn't find "Chelan"
-		{
-			var test3 = test.Substring(test2 + 7, 10); //move to the right of the filepath to get the version number
-			print (test3);
-			
-			if (test3.Substring(1, 1) == ".") //sanity check
-			testversion = test3;
-		}
-		
-		if (testversion == null) //if our code didn't find the version, modify the error message to display below
-		{
-			message = "An issue with newer releases of WinStore MCC " + "\n" +
-			"has broken some of my version checking code." + "\n" +
-			"For now I'll assume you're on the latest patch and try to work anyway.";
-		}
-	}
 	
 	
 	//version check and warning message for invalid version  
-	switch(testversion)
+	switch(modules.First().FileVersionInfo.FileVersion)
 	{
 		case "1.2448.0.0":
 		version = "1.2448.0.0";
@@ -80,13 +43,20 @@ init //hooking to game to make memorywatchers
 		
 		default: 
 		version = "1.2904.0.0";
-		if (vars.brokenupdateshowed == false)
+		if (vars.brokenupdateshowed == false && modules.First().ToString() == "MCC-Win64-Shipping.exe")
 		{
 			vars.brokenupdateshowed = true;
-			var brokenupdateMessage = MessageBox.Show(message,
+			var brokenupdateMessage = MessageBox.Show(
+				"It looks like MCC has recieved a new patch that will "+
+				"probably break me (the autosplitter). \n"+
+				"Autosplitter was made for version: "+ "1.2904.0.0" + "\n" + 
+				"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
+				"If I'm broken, you'll just have to wait for Burnt to update me. "+
+				"You won't need to do anything except restart Livesplit once I'm updated.",
 				vars.aslName+" | LiveSplit",
 				MessageBoxButtons.OK 
 			);
+			
 		}
 		break;
 	}
