@@ -22,50 +22,43 @@ init //hooking to game to make memorywatchers
 	if (settings["perfmode"]) {refreshRate = 30;} else {refreshRate = 60;}	//Set autosplitter refresh rate. Probably doesn't help much. Whatever
 	
 	
-	//version check and warning message for invalid version 
-	if (modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe" || modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe")
+	//version check and warning message for invalid version  
+	switch(modules.First().FileVersionInfo.FileVersion)
 	{
+		case "1.2448.0.0":
+		version = "1.2448.0.0";
+		break;
+		
+		case "1.2645.0.0":
+		version = "1.2645.0.0";
+		break;
+		
+		case "1.2862.0.0":
+		version = "1.2862.0.0";
+		break;
+		
+		case "1.2904.0.0":
 		version = "1.2904.0.0";
-	}
-	else
-	{
-		switch (modules.First().FileVersionInfo.FileVersion)
+		break;
+		
+		default: 
+		version = "1.2904.0.0";
+		if (vars.brokenupdateshowed == false && modules.First().ToString() == "MCC-Win64-Shipping.exe")
 		{
-			case "1.2448.0.0":
-			version = "1.2448.0.0";
-			break;
+			vars.brokenupdateshowed = true;
+			var brokenupdateMessage = MessageBox.Show(
+				"It looks like MCC has recieved a new patch that will "+
+				"probably break me (the autosplitter). \n"+
+				"Autosplitter was made for version: "+ "1.2904.0.0" + "\n" + 
+				"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
+				"If I'm broken, you'll just have to wait for Burnt to update me. "+
+				"You won't need to do anything except restart Livesplit once I'm updated.",
+				vars.aslName+" | LiveSplit",
+				MessageBoxButtons.OK 
+			);
 			
-			case "1.2645.0.0":
-			version = "1.2645.0.0";
-			break;
-			
-			case "1.2862.0.0":
-			version = "1.2862.0.0";
-			break;
-			
-			case "1.2904.0.0":
-			version = "1.2904.0.0";
-			break;
-			
-			default: 
-			version = "1.2904.0.0";
-			if (vars.brokenupdateshowed == false)
-			{
-				vars.brokenupdateshowed = true;
-				var brokenupdateMessage = MessageBox.Show(
-					"It looks like MCC has recieved a new patch that will "+
-					"probably break me (the autosplitter). \n"+
-					"Autosplitter was made for version: "+ "1.2904.0.0" + "\n" + 
-					"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
-					"If I'm broken, you'll just have to wait for Burnt to update me. "+
-					"You won't need to do anything except restart Livesplit once I'm updated.",
-					vars.aslName+" | LiveSplit",
-					MessageBoxButtons.OK 
-				);
-				
-			}
-			break;
 		}
+		break;
 	}
 	
 	//STATE init
