@@ -198,7 +198,8 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h4 = new MemoryWatcherList() {
 				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03F7BA50, 0x68, 0x29A3743), 3)),
-				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03F7BA50, 0x68, 0x0267C478, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03F7BA50, 0x68, 0x0267C478, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.IGT_float = new MemoryWatcher<float> (new DeepPointer(0x3F7C33C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //leaving this here as it's currently only useful for H4
 			};
 			
 			vars.watchers_h4bsp = new MemoryWatcherList() {
@@ -313,6 +314,7 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4 = new MemoryWatcherList() {
 				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03F7BAD0, 0x68, 0x29A3743), 3)),
 				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03F7BAD0, 0x68, 0x0267C478, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.IGT_float = new MemoryWatcher<float> (new DeepPointer(0x3F7C33C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //almost definitely wrong.
 			};
 			
 			vars.watchers_h4bsp = new MemoryWatcherList() {
@@ -427,6 +429,7 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4 = new MemoryWatcherList() {
 				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x68, 0x2836433), 3)),
 				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03B80E98, 0x68, 0x0250F098, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.IGT_float = new MemoryWatcher<float> (new DeepPointer(0x3B80FF8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h4bsp = new MemoryWatcherList() {
@@ -544,6 +547,7 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4 = new MemoryWatcherList() {
 				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0x68, 0x276ACA3), 3)),
 				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x3A24FF8, 0x68, 0x02441B98, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.IGT_float = new MemoryWatcher<float> (new DeepPointer(0x3A25188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h4bsp = new MemoryWatcherList() {
@@ -553,9 +557,9 @@ init //hooking to game to make memorywatchers
 		}
 		
 		
-		
-	// WINSTORE !!!!!!!!!!!!!!!!!!!!
+
 	}
+	// WINSTORE !!!!!!!!!!!!!!!!!!!!
 	else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe" || modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe")
 	{
 		if (version == "1.2904.0.0")
@@ -661,7 +665,8 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h4 = new MemoryWatcherList() {
 				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0x68, 0x29A3743), 3)),
-				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03E1F540, 0x68, 0x0267C478, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03E1F540, 0x68, 0x0267C478, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.IGT_float = new MemoryWatcher<float> (new DeepPointer(0x3E1FE1C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h4bsp = new MemoryWatcherList() {
@@ -1131,8 +1136,8 @@ update
 					break;
 
 					case 3:
-					IGT = vars.H4_IGT.Current;
-					IGTold = vars.H4_IGT.Old;
+					IGT = (uint)Math.Round(vars.IGT_float.Current * 60);
+					IGTold = (uint)Math.Round(vars.IGT_float.Old * 60);
 					tickrate = 60;
 					level = vars.H4_levelname.Current;
 					break;
@@ -1153,12 +1158,21 @@ update
 
 				}
 
+				if (settings["debugmode"])
+				{
+					print("IGT: " + IGT);
+					print("IGTold: " + IGTold);
+				}
+
 				//Squiggily mess is squiggily. I have no idea how this works even though I wrote it :)
 				if (settings["ILmode"]) //ILs
 				{
 					if (settings["Loopmode"])
 					{
-						if (vars.stateindicator.Current != 44 && vars.leveltime == 0 && !(vars.pgcrexists) && vars.startedlevel == level) {vars.leveltime = IGT;}
+						if (vars.leveltime == 0)
+						{
+							if (vars.stateindicator.Current != 44 && !(vars.pgcrexists) && vars.startedlevel == level)  {vars.leveltime = IGT;}
+						}
 						else if ((IGT - IGTold) > 0 && (IGT - IGTold) < 300 && vars.startedlevel == level) {vars.leveltime = vars.leveltime + (IGT - IGTold);}
 						
 						if (vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57 && vars.stateindicator.Old != 190) //add times
@@ -1209,7 +1223,10 @@ update
 				}
 				else //Fullgame or anylevel
 				{
-					if (vars.stateindicator.Current != 44 && vars.leveltime == 0 && !(vars.pgcrexists)) {vars.leveltime = IGT;}
+					if (vars.leveltime == 0)
+					{
+						if (vars.stateindicator.Current != 44 && !(vars.pgcrexists)) {vars.leveltime = IGT;}
+					}
 					else if ((IGT - IGTold) > 0 && (IGT - IGTold) < 300) {vars.leveltime = vars.leveltime + (IGT - IGTold);}
 
 					if (test == 2) //Want to do the math on the loading screen for theatre timing
@@ -2628,8 +2645,7 @@ split
 							return false;
 							break;
 							
-						}
-						
+						}	
 					}
 					
 					switch (checklevel)
@@ -3098,7 +3114,7 @@ reset
 			case 3:
 			if (vars.H4_levelname.Current == vars.startedlevel && vars.startedgame == 3 && timer.CurrentPhase != TimerPhase.Ended)
 			{
-				return ((vars.H4_IGT.Current < vars.H4_IGT.Old && vars.H4_IGT.Current < 10) || (vars.stateindicator.Current == 44 && vars.H4_IGT.Current == 0));
+				return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.H4_IGT.Current == 0));
 			}
 			break;
 			
