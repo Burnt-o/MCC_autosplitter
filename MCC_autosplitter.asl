@@ -479,7 +479,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h2 = new MemoryWatcherList() {
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0x28, 0xE63FB3), 3)),
-				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0x28, 0x1694754)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0x28, 0xE63144)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_IGT = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0x28, 0xE22F40)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x3A24FF8, 0x28, 0x0143ACA0, -0x92E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(0x3A24FF8, 0x28, 0x0143ACA0, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
