@@ -133,7 +133,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h2 = new MemoryWatcherList() {
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03F7BA50, 0x28, 0xD4ABF8), 3)),
-				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03F7BA50, 0x28, 0x1776D04)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03F7BA50, 0x28, 0x14BDBC4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03F7BA50, 0x28, 0x147D9F0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x03F7BA50, 0x28, 0x01520498, -0x92E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(0x03F7BA50, 0x28, 0x01520498, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -248,7 +248,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h2 = new MemoryWatcherList() {
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03F7BAD0, 0x28, 0xD4ABF8), 3)),
-				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03F7BAD0, 0x28, 0x1776D04)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03F7BAD0, 0x28, 0x14BDBC4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03F7BAD0, 0x28, 0x147D9F0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x03F7BAD0, 0x28, 0x01520498, -0x92E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(0x03F7BAD0, 0x28, 0x01520498, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -363,7 +363,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h2 = new MemoryWatcherList() {
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x28, 0xD42E68), 3)),
-				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03B80E98, 0x28, 0x176EF04)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03B80E98, 0x28, 0x14B5DE4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03B80E98, 0x28, 0x1475C10)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x03B80E98, 0x28, 0x015186A0, -0x92E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(0x03B80E98, 0x28, 0x015186A0, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -600,7 +600,7 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h2 = new MemoryWatcherList() {
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0x28, 0xD4ABF8), 3)),
-				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x28, 0x1776D04)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x28, 0x14BDBC4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x28, 0x147D9F0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x28, 0x01520498, -0x92E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(0x03E1F540, 0x28, 0x01520498, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -1324,9 +1324,10 @@ update
 							case "07a": //Gravemind
 							case "08a": //Uprising
 							case "07b": //High Charity
-							if ((vars.H2_tickcounter.Current > 60 && vars.H2_tickcounter.Current < 4294967295 && vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
+							if ((vars.H2_tickcounter.Current > 60 && vars.H2_fadebyte.Current == 1 && vars.H2_fadebyte.Old == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
 							{
 								vars.loading = true;
+								print ("loading true");
 							}
 							break;
 
@@ -1339,7 +1340,7 @@ update
 								else if (vars.H2_levelname.Current == "05b" && vars.H2_bspstate.Current == 2) {vars.lastinternal = true;}
 
 							}
-							else if ((vars.H2_tickcounter.Current > 60 && vars.H2_tickcounter.Current < 4294967295 && vars.lastinternal == true && vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
+							else if ((vars.H2_tickcounter.Current > 60 && vars.lastinternal == true && vars.H2_fadebyte.Current == 1 && vars.H2_fadebyte.Old == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
 							{
 								vars.loading = true;	
 								vars.lastinternal = false;
@@ -1347,7 +1348,7 @@ update
 							break;
 
 							case "06b":	//Quarantine Zone
-							if ((vars.H2_tickcounter.Current > 60 && vars.H2_tickcounter.Current < 4294967295 && vars.H2_fadebyte.Current == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
+							if ((vars.H2_tickcounter.Current > 60 && vars.H2_fadebyte.Current == 1 && vars.H2_fadebyte.Old == 1 && vars.H2_letterbox.Current > 0.96 && vars.H2_letterbox.Old <= 0.96 && vars.H2_letterbox.Old != 0) || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57)
 							{
 								vars.watchers_h2bsp.UpdateAll(game);
 								if (vars.H2_bspstate.Current == 4  || vars.stateindicator.Current == 44 || vars.stateindicator.Current == 57) {vars.loading = true;}
@@ -1393,7 +1394,7 @@ update
 									vars.watchers_h2bsp.UpdateAll(game);
 									if (vars.H2_bspstate.Current == 0) {vars.loading = false;}
 								}
-								else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old) {vars.loading = false;}
+								else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old && vars.H2_tickcounter.Current > 10 && vars.stateindicator.Current != 44) {vars.loading = false;}
 							}
 							break;	
 						}
