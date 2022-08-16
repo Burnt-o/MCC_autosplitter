@@ -185,7 +185,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_hrdeath = new MemoryWatcherList(){
-				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03F7BA50, 0xC8, 0x00EEF330, 0xEF2010)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03F7BA50, 0xC8, 0x23CC7D8, 0x1F419)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
@@ -3013,7 +3013,7 @@ reset
 			}
 			else
 			{
-				if ((vars.H2_levelname.Current == "01a" || vars.H2_levelname.Current == "01b") && vars.startedgame == 1 && timer.CurrentPhase != TimerPhase.Ended)
+				if ((vars.H2_levelname.Current == "01a" || (vars.H2_levelname.Current == "01b" && vars.startedlevel != "01a")) && vars.startedgame == 1 && timer.CurrentPhase != TimerPhase.Ended)
 				{
 					return ((vars.H2_IGT.Current < vars.H2_IGT.Old && vars.H2_IGT.Current < 10) || (vars.stateindicator.Current != 44 && vars.stateindicator.Old == 44 && vars.H2_tickcounter.Current < 60));
 				}
