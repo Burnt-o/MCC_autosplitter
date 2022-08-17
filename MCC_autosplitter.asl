@@ -4,13 +4,14 @@
 
 //TODO;
 /*
-	h4 deathcounter?
+	H4 deathcounter?
+	H4 IL splits - Probably not unless someone wants to supply the needed information re bspstate values.
 
 	***NOTE*****
-	the H4 and HR IGT addresses are unstable (random changes in value when reverting cp) resulting in
-	errors with current igt math implementation. Replaced some functionality with the IGT float address 
-	which appears to be stable and accurate. Might completely remove H4 and HR IGT watchers in future if
-	everything works properly.
+	Replaced H3, H4, HR and ODST IGT uint watchers with a global float watcher representing the game time.
+	The IGT tickcounters for HR and H4 are unstable resulting in errors with the game time calc. The float
+	value is stable and accurate so a better option for these 4 games to cut down on offsets to update.
+	Doesn't work well in H2 though. Just keep and eye out for anything weird happening though.
 */
 
 state("MCC-Win64-Shipping") {}
@@ -108,7 +109,7 @@ init //hooking to game to make memorywatchers
 			};
 
 			vars.watchers_igt = new MemoryWatcherList() {
-				(vars.IGT_float = new MemoryWatcher<float> (new DeepPointer(0x3F7C33C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3F7C33C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -167,17 +168,12 @@ init //hooking to game to make memorywatchers
 				(vars.H3_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03F7BA50, 0x48, 0x99FCA0, 0x2C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
-			vars.watchers_h3IL = new MemoryWatcherList() {
-				(vars.H3_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03F7BA50, 0x48, 0x9AD720)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
-			};
-			
 			vars.watchers_h3death = new MemoryWatcherList(){
 				(vars.H3_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03F7BA50, 0x48, 0x1D8DF48, 0x1073D)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_hr = new MemoryWatcherList() {
 				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03F7BA50, 0xC8, 0x290BDA7), 3)),
-				(vars.HR_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03F7BA50, 0xC8, 0x023CC768, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_hrbsp = new MemoryWatcherList() {
@@ -189,8 +185,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x03F7BA50, 0xA8, 0x20872f5), 4)), 
-				(vars.ODST_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03F7BA50, 0xA8, 0xA11C20)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(0x03F7BA50, 0xA8, 0xABD8E1), 4)),
+				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(0x03F7BA50, 0xA8, 0x20872f5), 4))
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
@@ -202,8 +198,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_h4 = new MemoryWatcherList() {
-				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03F7BA50, 0x68, 0x29A3743), 3)),
-				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03F7BA50, 0x68, 0x0267C478, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03F7BA50, 0x68, 0x29A3743), 3))
 			};
 			
 			vars.watchers_h4bsp = new MemoryWatcherList() {
@@ -226,7 +221,7 @@ init //hooking to game to make memorywatchers
 			};
 
 			vars.watchers_igt = new MemoryWatcherList() {
-				(vars.IGT_float = new MemoryWatcher<float> (new DeepPointer(0x3B80FF8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3B80FF8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -285,17 +280,12 @@ init //hooking to game to make memorywatchers
 				(vars.H3_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03B80E98, 0x48, 0x009A4Ba0, 0x2C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
-			vars.watchers_h3IL = new MemoryWatcherList() {
-				(vars.H3_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03B80E98, 0x48, 0x9B2420)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
-			};
-			
 			vars.watchers_h3death = new MemoryWatcherList(){
-				(vars.H3_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03B80E98, 0x48, 0x1D91E68, 0x1077D)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H3_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03B80E98, 0x48, 0x1D91E68, 0x1077D)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_hr = new MemoryWatcherList() {
-				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0xC8, 0x2907107), 3)),
-				(vars.HR_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03B80E98, 0xC8, 0x023C9A48, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0xC8, 0x2907107), 3))
 			};
 			
 			vars.watchers_hrbsp = new MemoryWatcherList() {
@@ -303,12 +293,12 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_hrdeath = new MemoryWatcherList(){
-				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03B80E98, 0xC8, 0x00EEF330, 0x594249)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03B80E98, 0xC8, 0x00EEF330, 0x594249)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0xA8, 0x2079d85), 4)),
-				(vars.ODST_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03B80E98, 0xA8, 0xA03C40)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(0x03B80E98, 0xA8, 0xAAF371), 4)),
+				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(0x03B80E98, 0xA8, 0x2079d85), 4))
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
@@ -316,12 +306,11 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
-				(vars.ODST_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03B80E98, 0xA8, 0x00F3020c, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03B80E98, 0xA8, 0x00F3020c, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h4 = new MemoryWatcherList() {
-				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x68, 0x2836433), 3)),
-				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03B80E98, 0x68, 0x0250F098, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x68, 0x2836433), 3))
 			};
 			
 			vars.watchers_h4bsp = new MemoryWatcherList() {
@@ -341,11 +330,11 @@ init //hooking to game to make memorywatchers
 			
 			
 			vars.watchers_slow = new MemoryWatcherList() {
-				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3A253A0, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
+				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3A253A0, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) //scan for 8B 4B 18 ** ** ** ** **    48 8B 5C 24 30  89 07 nonwriteable, check what 89 07 writes to
 			};
 
 			vars.watchers_igt = new MemoryWatcherList() {
-				(vars.IGT_float = new MemoryWatcher<float> (new DeepPointer(0x3A25188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3A25188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -392,7 +381,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_h2death = new MemoryWatcherList(){
-				(vars.H2_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0x28, 0x00DA6140, -0xEF)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0x28, 0x00DA6140, -0xEF)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h3 = new MemoryWatcherList() {
@@ -404,17 +393,12 @@ init //hooking to game to make memorywatchers
 				(vars.H3_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x3A24FF8, 0x48, 0x009F3EF0, 0x2C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
-			vars.watchers_h3IL = new MemoryWatcherList() {
-				(vars.H3_IGT = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0x48, 0xA01770)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
-			};
-			
 			vars.watchers_h3death = new MemoryWatcherList(){
-				(vars.H3_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0x48, 0x1CB15C8, 0x1051D)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H3_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0x48, 0x1CB15C8, 0x1051D)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_hr = new MemoryWatcherList() {
-				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0xC8, 0x2868777), 3)),
-				(vars.HR_IGT = new MemoryWatcher<uint> (new DeepPointer(0x3A24FF8, 0xC8, 0x0232A5C8, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0xC8, 0x2868777), 3))
 			};
 			
 			vars.watchers_hrbsp = new MemoryWatcherList() {
@@ -422,13 +406,12 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_hrdeath = new MemoryWatcherList(){
-				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0xC8, 0x00EEFEB0, 0x544249)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0xC8, 0x00EEFEB0, 0x544249)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0xA8, 0x1D25187), 4)), 
-				(vars.ODST_IGT = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0xA8, 0x9B8620)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				
+				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(0x3A24FF8, 0xA8, 0xA84483), 4)),
+				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(0x3A24FF8, 0xA8, 0x1D25187), 4))
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
@@ -437,12 +420,11 @@ init //hooking to game to make memorywatchers
 			
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
-				(vars.ODST_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0xA8, 0x00E8520C, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0xA8, 0x00E8520C, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h4 = new MemoryWatcherList() {
-				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0x68, 0x276ACA3), 3)),
-				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x3A24FF8, 0x68, 0x02441B98, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x3A24FF8, 0x68, 0x276ACA3), 3))
 			};
 			
 			vars.watchers_h4bsp = new MemoryWatcherList() {
@@ -469,7 +451,7 @@ init //hooking to game to make memorywatchers
 			};
 
 			vars.watchers_igt = new MemoryWatcherList() {
-				(vars.IGT_float = new MemoryWatcher<float> (new DeepPointer(0x3E1FE1C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3E1FE1C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
@@ -528,17 +510,12 @@ init //hooking to game to make memorywatchers
 				(vars.H3_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03E1F540, 0x48, 0x99FCA0, 0x2C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
-			vars.watchers_h3IL = new MemoryWatcherList() {
-				(vars.H3_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x48, 0x9AD720)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
-			};
-			
 			vars.watchers_h3death = new MemoryWatcherList(){
 				(vars.H3_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x48, 0x1D8DF48, 0x1073D)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_hr = new MemoryWatcherList() {
-				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0xC8, 0x290BDA7), 3)),
-				(vars.HR_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03E1F540, 0xC8, 0x023CC768, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0xC8, 0x290BDA7), 3))
 			};
 			
 			vars.watchers_hrbsp = new MemoryWatcherList() {
@@ -550,8 +527,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.ODST_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0xA8, 0x20872f5), 4)), 
-				(vars.ODST_IGT = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0xA8, 0xA11C20)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(0x03F7BA50, 0xA8, 0xABD8E1), 4)),
+				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(0x03E1F540, 0xA8, 0x20872f5), 4))
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
@@ -563,9 +540,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_h4 = new MemoryWatcherList() {
-				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0x68, 0x29A3743), 3)),
-				(vars.H4_IGT = new MemoryWatcher<uint> (new DeepPointer(0x03E1F540, 0x68, 0x0267C478, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.IGT_float = new MemoryWatcher<float> (new DeepPointer(0x3E1FE1C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H4_levelname = new StringWatcher(new DeepPointer(0x03E1F540, 0x68, 0x29A3743), 3))
 			};
 			
 			vars.watchers_h4bsp = new MemoryWatcherList() {
@@ -853,7 +828,7 @@ update
 			vars.watchers_h3.UpdateAll(game);
 			if (settings["deathcounter"]) {vars.watchers_h3death.UpdateAll(game);}
 			if (settings["bspmode"]) {vars.watchers_h3bsp.UpdateAll(game);}
-			if (settings["ILmode"]) {vars.watchers_h3IL.UpdateAll(game);}
+			if (settings["ILmode"]) {vars.watchers_igt.UpdateAll(game);}
 			break;
 			
 			//H4
@@ -866,6 +841,7 @@ update
 			//ODST
 			case 5:
 			vars.watchers_odst.UpdateAll(game);
+			vars.watchers_igt.UpdateAll(game);
 			if (settings["bspmode"]) {vars.watchers_odstbsp.UpdateAll(game);}
 			if (settings["deathcounter"]) {vars.watchers_odstdeath.UpdateAll(game);}	
 			break;
@@ -944,7 +920,7 @@ update
 				break;
 
 				case 5:
-				if (vars.ODST_levelname.Current != "h100") {vars.dirtybsps_long.Clear();}
+				if (vars.ODST_levelnameBad.Current != "h100") {vars.dirtybsps_long.Clear();}
 				break;
 
 				case 6:
@@ -983,7 +959,7 @@ update
 				break;
 
 				case 5:
-				vars.startedlevel = vars.ODST_levelname.Current;
+				vars.startedlevel = vars.ODST_levelnameBad2.Current;
 				vars.startedgame = 5;
 				break;
 
@@ -1028,8 +1004,8 @@ update
 					case 2:
 					if (settings["ILmode"])
 					{
-						IGT = vars.H3_IGT.Current;
-						IGTold = vars.H3_IGT.Old;
+						IGT = (uint)Math.Round(vars.IGT_float.Current * 60);
+						IGTold = (uint)Math.Round(vars.IGT_float.Old * 60);
 						tickrate = 60;
 						level = vars.H3_levelname.Current;
 					}
@@ -1050,10 +1026,15 @@ update
 					break;
 
 					case 5:
-					IGT = vars.ODST_IGT.Current;
-					IGTold = vars.ODST_IGT.Old;
+					IGT = (uint)Math.Round(vars.IGT_float.Current * 60);
+					IGTold = (uint)Math.Round(vars.IGT_float.Old * 60); 
 					tickrate = 60;
-					level = vars.ODST_levelname.Current;
+					if (vars.ODST_levelnameBad.Current.Length > 1) //Check that the level name actually exists in memory so a bunch of errors dont get spat out
+					{
+						if (vars.ODST_levelnameBad.Current[1] == '\\') {level = vars.ODST_levelnameBad2.Current;}
+						else {level = vars.ODST_levelnameBad.Current;}
+					}
+					else {level = vars.ODST_levelnameBad2.Current;} //Streets are not a real level :)
 					break;
 
 					case 6:
@@ -1386,7 +1367,7 @@ update
 					break;
 
 					case 5:
-					if (vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57 && vars.stateindicator.Old != 190 && vars.ODST_levelname.Current == "l300")
+					if (vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57 && vars.stateindicator.Old != 190 && vars.ODST_levelnameBad2.Current == "l300")
 					{
 						if (!settings["anylevel"]) {vars.multigamepause = true;}
 					}
@@ -1439,21 +1420,21 @@ update
 					break;
 					
 					case 3:
-					if 	(vars.H4_levelname.Current == "m10" && vars.H4_IGT.Current > 10 && vars.H4_IGT.Current < 30)
+					if 	(vars.H4_levelname.Current == "m10" && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
 					{
 						vars.multigamepause = false;
 					}
 					break;
 					
 					case 5: //ODST
-					if (vars.ODST_levelname.Current == "c100" && vars.ODST_IGT.Current > 15 && vars.ODST_IGT.Current < 30) //there was a bsp check here; do I still need it?
+					if (vars.ODST_levelnameBad2.Current == "c100" && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5) //there was a bsp check here; do I still need it?
 					{
 						vars.multigamepause = false;
 					}
 					break;
 					
 					case 6:
-					if 	(vars.HR_levelname.Current == "m10" && vars.HR_IGT.Current > 10 && vars.HR_IGT.Current < 30)
+					if 	(vars.HR_levelname.Current == "m10" && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
 					{
 						vars.multigamepause = false;
 					}
@@ -1463,8 +1444,6 @@ update
 				if (settings["debugmode"] && !vars.multigamepause) {print ("multigamepause is false");}
 			}
 		}
-		print("startlevel: " + vars.startedlevel);
-		print("startedgame: " + vars.startedgame);
 	}
 }
 
@@ -1538,7 +1517,7 @@ start 	//starts timer
 
 			//Halo 2
 			case 1: 
-			if (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current > 26 &&  vars.H2_tickcounter.Current < 30) //start on armory
+			if (vars.H2_levelname.Current == "01a" && vars.H2_tickcounter.Current >= 26 &&  vars.H2_tickcounter.Current < 30) //start on armory
 			{
 				vars.startedlevel = "01a";
 				return true;
@@ -1570,12 +1549,12 @@ start 	//starts timer
 
 			//Halo 3
 			case 2:
-			if (settings["ILmode"] && vars.H3_IGT.Current > 10 && vars.H3_IGT.Current < 30)
+			if (settings["ILmode"] && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
 			{
 				vars.startedlevel = vars.H3_levelname.Current;
 				return true;
 			}
-			else if (settings["anylevel"])
+			else if (settings["anylevel"] || vars.H3_levelname.Current == "010")
 			{
 				
 				if (vars.stateindicator.Current != 44 && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
@@ -1584,64 +1563,35 @@ start 	//starts timer
 					return true;
 				}
 			}
-			else if (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
-			{
-				vars.startedlevel = "010";
-				return true;
-			}
 			break;
 			
 
 			//Halo 4
 			case 3:
-			if ((settings["ILmode"] || vars.H4_levelname.Current == "m10")  && vars.H4_IGT.Current > 10 && vars.H4_IGT.Current < 30)
+			if ((settings["ILmode"] || settings["anylevel"] || vars.H4_levelname.Current == "m10") && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
 			{
 				vars.startedlevel = vars.H4_levelname.Current;
 				return true;
-			}
-			else if (settings["anylevel"])
-			{
-				if (vars.stateindicator.Current != 44 && vars.H4_IGT.Current > 10 && vars.H4_IGT.Current < 30)
-				{
-					vars.startedlevel = vars.H4_levelname.Current;
-					return true;
-				}
 			}
 			break;
 			
 
 			//ODST
 			case 5:
-			if ((settings["ILmode"] || vars.ODST_levelname.Current == "c100") && vars.ODST_IGT.Current > 10 && vars.ODST_IGT.Current < 30)
+			if ((settings["ILmode"] || settings["anylevel"] || vars.ODST_levelnameBad2.Current == "c100") && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
 			{
-				vars.startedlevel = vars.ODST_levelname.Current;
+				vars.startedlevel = vars.ODST_levelnameBad2.Current;
 				return true;
-			}
-			else if (settings["anylevel"])
-			{
-				if (vars.stateindicator.Current != 44 && vars.ODST_IGT.Current > 10 && vars.ODST_IGT.Current < 30)
-				{
-					vars.startedlevel = vars.ODST_levelname.Current;
-					return true;
-				}
 			}
 			break;
 			
 
 			//Reach
 			case 6:
-			if ((settings["ILmode"] || vars.HR_levelname.Current == "m10")  && vars.HR_IGT.Current > 21 && vars.HR_IGT.Current < 30)
+			if ((settings["ILmode"] || settings["anylevel"] || vars.HR_levelname.Current == "m10") && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
 			{
 				vars.startedlevel = vars.HR_levelname.Current;
 				return true;
-			}
-			else if (settings["anylevel"])
-			{
-				if (vars.stateindicator.Current != 44 && vars.HR_IGT.Current > 21 && vars.HR_IGT.Current < 30)
-				{
-					vars.startedlevel = vars.HR_levelname.Current;
-					return true;
-				}
 			}
 			break;
 		}
@@ -2340,7 +2290,7 @@ split
 				
 				if (settings["Loopmode"] && vars.H3_levelname.Current == vars.startedlevel && vars.loopsplit == false)
 				{
-					if (vars.H3_IGT.Current > 10 && vars.H3_IGT.Current < 30)
+					if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
 					{
 						vars.loopsplit = true;
 						vars.dirtybsps_long.Clear();
@@ -2498,7 +2448,7 @@ split
 				
 				if (settings["Loopmode"] && vars.H4_levelname.Current == vars.startedlevel)
 				{
-					if (vars.H4_IGT.Current > 10 && vars.H4_IGT.Current < 30 && vars.loopsplit == false)
+					if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5 && vars.loopsplit == false)
 					{
 						vars.loopsplit = true;
 						vars.dirtybsps_long.Clear();
@@ -2656,12 +2606,17 @@ split
 					}
 				}
 
+				if (vars.ODST_levelnameBad.Current.Length > 1) //Check that the level name actually exists in memory so a bunch of errors dont get spat out
+				{
+					if (vars.ODST_levelnameBad.Current[1] == '\\') {checklevel = vars.ODST_levelnameBad2.Current;}
+					else {checklevel = vars.ODST_levelnameBad.Current;}
+				}
+				else {checklevel = vars.ODST_levelnameBad2.Current;} //Streets are not a real level :)
 
-				checklevel = vars.ODST_levelname.Current;
-				
+
 				if (settings["Loopmode"] && checklevel == vars.startedlevel && vars.loopsplit == false)
 				{
-					if (vars.ODST_IGT.Current > 10 && vars.ODST_IGT.Current < 30)
+					if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
 					{
 						vars.loopsplit = true;
 						vars.dirtybsps_long.Clear();
@@ -2688,7 +2643,7 @@ split
 							if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc11, x => x == vars.ODST_bspstate.Current))
 							{
 								vars.watchers_odst.UpdateAll(game); 
-								if (vars.ODST_IGT.Current > 30)
+								if (vars.IGT_float.Current > 0.5)
 								{
 									return true;
 								}
@@ -2749,7 +2704,7 @@ split
 						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc11, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current)))
 						{
 							vars.watchers_odst.UpdateAll(game); 
-							if (vars.ODST_IGT.Current > 30)
+							if (vars.IGT_float.Current > 0.5)
 							{
 								vars.dirtybsps_long.Add(vars.ODST_bspstate.Current);
 								return true;
@@ -2831,7 +2786,7 @@ split
 				
 				if (settings["Loopmode"] && vars.HR_levelname.Current == vars.startedlevel)
 				{
-					if (vars.HR_IGT.Current > 10 && vars.HR_IGT.Current < 30 && vars.loopsplit == false)
+					if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5 && vars.loopsplit == false)
 					{
 						vars.loopsplit = true;
 						vars.dirtybsps_int.Clear();
@@ -3026,7 +2981,7 @@ reset
 			{
 				if (settings["ILmode"])
 				{
-					return (vars.H3_levelname.Current == vars.startedlevel && vars.H3_IGT.Current < vars.H3_IGT.Old && vars.H3_IGT.Current < 10);
+					return (vars.H3_levelname.Current == vars.startedlevel && vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167);
 				}
 				else
 				{
@@ -3045,32 +3000,42 @@ reset
 			{
 				if (vars.H4_levelname.Current == vars.startedlevel && vars.startedgame == 3 && timer.CurrentPhase != TimerPhase.Ended)
 				{
-					return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.H4_IGT.Current == 0));
+					return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.IGT_float.Current == 0));
 				}
 			}
 			else
 			{
 				if (vars.H4_levelname.Current == "m10" && vars.startedgame == 3 && timer.CurrentPhase != TimerPhase.Ended)
 				{
-					return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.H4_IGT.Current == 0));
+					return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.IGT_float.Current == 0));
 				}
 			}
 			break;
 			
 			//ODST
 			case 5:
-			if (settings["ILmode"] || settings["anylevel"])
+			if (settings["anylevel"])
 			{
-				if (vars.ODST_levelname.Current == vars.startedlevel && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
+				if (vars.ODST_levelnameBad.Current.Length > 1) //Check that the level name actually exists in memory so a bunch of errors dont get spat out
 				{
-					return ((vars.ODST_IGT.Current < vars.ODST_IGT.Old && vars.ODST_IGT.Current < 10) || (vars.stateindicator.Current == 44 && vars.ODST_IGT.Current == 0));
+					if (vars.ODST_levelnameBad2.Current == vars.startedlevel && (vars.ODST_levelnameBad.Current[1] == '\\' || vars.ODST_levelnameBad2.Current == "c100") && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
+					{
+						return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.IGT_float.Current == 0));
+					}
+				}
+			}
+			else if (settings["ILmode"])
+			{
+				if (vars.ODST_levelnameBad2.Current == vars.startedlevel && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
+				{
+					return (vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167);
 				}
 			}
 			else
 			{
-				if (vars.ODST_levelname.Current == "c100" && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
+				if (vars.ODST_levelnameBad2.Current == "c100" && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
 				{
-					return ((vars.ODST_IGT.Current < vars.ODST_IGT.Old && vars.ODST_IGT.Current < 10) || (vars.stateindicator.Current == 44 && vars.ODST_IGT.Current == 0));
+					return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.IGT_float.Current == 0));
 				}
 			}
 			break;
@@ -3081,14 +3046,14 @@ reset
 			{
 				if (vars.HR_levelname.Current == vars.startedlevel && vars.startedgame == 6 && timer.CurrentPhase != TimerPhase.Ended)
 				{
-					return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.HR_IGT.Current == 0));
+					return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.IGT_float.Current == 0));
 				}
 			}
 			else
 			{
 				if (vars.HR_levelname.Current == "m10" && vars.startedgame == 6 && timer.CurrentPhase != TimerPhase.Ended)
 				{
-					return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.HR_IGT.Current == 0));
+					return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.IGT_float.Current == 0));
 				}
 			}
 			break;
@@ -3104,7 +3069,7 @@ isLoading
 	
 	if (settings["menupause"] && (vars.stateindicator.Current == 44 || vars.menuindicator.Current != 7)) {return true;}
 	
-	//also should prolly code load removal to work in loading screens when menuindicator isn't == 7 in case of restart/crash
+	//also should prolly code load removal to work in case of restart/crash
 	switch (test)
 	{
 		case 0: //halo 1
