@@ -11,7 +11,7 @@
 	Replaced H3, H4, HR and ODST IGT uint watchers with a global float watcher representing the game time.
 	The IGT tickcounters for HR and H4 are unstable resulting in errors with the game time calc. The float
 	value is stable and accurate so a better option for these 4 games to cut down on offsets to update.
-	Doesn't work well in H2 though. Just keep and eye out for anything weird happening though.
+	Doesn't work well in H2 though. Just keep an eye out for anything weird happening.
 */
 
 state("MCC-Win64-Shipping") {}
@@ -130,7 +130,6 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03F7BA50, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
-			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03F7BA50, 0x8, 0x2E7F868, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
 				(vars.H1_fadelength = new MemoryWatcher<ushort>(new DeepPointer(0x03F7BA50, 0x8, 0x2E7F868, 0x3C4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -242,7 +241,6 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03B80E98, 0x8, 0x2AF8257)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 
-			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03B80E98, 0x8, 0x2B88E58, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
 				(vars.H1_fadelength = new MemoryWatcher<ushort>(new DeepPointer(0x03B80E98, 0x8, 0x2B88E58, 0x3C4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -355,7 +353,6 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0x8, 0x2AF10E7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 
-			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0x8, 0x2B81CE8, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
 				(vars.H1_fadelength = new MemoryWatcher<ushort>(new DeepPointer(0x3A24FF8, 0x8, 0x2B81CE8, 0x3C4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -472,7 +469,6 @@ init //hooking to game to make memorywatchers
 				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x2B611B7)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
-			//scan for 00 00 80 3F 00 00 80 3F 00 00 80 3F 02 00 00 00 FF FF 00 during cryo cs. Last 7 values are these, in order.
 			vars.watchers_h1fade = new MemoryWatcherList(){
 				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x8, 0x2E7F868, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
 				(vars.H1_fadelength = new MemoryWatcher<ushort>(new DeepPointer(0x03E1F540, 0x8, 0x2E7F868, 0x3C4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -881,6 +877,7 @@ update
 		vars.H2_tgjreadyflag = false;
 		vars.H2_tgjreadytime = 0;
 		vars.lastinternal = false;
+		vars.oldtick = -2;
 
 		vars.dirtybsps_byte.Clear();
 		vars.dirtybsps_int.Clear();
@@ -1367,7 +1364,7 @@ update
 					break;
 
 					case 5:
-					if (vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57 && vars.stateindicator.Old != 190 && vars.ODST_levelnameBad2.Current == "l300")
+					if (vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57 && vars.stateindicator.Old != 190 && (vars.ODST_levelnameBad.Current == "l300" || vars.ODST_levelnameBad2.Current == "l300"))
 					{
 						if (!settings["anylevel"]) {vars.multigamepause = true;}
 					}
