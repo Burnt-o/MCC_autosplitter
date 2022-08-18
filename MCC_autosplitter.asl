@@ -2259,7 +2259,7 @@ split
 
 				if (!settings["ILmode"]) //Split on loading screen
 				{
-					if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44) 
+					if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && checklevel != "00a") 
 					{
 						vars.dirtybsps_byte.Clear();
 						return true;
@@ -2965,7 +2965,7 @@ reset
 			}
 			else
 			{
-				if ((vars.H2_levelname.Current == "01a" || (vars.H2_levelname.Current == "01b" && vars.startedlevel != "01a")) && vars.startedgame == 1 && timer.CurrentPhase != TimerPhase.Ended)
+				if ((vars.H2_levelname.Current == "01a" || (vars.H2_levelname.Current == "01b" && vars.startedlevel != "01a") || vars.H2_levelname.Current == "00a") && vars.startedgame == 1 && timer.CurrentPhase != TimerPhase.Ended)
 				{
 					return ((vars.H2_IGT.Current < vars.H2_IGT.Old && vars.H2_IGT.Current < 10) || (vars.stateindicator.Current != 44 && vars.stateindicator.Old == 44 && vars.H2_tickcounter.Current < 60));
 				}
