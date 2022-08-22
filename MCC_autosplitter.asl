@@ -528,7 +528,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
-				(vars.ODST_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03E1F540, 0xA8, 0x2F9FD5C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.ODST_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03E1F540, 0xA8, 0x2F9FD4C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
