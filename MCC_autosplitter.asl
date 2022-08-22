@@ -189,7 +189,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
-				(vars.ODST_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03F7BA50, 0xA8, 0x2F9FD5C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.ODST_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03F7BA50, 0xA8, 0x2F9FD4C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
@@ -651,6 +651,13 @@ startup //variable init and settings
 	
 	//HALO ODST	
 	//streets
+	vars.splitbsp_h100_s8 = new ulong[9] { 1133871366440, 1271310319968, //drone optic
+		1374389535072, 1511828488496, 1580547965328, 2130303779712, //guass turret
+		1116691497222, //remote det (actually goes to sniper)
+		3848290697604, //sniper rifle (actually goes to guass turret)
+		1108101562627
+		//no loads on pre data hive
+	};
 	vars.splitbsp_h100 = new ulong[9] { 1271310319912, 1511828488552, //drone optic
 		1511828488544, 1305670058352, 1717986918896, 3848290698224, //guass turret
 		1125281431814, //remote det (actually goes to sniper)
@@ -666,29 +673,36 @@ startup //variable init and settings
 	//1103806595337 more
 	//no bsp loads on ptd
 	
+	vars.splitbsp_sc10_s8 = new ulong[3] { 42949672974, 60129542157, 64424509449 }; //tayari s8
 	vars.splitbsp_sc10 = new ulong[3] { 60129542158, 55834574863, 38654705679 }; //tayari
 	
-	
+	vars.splitbsp_sc11_s8 = new ulong[3] { 339302416463, 339302416476, 408021893216 }; //uplift reserve s8
 	vars.splitbsp_sc11 = new ulong[3] { 339302416463, 395136991327, 412316860543 }; //uplift reserve
 	//first load has issue of being used in cutscene - add check for pgcr time being > 30 or something
 	
-	vars.splitbsp_sc13 = new ulong[2] { 47244640267,  30064771087}; //oni
+	vars.splitbsp_sc13_s8 = new ulong[3] { 38654705675, 47244640259, 47244640263 }; //oni s8
+	vars.splitbsp_sc13 = new ulong[2] { 47244640267, 30064771087}; //oni
 	//bad vals 38654705673
 	//12884901899 is a a valid bsp bsp load but i've removed it since it doesn't save time to compare to
 	
+	vars.splitbsp_sc12_s8 = new ulong[3] { 38654705675, 47244640270, 64424509452 }; //kizingo s8
 	vars.splitbsp_sc12 = new ulong[3] { 47244640267, 60129542159, 51539607567 }; //kizingo
 	//bad vals 38654705673, 42949672971
 	
+	vars.splitbsp_sc14_s8 = new ulong[3] { 38654705675, 47244640270, 64424509452}; //NMPD s8
 	vars.splitbsp_sc14 = new ulong[3] { 47244640267, 60129542159, 51539607567}; //NMPD
 	//bad vals 38654705673
 	//yes the vals are the same as kizongo
 	
+	vars.splitbsp_sc15_s8 = new ulong[3] { 30064771086, 64424509468, 133143986200 }; //kikowani s8
 	vars.splitbsp_sc15 = new ulong[3] { 60129542159, 120259084319, 103079215135 }; //kikowani
 	//bad vals 4294967297, 25769803783
 	
+	vars.splitbsp_l200_s8 = new ulong[7] { 30064771086, 64424509468, 133143986200, 133143986224, 270582939696, 270582939856, 1095216660704}; //data hive s8
 	vars.splitbsp_l200 = new ulong[7] { 60129542159, 120259084319, 103079215135, 206158430271, 893353197823, 962072674559, 1786706395647}; //data hive
 	//30064771079, 30064771072, 824633721087
 	
+	vars.splitbsp_l300_s8  = new ulong[4] { 717259538465, 717259538473, 751619276856, 820338753648 }; //coastal s8
 	vars.splitbsp_l300  = new ulong[1] { 141733920935 }; //coastal
 	//575525617798, 176093659311 (valid bsp but no timesave), 171798692015, 240518168767(valid but no timesave), 206158430399, 481036337407
 	
@@ -788,7 +802,7 @@ update
 {
 	//Update state vars
 	vars.watchers_fast.UpdateAll(game);
-	
+
 	if (!(vars.menuindicator.Current == 7))
 	{
 		vars.watchers_slow.UpdateAll(game);
@@ -2629,15 +2643,15 @@ split
 						switch (checklevel)
 						{
 							case "h100":
-							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_h100, x => x == vars.ODST_bspstate.Current));
+							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_h100, x => x == vars.ODST_bspstate.Current) || Array.Exists((ulong[]) vars.splitbsp_h100_s8, x => x == vars.ODST_bspstate.Current)));
 							break;
 							
 							case "sc10":
-							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc10, x => x == vars.ODST_bspstate.Current));
+							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc10, x => x == vars.ODST_bspstate.Current) || Array.Exists((ulong[]) vars.splitbsp_sc10_s8, x => x == vars.ODST_bspstate.Current)));
 							break;
 							
 							case "sc11":
-							if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc11, x => x == vars.ODST_bspstate.Current))
+							if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc11, x => x == vars.ODST_bspstate.Current) || Array.Exists((ulong[]) vars.splitbsp_sc11_s8, x => x == vars.ODST_bspstate.Current)))
 							{
 								vars.watchers_odst.UpdateAll(game); 
 								if (vars.IGT_float.Current > 0.5)
@@ -2648,27 +2662,27 @@ split
 							break;
 							
 							case "sc13":
-							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc13, x => x == vars.ODST_bspstate.Current));
+							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc13, x => x == vars.ODST_bspstate.Current) || Array.Exists((ulong[]) vars.splitbsp_sc13_s8, x => x == vars.ODST_bspstate.Current)));
 							break;
 							
 							case "sc12":
-							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc12, x => x == vars.ODST_bspstate.Current));
+							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc12, x => x == vars.ODST_bspstate.Current) || Array.Exists((ulong[]) vars.splitbsp_sc12_s8, x => x == vars.ODST_bspstate.Current)));
 							break;
 							
 							case "sc14":
-							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc14, x => x == vars.ODST_bspstate.Current));
+							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc14, x => x == vars.ODST_bspstate.Current) || Array.Exists((ulong[]) vars.splitbsp_sc14_s8, x => x == vars.ODST_bspstate.Current)));
 							break;
 							
 							case "sc15":
-							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc15, x => x == vars.ODST_bspstate.Current));
+							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc15, x => x == vars.ODST_bspstate.Current) || Array.Exists((ulong[]) vars.splitbsp_sc15_s8, x => x == vars.ODST_bspstate.Current)));
 							break;
 							
 							case "l200":
-							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_l200, x => x == vars.ODST_bspstate.Current));
+							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_l200, x => x == vars.ODST_bspstate.Current) || Array.Exists((ulong[]) vars.splitbsp_l200_s8, x => x == vars.ODST_bspstate.Current)));
 							break;
 							
 							case "l300":
-							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_l300, x => x == vars.ODST_bspstate.Current));
+							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_l300, x => x == vars.ODST_bspstate.Current) || Array.Exists((ulong[]) vars.splitbsp_l300_s8, x => x == vars.ODST_bspstate.Current)));
 							break;
 							
 							default:
@@ -2682,7 +2696,7 @@ split
 					switch (checklevel)
 					{
 						case "h100":
-						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_h100, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current)))
+						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_h100, x => x == vars.ODST_bspstate.Current) || (Array.Exists((ulong[]) vars.splitbsp_h100_s8, x => x == vars.ODST_bspstate.Current)) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current))))
 						{
 							vars.dirtybsps_long.Add(vars.ODST_bspstate.Current);
 							return true;
@@ -2690,7 +2704,7 @@ split
 						break;
 						
 						case "sc10":
-						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc10, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current)))
+						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc10, x => x == vars.ODST_bspstate.Current) || (Array.Exists((ulong[]) vars.splitbsp_sc10_s8, x => x == vars.ODST_bspstate.Current)) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current))))
 						{
 							vars.dirtybsps_long.Add(vars.ODST_bspstate.Current);
 							return true;
@@ -2698,7 +2712,7 @@ split
 						break;
 						
 						case "sc11":
-						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc11, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current)))
+						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc11, x => x == vars.ODST_bspstate.Current) || (Array.Exists((ulong[]) vars.splitbsp_sc11_s8, x => x == vars.ODST_bspstate.Current)) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current))))
 						{
 							vars.watchers_odst.UpdateAll(game); 
 							if (vars.IGT_float.Current > 0.5)
@@ -2710,7 +2724,7 @@ split
 						break;
 						
 						case "sc13":
-						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc13, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current)))
+						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc13, x => x == vars.ODST_bspstate.Current) || (Array.Exists((ulong[]) vars.splitbsp_sc13_s8, x => x == vars.ODST_bspstate.Current)) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current))))
 						{
 							vars.dirtybsps_long.Add(vars.ODST_bspstate.Current);
 							return true;
@@ -2718,7 +2732,7 @@ split
 						break;
 						
 						case "sc12":
-						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc12, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current)))
+						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc12, x => x == vars.ODST_bspstate.Current) || (Array.Exists((ulong[]) vars.splitbsp_sc12_s8, x => x == vars.ODST_bspstate.Current)) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current))))
 						{
 							vars.dirtybsps_long.Add(vars.ODST_bspstate.Current);
 							return true;
@@ -2726,7 +2740,7 @@ split
 						break;
 						
 						case "sc14":
-						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc14, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current)))
+						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc14, x => x == vars.ODST_bspstate.Current) || (Array.Exists((ulong[]) vars.splitbsp_sc14_s8, x => x == vars.ODST_bspstate.Current)) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current))))
 						{
 							vars.dirtybsps_long.Add(vars.ODST_bspstate.Current);
 							return true;
@@ -2734,7 +2748,7 @@ split
 						break;
 						
 						case "sc15":
-						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_sc15, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current)))
+						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_sc15, x => x == vars.ODST_bspstate.Current) || (Array.Exists((ulong[]) vars.splitbsp_sc15_s8, x => x == vars.ODST_bspstate.Current)) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current))))
 						{
 							vars.dirtybsps_long.Add(vars.ODST_bspstate.Current);
 							return true;
@@ -2742,7 +2756,7 @@ split
 						break;
 						
 						case "l200":
-						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_l200, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current)))
+						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_l200, x => x == vars.ODST_bspstate.Current) || (Array.Exists((ulong[]) vars.splitbsp_l200_s8, x => x == vars.ODST_bspstate.Current)) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current))))
 						{
 							vars.dirtybsps_long.Add(vars.ODST_bspstate.Current);
 							return true;
@@ -2750,7 +2764,7 @@ split
 						break;
 						
 						case "l300":
-						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((ulong[]) vars.splitbsp_l300, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current)))
+						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && (Array.Exists((ulong[]) vars.splitbsp_l300, x => x == vars.ODST_bspstate.Current) || (Array.Exists((ulong[]) vars.splitbsp_l300_s8, x => x == vars.ODST_bspstate.Current)) && !(vars.dirtybsps_long.Contains(vars.ODST_bspstate.Current))))
 						{
 							vars.dirtybsps_long.Add(vars.ODST_bspstate.Current);
 							return true;
