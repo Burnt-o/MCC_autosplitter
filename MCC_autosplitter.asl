@@ -655,34 +655,31 @@ startup //variable init and settings
 		352, 304, 400, 896, //guass turret
 		262, //remote det (actually goes to sniper)
 		388, 262, //sniper rifle
-		259	};//end streets
-
-		//no loads on pre data hive
+		259}; //biofoam
+	
+	//no loads on pre data hive
 	//no bsp loads on ptd
 	
 	vars.splitbsp_sc10 = new uint[3] { 14, 13, 9 }; //tayari
-	
-	
+	//bad vals: 12
+
 	vars.splitbsp_sc11 = new uint[3] { 79, 92, 96 }; //uplift reserve
 	//first load has issue of being used in cutscene - add check for pgcr time being > 30 or something
-	
-	vars.splitbsp_sc13 = new uint[2] { 11, 7 }; //oni
-	//3 is a a valid bsp bsp load but i've removed it since it doesn't save time to compare to
-	
+
+	vars.splitbsp_sc13 = new uint[3] { 11, 3, 7 }; //oni
 	vars.splitbsp_sc12 = new uint[3] { 11, 14, 12 }; //kizingo
 	//bad vals 9, 10
 	
 	vars.splitbsp_sc14 = new uint[3] { 11, 14, 12}; //NMPD
-	//bad vals 9
+	//bad vals: 9
 	//yes the vals are the same as kizongo
 	
 	vars.splitbsp_sc15 = new uint[3] { 14, 28, 24 }; //kikowani
 	
 	vars.splitbsp_l200 = new uint[7] { 14, 28, 24, 48, 208, 224, 416 }; //data hive
-	//bad 6, 12, 16, 192, 160
+	//bad: 6, 12, 16, 192, 160
 	
-	vars.splitbsp_l300  = new uint[1] { 33 }; //coastal
-	//Feel like more could be done here. What about 41, 56, 112
+	vars.splitbsp_l300  = new uint[4] { 33, 41, 56, 112 }; //coastal
 	
 	
 	vars.aslName = "MCCsplitter";
