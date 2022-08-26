@@ -172,7 +172,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_hr = new MemoryWatcherList() {
-				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03F7BA50, 0xC8, 0x290BDA7), 3)),
+				(vars.HR_levelname = new StringWatcher(new DeepPointer(0x03F7BA50, 0xC8, 0x28A4C3F), 3)),
 			};
 			
 			vars.watchers_hrbsp = new MemoryWatcherList() {
@@ -415,7 +415,6 @@ init //hooking to game to make memorywatchers
 				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(0x3A24FF8, 0xA8, 0x2E46964)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
-			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
 				(vars.ODST_deathflag = new MemoryWatcher<bool>(new DeepPointer(0x3A24FF8, 0xA8, 0x00E8520C, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
@@ -652,36 +651,25 @@ startup //variable init and settings
 	//HALO ODST	
 	//streets
 	vars.splitbsp_h100 = new uint[10] { 296, 352, //drone optic
-		352, 304, 400, 896, //guass turret
+		352, 304, 400, //guass turret, 896 also exists but does funny things in fullgame do leaving it out
 		262, //remote det (actually goes to sniper)
 		388, 262, //sniper rifle
-		259}; //biofoam
-	
+		259 //biofoam
+	};
 	//no loads on pre data hive
 	//no bsp loads on ptd
 	
-	vars.splitbsp_sc10 = new uint[3] { 14, 13, 9 }; //tayari
-	//bad vals: 12
-
-	vars.splitbsp_sc11 = new uint[3] { 79, 92, 96 }; //uplift reserve
-	//first load has issue of being used in cutscene - add check for pgcr time being > 30 or something
-
+	vars.splitbsp_sc10 = new uint[3] { 14, 13, 9 }; //tayari, bad vals: 12
+	vars.splitbsp_sc11 = new uint[3] { 79, 92, 96 }; //uplift reserve first load used in cutscene - add check for pgcr time being > 30 or something
 	vars.splitbsp_sc13 = new uint[3] { 11, 3, 7 }; //oni
-	vars.splitbsp_sc12 = new uint[3] { 11, 14, 12 }; //kizingo
-	//bad vals 9, 10
-	
-	vars.splitbsp_sc14 = new uint[3] { 11, 14, 12}; //NMPD
-	//bad vals: 9
-	//yes the vals are the same as kizongo
-	
+	vars.splitbsp_sc12 = new uint[3] { 11, 14, 12 }; //kizingo bad vals 9, 10
+	vars.splitbsp_sc14 = new uint[3] { 11, 14, 12}; //NMPD, bad vals: 9	
 	vars.splitbsp_sc15 = new uint[3] { 14, 28, 24 }; //kikowani
-	
-	vars.splitbsp_l200 = new uint[7] { 14, 28, 24, 48, 208, 224, 416 }; //data hive
-	//bad: 6, 12, 16, 192, 160
-	
+	vars.splitbsp_l200 = new uint[7] { 14, 28, 24, 48, 208, 224, 416 }; //data hive, bad: 6, 12, 16, 192, 160
 	vars.splitbsp_l300  = new uint[4] { 33, 41, 56, 112 }; //coastal
 	
 	
+	//SETTINGS + UI
 	vars.aslName = "MCCsplitter";
 	if(timer.CurrentTimingMethod == TimingMethod.RealTime){
 		
