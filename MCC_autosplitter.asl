@@ -650,7 +650,7 @@ startup //variable init and settings
 	
 	//HALO ODST	
 	//streets
-	vars.splitbsp_h100 = new uint[10] { 296, 352, //drone optic
+	vars.splitbsp_h100 = new uint[9] { 296, 352, //drone optic
 		352, 304, 400, //guass turret, 896 also exists but does funny things in fullgame do leaving it out
 		262, //remote det (actually goes to sniper)
 		388, 262, //sniper rifle
