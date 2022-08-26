@@ -650,8 +650,8 @@ startup //variable init and settings
 	
 	//HALO ODST	
 	//streets
-	vars.splitbsp_h100 = new uint[9] { 296, 352, //drone optic
-		352, 304, 400, //guass turret, 896 also exists but does funny things in fullgame do leaving it out
+	vars.splitbsp_h100 = new uint[10] { 296, 352, //drone optic
+		352, 304, 400, 896, //guass turret, 896 also exists but does funny things in fullgame do leaving it out
 		262, //remote det (actually goes to sniper)
 		388, 262, //sniper rifle
 		259 //biofoam
@@ -2606,7 +2606,7 @@ split
 						switch (checklevel)
 						{
 							case "h100":
-							return (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((uint[]) vars.splitbsp_h100, x => x == vars.ODST_bspstate.Current));
+							return (vars.IGT_float.Current > 0.5 && vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((uint[]) vars.splitbsp_h100, x => x == vars.ODST_bspstate.Current));
 							break;
 							
 							case "sc10":
@@ -2616,7 +2616,6 @@ split
 							case "sc11":
 							if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((uint[]) vars.splitbsp_sc11, x => x == vars.ODST_bspstate.Current))
 							{
-								vars.watchers_odst.UpdateAll(game); 
 								if (vars.IGT_float.Current > 0.5)
 								{
 									return true;
@@ -2659,7 +2658,7 @@ split
 					switch (checklevel)
 					{
 						case "h100":
-						if (vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((uint[]) vars.splitbsp_h100, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_int.Contains(vars.ODST_bspstate.Current)))
+						if (vars.IGT_float.Current > 0.5 && vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((uint[]) vars.splitbsp_h100, x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_int.Contains(vars.ODST_bspstate.Current)))
 						{
 							vars.dirtybsps_int.Add(vars.ODST_bspstate.Current);
 							return true;
