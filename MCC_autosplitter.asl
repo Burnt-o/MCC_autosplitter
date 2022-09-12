@@ -209,19 +209,6 @@ init //hooking to game to make memorywatchers
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x3F94F90, 0x68, 0x27564B0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 
-			vars.H1_checklist = new Dictionary<string, uint>{
-				{"a10", 2023477633},
-				{"a30", 1197744442},
-				{"a50", 522123179},
-				{"b30", 2022995318},
-				{"b40", 4112928798},
-				{"c10", 4250424451},
-				{"c20", 1165450382},
-				{"c40", 2733116763},
-				{"d20", 1722772470},
-				{"d40", 3775314541},
-			};
-
 
 
 
@@ -248,7 +235,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03F7BA50, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03F7BA50, 0x8, 0x02E773D8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x03F7BA50, 0x8, 0x02E773D8, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_check = new MemoryWatcher<uint>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H1_check = new MemoryWatcher<uint>(new DeepPointer(0x03F7BA50, 0x8, 0x2D66A88)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1xy = new MemoryWatcherList() {
@@ -334,19 +321,6 @@ init //hooking to game to make memorywatchers
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03F7BA50, 0x68, 0x25DC188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 
-			vars.H1_checklist = new Dictionary<string, uint>{
-				{"a10", 4294967295},
-				{"a30", 4294967295},
-				{"a50", 4294967295},
-				{"b30", 4294967295},
-				{"b40", 4294967295},
-				{"c10", 4294967295},
-				{"c20", 4294967295},
-				{"c40", 4294967295},
-				{"d20", 4294967295},
-				{"d40", 4294967295},
-			};
-
 
 
 
@@ -390,7 +364,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_fadelength = new MemoryWatcher<ushort>(new DeepPointer(0x03B80E98, 0x8, 0x2B88E58, 0x3C4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x03B80E98, 0x8, 0x2B88E58, 0x3C6)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-			
+
 			vars.watchers_h2 = new MemoryWatcherList() {
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x03B80E98, 0x28, 0xD42E68), 3)),
 				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x03B80E98, 0x28, 0x14B5DE4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -458,19 +432,8 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4bsp = new MemoryWatcherList() {
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03B80E98, 0x68, 0x2472A88)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
-			
-			vars.H1_checklist = new Dictionary<string, uint>{
-				{"a10", 4031641132},
-				{"a30", 1497905037},
-				{"a50", 2613596386},
-				{"b30", 4057206713},
-				{"b40", 2439716616},
-				{"c10", 2597150717},
-				{"c20", 1656675814},
-				{"c40", 1573304389},
-				{"d20", 1507739304},
-				{"d40", 2038583061},
-			};
+
+
 
 
 		}
@@ -583,18 +546,6 @@ init //hooking to game to make memorywatchers
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x3A24FF8, 0x68, 0x2441AB8, -0x560)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 
-			vars.H1_checklist = new Dictionary<string, uint>{
-				{"a10", 2495112808},
-				{"a30", 1196246201},
-				{"a50", 3037603536},
-				{"b30", 682311759},
-				{"b40", 326064131},
-				{"c10", 645721511},
-				{"c20", 540616268},
-				{"c40", 1500399674},
-				{"d20", 2770760039},
-				{"d40", 1695151528},
-			};
 			
 		}
 		
@@ -643,7 +594,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_fadelength = new MemoryWatcher<ushort>(new DeepPointer(0x3DE6578, 0x8, 0x030041A8, 0x3C4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_fadebyte = new MemoryWatcher<byte>(new DeepPointer(0x3DE6578, 0x8, 0x030041A8, 0x3C6)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
-			
+						
 			vars.watchers_h2 = new MemoryWatcherList() {
 				(vars.H2_levelname = new StringWatcher(new DeepPointer(0x3DE6578, 0x28, 0xD54498), 3)),
 				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(0x3DE6578, 0x28, 0x14C7494)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -712,19 +663,6 @@ init //hooking to game to make memorywatchers
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x3DE6578, 0x68, 0x27564B0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 
-			vars.H1_checklist = new Dictionary<string, uint>{
-				{"a10", 2023477633},
-				{"a30", 1197744442},
-				{"a50", 522123179},
-				{"b30", 2022995318},
-				{"b40", 4112928798},
-				{"c10", 4250424451},
-				{"c20", 1165450382},
-				{"c40", 2733116763},
-				{"d20", 1722772470},
-				{"d40", 3775314541},
-			};
-
 
 
 
@@ -751,7 +689,7 @@ init //hooking to game to make memorywatchers
 				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(0x03E1F540, 0x8, 0x1B661CC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x02E773D8, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(0x03E1F540, 0x8, 0x02E773D8, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_check = new MemoryWatcher<uint>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H1_check = new MemoryWatcher<uint>(new DeepPointer(0x03E1F540, 0x8, 0x2D66A88)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_h1xy = new MemoryWatcherList() {
@@ -837,20 +775,27 @@ init //hooking to game to make memorywatchers
 				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(0x03E1F540, 0x68, 0x25DC188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 
-			vars.H1_checklist = new Dictionary<string, uint>{
-				{"a10", 4294967295},
-				{"a30", 4294967295},
-				{"a50", 4294967295},
-				{"b30", 4294967295},
-				{"b40", 4294967295},
-				{"c10", 4294967295},
-				{"c20", 4294967295},
-				{"c40", 4294967295},
-				{"d20", 4294967295},
-				{"d40", 4294967295},
-			};
 	
 		}
+	}
+
+	switch (version)
+	{
+		case "1.2969.0.0":
+		vars.H1_checklist = new Dictionary<string, uint>{{"a10", 2023477633},{"a30", 1197744442},{"a50", 522123179},{"b30", 2022995318},{"b40", 4112928798},{"c10", 4250424451},{"c20", 1165450382},{"c40", 2733116763},{"d20", 1722772470},{"d40", 3775314541},};
+		break;
+
+		case "1.2904.0.0":
+		vars.H1_checklist = new Dictionary<string, uint>{{"a10", 89028072},{"a30", 1083179843},{"a50", 2623582826},{"b30", 1895318681},{"b40", 1935970024},{"c10", 974037405},{"c20", 714510620},{"c40", 2859044941},{"d20", 1178559651},{"d40", 3253884125},};
+		break;
+
+		case "1.2645.0.0":
+		vars.H1_checklist = new Dictionary<string, uint>{{"a10", 4031641132},{"a30", 1497905037},{"a50", 2613596386},{"b30", 4057206713},{"b40", 2439716616},{"c10", 2597150717},{"c20", 1656675814},{"c40", 1573304389},{"d20", 1507739304},{"d40", 2038583061},};
+		break;
+
+		case "1.2448.0.0":
+		vars.H1_checklist = new Dictionary<string, uint>{{"a10", 2495112808},{"a30", 1196246201},{"a50", 3037603536},{"b30", 682311759},{"b40", 326064131},{"c10", 645721511},{"c20", 540616268},{"c40", 1500399674},{"d20", 2770760039},{"d40", 1695151528},};
+		break;
 	}
 }
 
@@ -1735,20 +1680,16 @@ update
 			}
 		}
 		
-		if (vars.isvalid == false)
+		if (vars.isvalid == false && test == 0)
 		{
 			if (vars.menuindicator.Current == 7 && vars.loopcount == 60 && vars.stateindicator.Current != 44)
 			{
-				switch (test)
+				if (vars.H1_tickcounter.Current < 1100 && vars.H1_checklist[vars.H1_levelname.Current] != 4294967295 && vars.H1_checklist[vars.H1_levelname.Current] != vars.H1_check.Current)
 				{
-					case 0:
-					if (vars.H1_tickcounter.Current < 1100 && vars.H1_checklist[vars.H1_levelname.Current] != 4294967295 && vars.H1_checklist[vars.H1_levelname.Current] != vars.H1_check.Current)
-					{
-						vars.isvalid = true;
-						print("sus");
-					}
-					break;
+					vars.isvalid = true;
+					print("sus");
 				}
+
 			}
 		}
 	}
@@ -3409,22 +3350,25 @@ isLoading
 
 gameTime
 {
-	if (!vars.multigamepause && vars.menuindicator.Current == 7 && vars.isvalid && !vars.loading)
+	if (vars.gameindicator.Current == 0 && vars.menuindicator.Current == 7)
 	{
-		TimeSpan test = TimeSpan.Zero;
-		TimeSpan comp = new TimeSpan(0, 0, 0);
-		if (timer.CurrentTime.GameTime.HasValue) {test = (TimeSpan)timer.CurrentTime.GameTime;}
-		if (test.Seconds == 11 && test.Milliseconds < 35)
+		if (!vars.multigamepause && vars.isvalid && !vars.loading)
 		{
-			vars.diff = timer.CurrentTime.RealTime;
-			vars.ctime = timer.CurrentTime.GameTime;
-			return comp;
-		}
-		else if (vars.ctime != TimeSpan.Zero)
-		{
-			test = (vars.ctime + (timer.CurrentTime.RealTime - vars.diff));
-			vars.ctime = TimeSpan.Zero;
-			return (test);
+			TimeSpan test = TimeSpan.Zero;
+			TimeSpan comp = new TimeSpan(0, 0, 0);
+			if (timer.CurrentTime.GameTime.HasValue) {test = (TimeSpan)timer.CurrentTime.GameTime;}
+			if (test.Seconds == 11 && test.Milliseconds < 35)
+			{
+				vars.diff = timer.CurrentTime.RealTime;
+				vars.ctime = timer.CurrentTime.GameTime;
+				return comp;
+			}
+			else if (vars.ctime != TimeSpan.Zero)
+			{
+				test = (vars.ctime + (timer.CurrentTime.RealTime - vars.diff));
+				vars.ctime = TimeSpan.Zero;
+				return (test);
+			}
 		}
 	}
 
