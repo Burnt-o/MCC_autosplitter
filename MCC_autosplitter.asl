@@ -932,7 +932,7 @@ startup //variable init and settings
 		259 //biofoam
 	*/
 	vars.ODST_levellist = new Dictionary<string, uint[]>{
-		{"h100", new uint[] { 296, 352, 304, 400, 896, 262, 388, 262, 25 }},
+		{"h100", new uint[] { 296, 352, 304, 400, 896, 262, 388, 259 }},
 		{"sc10", new uint[] { 14, 13, 9 }},	//tayari, bad vals: 12
 		{"sc11", new uint[] { 79, 92, 96 }}, //uplift reserve first load used in cutscene - add check for pgcr time being > 30 or something
 		{"sc13", new uint[] { 11, 3, 7 }}, //oni
