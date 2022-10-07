@@ -191,8 +191,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x1E44AD1), 4)),
-				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x212F225), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x20D68F8), 4)),
+				(vars.ODST_streets = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x21DD308)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
@@ -305,8 +305,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0xABD8E1), 4)),
-				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x20872f5), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x202EA58), 4)),
+				(vars.ODST_streets = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x21353D8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
@@ -419,8 +419,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0xAAF371), 4)),
-				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x2079d85), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x2020CA8), 4)),
+				(vars.ODST_streets = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x2116FD8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
@@ -533,8 +533,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x290B2FD), 4)),
-				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x1D25187), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x1CDF200), 4)),
+				(vars.ODST_streets = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x1DB2568)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
@@ -652,8 +652,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x1E44AD1), 4)),
-				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x212F225), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x20D68F8), 4)),
+				(vars.ODST_streets = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x21DD308)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
@@ -766,8 +766,8 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.ODST_levelnameBad = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0xABD8E1), 4)),
-				(vars.ODST_levelnameBad2 = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x20872f5), 4))
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x202EA58), 4)),
+				(vars.ODST_streets = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x21353D8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
@@ -837,7 +837,10 @@ startup //variable init and settings
 	vars.multigametime = TimeSpan.Zero;
 	vars.H2_tgjreadyflag = false;
 	vars.H2_tgjreadytime = 0;
+	vars.lastinternal = false;
+	vars.oldtick = -2;
 	vars.loading = false;
+	vars.startedscene = 0; //default to recon helmet, 0 on recon helmet/ptd, 100 on drone optic, 110 on guass turret etc etc
 
 	//IGT
 	vars.gametime = TimeSpan.Zero;
@@ -845,6 +848,8 @@ startup //variable init and settings
 	vars.leveltime = 0;
 	vars.pgcrexists = false;
 
+
+	//LEVEL LIST
 	//HALO 1
 	vars.H1_levellist = new Dictionary<string, byte[]>{
 		{"a10", new byte[] { 1, 2, 3, 4, 5, 6 }}, //poa
@@ -877,9 +882,6 @@ startup //variable init and settings
 		{"07b", new byte[] { 1, 2, 4 }}, //HC -- none if doing HC skip
 		{"08b", new byte[] { 0, 1, 3 }}, //TGJ -- starts 0 and in cs, then goes to 1, then 0, then 1, then 0, then 3 (skipping 2 cos it's skippable)
 	};
-	
-	vars.lastinternal = false;
-	vars.oldtick = -2;
 	
 	
 	//HALO 3
@@ -1136,6 +1138,8 @@ update
 		vars.lastinternal = false;
 		vars.oldtick = -2;
 
+		vars.startedscene = 0;
+
 		vars.dirtybsps_byte.Clear();
 		vars.dirtybsps_int.Clear();
 		vars.dirtybsps_long.Clear();
@@ -1174,7 +1178,8 @@ update
 				break;
 
 				case 5:
-				if (vars.ODST_levelnameBad.Current != "h100") {vars.dirtybsps_int.Clear();}
+				//if (vars.ODST_levelname.Current != "h100") {vars.dirtybsps_int.Clear();}	//not really sure what this is supposed to do....
+				vars.dirtybsps_int.Clear();
 				break;
 
 				case 6:
@@ -1213,7 +1218,8 @@ update
 				break;
 
 				case 5:
-				vars.startedlevel = vars.ODST_levelnameBad2.Current;
+				vars.startedlevel = vars.ODST_levelname.Current;
+				vars.startedscene = vars.ODST_streets.Current;
 				vars.startedgame = 5;
 				break;
 
@@ -1283,12 +1289,7 @@ update
 					IGT = (uint)Math.Round(vars.IGT_float.Current * 60);
 					IGTold = (uint)Math.Round(vars.IGT_float.Old * 60); 
 					tickrate = 60;
-					if (vars.ODST_levelnameBad.Current.Length > 1) //Check that the level name actually exists in memory so a bunch of errors dont get spat out
-					{
-						if (vars.ODST_levelnameBad.Current[1] == '\\') {level = vars.ODST_levelnameBad2.Current;}
-						else {level = vars.ODST_levelnameBad.Current;}
-					}
-					else {level = vars.ODST_levelnameBad2.Current;} //Streets are not a real level :)
+					level = vars.ODST_levelname.Current; //Streets might cause problems in loopmode if someone does something weird
 					break;
 
 					case 6:
@@ -1595,7 +1596,7 @@ update
 					break;
 
 					case 5:
-					if (vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57 && vars.stateindicator.Old != 190 && (vars.ODST_levelnameBad.Current == "l300" || vars.ODST_levelnameBad2.Current == "l300"))
+					if (vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57 && vars.stateindicator.Old != 190 && vars.ODST_levelname.Current == "l300")
 					{
 						if (!settings["anylevel"]) {vars.multigamepause = true;}
 					}
@@ -1641,28 +1642,28 @@ update
 					break;
 					
 					case 2:
-					if (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
+					if (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30) //start on sierra
 					{
 						vars.multigamepause = false;
 					}
 					break;
 					
 					case 3:
-					if 	(vars.H4_levelname.Current == "m10" && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
+					if 	(vars.H4_levelname.Current == "m10" && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5) //start on dawn
 					{
 						vars.multigamepause = false;
 					}
 					break;
 					
-					case 5: //ODST
-					if (vars.ODST_levelnameBad2.Current == "c100" && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5) //there was a bsp check here; do I still need it?
+					case 5:
+					if (vars.ODST_levelname.Current == "h100" && vars.ODST_streets.Current == 0 && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5) //start on recon helmet
 					{
 						vars.multigamepause = false;
 					}
 					break;
 					
 					case 6:
-					if 	(vars.HR_levelname.Current == "m10" && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
+					if 	(vars.HR_levelname.Current == "m10" && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5) //start on wc
 					{
 						vars.multigamepause = false;
 					}
@@ -1700,6 +1701,7 @@ start 	//starts timer
 	{
 		byte test = vars.gameindicator.Current;
 		vars.startedgame = test; //Why did 343 reuse reach level names in H4 smh my head!
+
 		switch (test)
 		{
 			//Halo 1
@@ -1770,7 +1772,7 @@ start 	//starts timer
 			}
 			else if ((settings["anylevel"] || settings["ILmode"]) && vars.stateindicator.Current != 44) //start on any other level
 			{	
-				if (vars.H2_levelname.Current == "03a")
+				if (vars.H2_levelname.Current == "03a") //outskirts
 				{
 					vars.watchers_h2bsp.UpdateAll(game);
 					if (vars.H2_fadebyte.Current == 1 && vars.H2_tickcounter.Current >= 30 && vars.H2_tickcounter.Current < 40 && vars.H2_bspstate.Current == 0)
@@ -1779,7 +1781,7 @@ start 	//starts timer
 						return true;
 					}
 				}
-				else if (vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.H2_tickcounter.Current < 120)
+				else if (vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.H2_tickcounter.Current < 120) //everything else
 				{
 					vars.startedlevel = vars.H2_levelname.Current;
 					return true;
@@ -1819,9 +1821,10 @@ start 	//starts timer
 
 			//ODST
 			case 5:
-			if ((settings["ILmode"] || settings["anylevel"] || vars.ODST_levelnameBad2.Current == "c100") && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
+			if ((settings["ILmode"] || settings["anylevel"] || (vars.ODST_levelname.Current == "h100" && vars.ODST_streets.Current == 0)) && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
 			{
-				vars.startedlevel = vars.ODST_levelnameBad2.Current;
+				vars.startedlevel = vars.ODST_levelname.Current;
+				vars.startedscene = vars.ODST_streets.Current;
 				return true;
 			}
 			break;
@@ -1957,15 +1960,12 @@ split
 						{
 							if (vars.H1_bspstate.Current == 0)
 							{
-									vars.watchers_h1xy.UpdateAll(game);
-							if (vars.H1_ypos.Current > (-19.344 - 0.2) && vars.H1_ypos.Current < (-19.344 + 0.2))
+								vars.watchers_h1xy.UpdateAll(game);
+								if (vars.H1_ypos.Current > (-19.344 - 0.2) && vars.H1_ypos.Current < (-19.344 + 0.2))
 								{
 									vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
 									return true;
-								} else
-								{
-									return false;
-								}
+								} else return false;
 							} 
 							else
 							{
@@ -1986,10 +1986,7 @@ split
 								{
 									vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
 									return true;
-								} else
-								{
-									return false;
-								}
+								} else return false;
 							} 
 							else
 							{
@@ -2410,13 +2407,7 @@ split
 					}
 				}
 
-				if (vars.ODST_levelnameBad.Current.Length > 1) //Check that the level name actually exists in memory so a bunch of errors dont get spat out
-				{
-					if (vars.ODST_levelnameBad.Current[1] == '\\') {checklevel = vars.ODST_levelnameBad2.Current;}
-					else {checklevel = vars.ODST_levelnameBad.Current;}
-				}
-				else {checklevel = vars.ODST_levelnameBad2.Current;} //Streets are not a real level :)
-
+				checklevel = vars.ODST_levelname.Current;
 
 				if (settings["Loopmode"] && checklevel == vars.startedlevel && vars.loopsplit == false)
 				{
@@ -2577,26 +2568,16 @@ reset
 			
 			//ODST
 			case 5:
-			if (settings["anylevel"])
+			if (settings["anylevel"] || settings["ILmode"])
 			{
-				if (vars.ODST_levelnameBad.Current.Length > 1) //Check that the level name actually exists in memory so a bunch of errors dont get spat out
+				if (vars.ODST_levelname.Current == vars.startedlevel && vars.startedscene == vars.ODST_streets.Current && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
 				{
-					if (vars.ODST_levelnameBad2.Current == vars.startedlevel && (vars.ODST_levelnameBad.Current[1] == '\\' || vars.ODST_levelnameBad2.Current == "c100") && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
-					{
-						return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.IGT_float.Current == 0));
-					}
-				}
-			}
-			else if (settings["ILmode"])
-			{
-				if (vars.ODST_levelnameBad2.Current == vars.startedlevel && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
-				{
-					return (vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167);
+					return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.IGT_float.Current == 0));
 				}
 			}
 			else
 			{
-				if (vars.ODST_levelnameBad2.Current == "c100" && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
+				if ((vars.ODST_levelname.Current == "c100" || (vars.ODST_levelname.Current == "h100" && vars.ODST_streets.Current == 0)) && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
 				{
 					return ((vars.IGT_float.Current < vars.IGT_float.Old && vars.IGT_float.Current < 0.167) || (vars.stateindicator.Current == 44 && vars.IGT_float.Current == 0));
 				}
