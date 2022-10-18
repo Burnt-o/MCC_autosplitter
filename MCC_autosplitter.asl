@@ -4,14 +4,9 @@
 
 //TODO;
 /*
+	Get rid of ulong h3 bsp watcher before an update breaks it or just wait for it to break first?
 	H4 deathcounter?
 	H4 IL splits - Probably not unless someone wants to supply the needed information re bspstate values.
-
-	***NOTE*****
-	Replaced H3, H4, HR and ODST IGT uint watchers with a global float watcher representing the game time.
-	The IGT tickcounters for HR and H4 are unstable resulting in errors with the game time calc. The float
-	value is stable and accurate so a better option for these 4 games to cut down on offsets to update.
-	Doesn't work well in H2 though. Just keep an eye out for anything weird happening.
 */
 
 state("MCC-Win64-Shipping") {}
@@ -160,6 +155,11 @@ init //hooking to game to make memorywatchers
 				(vars.H2_xpos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xD63A28)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_ypos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xD63A2C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
+
+			vars.watchers_h2fade = new MemoryWatcherList(){
+				(vars.H2_fadetick = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x14CEB68, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
+				(vars.H2_fadelength = new MemoryWatcher<ushort>(new DeepPointer(dllPointer, 0x28, 0x14CEB68, 0x4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+			};
 			
 			vars.watchers_h2death = new MemoryWatcherList(){
 				(vars.H2_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x28, 0xD63E80, -0xEF)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
@@ -273,6 +273,11 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h2xy = new MemoryWatcherList() {
 				(vars.H2_xpos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xD5A148)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_ypos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xD5A14C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+
+			vars.watchers_h2fade = new MemoryWatcherList(){
+				(vars.H2_fadetick = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x14C5228, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
+				(vars.H2_fadelength = new MemoryWatcher<ushort>(new DeepPointer(dllPointer, 0x28, 0x14C5228, 0x4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_h2death = new MemoryWatcherList(){
@@ -388,6 +393,11 @@ init //hooking to game to make memorywatchers
 				(vars.H2_xpos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xD523A8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_ypos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xD523AC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
+
+			vars.watchers_h2fade = new MemoryWatcherList(){
+				(vars.H2_fadetick = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x14BD450, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
+				(vars.H2_fadelength = new MemoryWatcher<ushort>(new DeepPointer(dllPointer, 0x28, 0x14BD450, 0x4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+			};
 			
 			vars.watchers_h2death = new MemoryWatcherList(){
 				(vars.H2_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x28, 0x00D52800, -0xEF)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -501,6 +511,11 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h2xy = new MemoryWatcherList() {
 				(vars.H2_xpos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xDA5CD8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_ypos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xDA5CDC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+
+			vars.watchers_h2fade = new MemoryWatcherList(){
+				(vars.H2_fadetick = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x13DFC58, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
+				(vars.H2_fadelength = new MemoryWatcher<ushort>(new DeepPointer(dllPointer, 0x28, 0x13DFC58, 0x4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_h2death = new MemoryWatcherList(){
@@ -621,6 +636,11 @@ init //hooking to game to make memorywatchers
 				(vars.H2_xpos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xD63A28)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 				(vars.H2_ypos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xD63A2C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
+
+			vars.watchers_h2fade = new MemoryWatcherList(){
+				(vars.H2_fadetick = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x14CEB68, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
+				(vars.H2_fadelength = new MemoryWatcher<ushort>(new DeepPointer(dllPointer, 0x28, 0x14CEB68, 0x4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+			};
 			
 			vars.watchers_h2death = new MemoryWatcherList(){
 				(vars.H2_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x28, 0xD63E80, -0xEF)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
@@ -736,6 +756,11 @@ init //hooking to game to make memorywatchers
 				(vars.H2_ypos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xD5A14C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 
+			vars.watchers_h2fade = new MemoryWatcherList(){
+				(vars.H2_fadetick = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x14C5228, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
+				(vars.H2_fadelength = new MemoryWatcher<ushort>(new DeepPointer(dllPointer, 0x28, 0x14C5228, 0x4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+			};
+
 			vars.watchers_h2death = new MemoryWatcherList(){
 				(vars.H2_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x28, 0x00D5A5A0, -0xEF)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
@@ -790,6 +815,7 @@ init //hooking to game to make memorywatchers
 		}
 	}
 
+	//version dependant consts
 	switch (version)
 	{
 		case "1.2969.0.0":
@@ -806,6 +832,7 @@ init //hooking to game to make memorywatchers
 
 		case "1.2448.0.0":
 		vars.H1_checklist = new Dictionary<string, uint>{{"a10", 2495112808},{"a30", 1196246201},{"a50", 3037603536},{"b30", 682311759},{"b40", 326064131},{"c10", 645721511},{"c20", 540616268},{"c40", 1500399674},{"d20", 2770760039},{"d40", 1695151528},};
+		vars.fadescale = 0.2;
 		break;
 	}
 }
@@ -839,6 +866,7 @@ startup //variable init and settings
 	vars.H2_tgjreadytime = 0;
 	vars.lastinternal = false;
 	vars.oldtick = -2;
+	vars.fadescale = 0.1;
 	vars.loading = false;
 	vars.startedscene = 0; //default to recon helmet, 0 on recon helmet/ptd, 100 on drone optic, 110 on guass turret etc etc
 
@@ -856,7 +884,7 @@ startup //variable init and settings
 		{"a30", new byte[] { 1 }}, //halo
 		{"a50", new byte[] { 1, 2, 3 }}, //tnr
 		{"b30", new byte[] { 1 }}, //sc
-		{"b40", new byte[] { 0, 1, 10, 2 }}, //aotcr - could put the others in for fullpath andys?
+		{"b40", new byte[] { 0, 1, 2, 4, 8, 9, 10, 11 }}, //aotcr - could put the others in for fullpath andys?
 		{"c10", new byte[] { 1, 3, 4, 5 }}, //343
 		{"c20", new byte[] { 1, 2, 3 }}, //library
 		{"c40", new byte[] { 12, 10, 1, 9, 8, 6, 0, 5 }}, //tb
@@ -1487,7 +1515,7 @@ update
 				}
 				else	//if currently loading, determine whether we need not be
 				{
-					if (vars.menuindicator.Current == 7) //between level loads.
+					if (vars.menuindicator.Current == 7 && vars.stateindicator.Current != 44) //between level loads.
 					{
 						string H2_checklevel = vars.H2_levelname.Current;
 						switch (H2_checklevel)
@@ -1505,22 +1533,23 @@ update
 							case "08a": //Uprising
 							case "07b": //High Charity
 							case "08b": //The Great Journey
-							if (vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 44 && vars.stateindicator.Current != 129)
+							if (vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 129)
 							{
 								vars.loading = false;
 								vars.lastinternal = false;
-							} else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old && vars.H2_tickcounter.Current > 10 && vars.stateindicator.Current != 44) {vars.loading = false;}
+							} else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old && vars.H2_tickcounter.Current > 10) {vars.loading = false;}
 							break;
 
 							case "03a": // Outskirts
 							if (vars.stateindicator.Current != 44)
 							{
-								if (vars.H2_fadebyte.Current == 1 && vars.H2_tickcounter.Current >= 30 && vars.H2_tickcounter.Current < 40)
+								vars.watchers_h2bsp.UpdateAll(game);
+								if (vars.H2_fadebyte.Current == 1 && vars.H2_bspstate.Current == 0 && vars.H2_tickcounter.Current > 10 && vars.H2_tickcounter.Current < 100)
 								{
-									vars.watchers_h2bsp.UpdateAll(game);
-									if (vars.H2_bspstate.Current == 0) {vars.loading = false;}
+									vars.watchers_h2fade.UpdateAll(game);
+									if (vars.H2_fadelength.Current > 15 && vars.H2_tickcounter.Current >= (vars.H2_fadetick.Current + (uint)Math.Round(vars.H2_fadelength.Current * vars.fadescale))) {vars.loading = false;}
 								}
-								else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old && vars.H2_tickcounter.Current > 10 && vars.stateindicator.Current != 44) {vars.loading = false;}
+								else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old && vars.H2_tickcounter.Current > 10) {vars.loading = false;}
 							}
 							break;	
 						}
@@ -1775,10 +1804,14 @@ start 	//starts timer
 				if (vars.H2_levelname.Current == "03a") //outskirts
 				{
 					vars.watchers_h2bsp.UpdateAll(game);
-					if (vars.H2_fadebyte.Current == 1 && vars.H2_tickcounter.Current >= 30 && vars.H2_tickcounter.Current < 40 && vars.H2_bspstate.Current == 0)
+					if (vars.H2_fadebyte.Current == 1 && vars.H2_bspstate.Current == 0 && vars.H2_tickcounter.Current > 10 && vars.H2_tickcounter.Current < 100)
 					{
-						vars.startedlevel = "03a";
-						return true;
+						vars.watchers_h2fade.UpdateAll(game);
+						if (vars.H2_fadelength.Current > 15 && vars.H2_tickcounter.Current >= (vars.H2_fadetick.Current + (uint)Math.Round(vars.H2_fadelength.Current * vars.fadescale)))
+						{
+							vars.startedlevel = "03a";
+							return true;
+						}
 					}
 				}
 				else if (vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.H2_tickcounter.Current < 120) //everything else
