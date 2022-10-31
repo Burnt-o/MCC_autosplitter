@@ -1,12 +1,9 @@
 //Halo: The Master Chief Collection Autosplitter
 //by Burnt and Cambid
 
-
-//TODO;
+//NOTES
 /*
-	Get rid of ulong h3 bsp watcher before an update breaks it or just wait for it to break first?
-	H4 deathcounter?
-	H4 IL splits - Probably not unless someone wants to supply the needed information re bspstate values.
+	Nothing to see here currently
 */
 
 state("MCC-Win64-Shipping") {}
@@ -832,7 +829,7 @@ init //hooking to game to make memorywatchers
 
 		case "1.2448.0.0":
 		vars.H1_checklist = new Dictionary<string, uint>{{"a10", 2495112808},{"a30", 1196246201},{"a50", 3037603536},{"b30", 682311759},{"b40", 326064131},{"c10", 645721511},{"c20", 540616268},{"c40", 1500399674},{"d20", 2770760039},{"d40", 1695151528},};
-		vars.fadescale = 0.2;
+		vars.fadescale = 0.183;
 		break;
 	}
 }
@@ -841,41 +838,47 @@ init //hooking to game to make memorywatchers
 startup //variable init and settings
 { 	
 	//MOVED VARIABLE INIT TO STARTUP TO PREVENT BUGS WHEN RESTARTING (OR CRASHING) MCC MID RUN
-	
-	//GENERAL inits
+	vars.brokenupdateshowed = false;
 	vars.loopcount = 0;
+
+	//GENERAL VARS INIT - most of these need to be reinit on timer reset
+	vars.varsreset = false;
+	vars.partialreset = false;
+
 	vars.dirtybsps_byte = new List<byte>();
 	vars.dirtybsps_int = new List<uint>();
 	vars.dirtybsps_long = new List<ulong>();
+
 	vars.startedlevel = "000";
 	vars.levelloaded = "000";
 	vars.startedgame = 10;
-	vars.varsreset = false;
-	vars.partialreset = false;
+	vars.startedscene = 0; //default to recon helmet, 0 on recon helmet/ptd, 100 on drone optic, 110 on guass turret etc etc
+
 	vars.loopsplit = true;
 	vars.forcesplit = false;
 	vars.forcesplit2 = false;
-	vars.isvalid = false;
-	vars.ctime = TimeSpan.Zero;
-	vars.diff = TimeSpan.Zero;
 
-	vars.brokenupdateshowed = false;
-	vars.multigamepause = false;
-	vars.multigametime = TimeSpan.Zero;
 	vars.H2_tgjreadyflag = false;
 	vars.H2_tgjreadytime = 0;
 	vars.lastinternal = false;
 	vars.oldtick = -2;
-	vars.fadescale = 0.1;
 	vars.loading = false;
-	vars.startedscene = 0; //default to recon helmet, 0 on recon helmet/ptd, 100 on drone optic, 110 on guass turret etc etc
+	vars.multigamepause = false;
+	vars.multigametime = TimeSpan.Zero;
 
-	//IGT
 	vars.gametime = TimeSpan.Zero;
 	vars.ingametime = 0;
 	vars.leveltime = 0;
 	vars.pgcrexists = false;
 
+	vars.isvalid = false;
+	vars.ctime = TimeSpan.Zero;
+	vars.diff = TimeSpan.Zero;
+
+
+	//GENERAL CONSTANTS INIT
+	vars.fadescale = 0.067;
+	vars.H1_checklist = new Dictionary<string, uint>{};
 
 	//LEVEL LIST
 	//HALO 1
@@ -891,7 +894,6 @@ startup //variable init and settings
 		{"d20", new byte[] { 4, 3, 2 }}, //keyes
 		{"d40", new byte[] { 1, 2, 3, 4, 5, 6, 7 }}, //maw
 	};
-	vars.H1_checklist = new Dictionary<string, uint>{};
 	
 
 	//HALO 2
@@ -1143,43 +1145,41 @@ update
 	}
 	else if (timer.CurrentPhase == TimerPhase.NotRunning && vars.varsreset == true)
 	{
+		vars.varsreset = false;
+		vars.partialreset = false;
+
+		vars.dirtybsps_byte = new List<byte>();
+		vars.dirtybsps_int = new List<uint>();
+		vars.dirtybsps_long = new List<ulong>();
+
+		vars.startedlevel = "000";
+		vars.levelloaded = "000";
+		vars.startedgame = 10;
+		vars.startedscene = 0; //default to recon helmet, 0 on recon helmet/ptd, 100 on drone optic, 110 on guass turret etc etc
+
+		vars.loopsplit = true;
+		vars.forcesplit = false;
+		vars.forcesplit2 = false;
+
+		vars.H2_tgjreadyflag = false;
+		vars.H2_tgjreadytime = 0;
+		vars.lastinternal = false;
+		vars.oldtick = -2;
 		vars.loading = false;
 		vars.multigamepause = false;
+		vars.multigametime = TimeSpan.Zero;
+
+		vars.gametime = TimeSpan.Zero;
+		vars.ingametime = 0;
+		vars.leveltime = 0;
+		vars.pgcrexists = false;
 
 		vars.isvalid = false;
 		vars.ctime = TimeSpan.Zero;
 		vars.diff = TimeSpan.Zero;
 
-		vars.startedlevel = "000";
-		vars.levelloaded = "000";
-		vars.startedgame = 10;
-		vars.loopsplit = true;
-		vars.forcesplit = false;
-		vars.forcesplit2 = false;
 		vars.DeathCounter = 0;
-
-		if (settings["deathcounter"])
-		vars.UpdateDeathCounter();
-		
-		vars.H2_tgjreadyflag = false;
-		vars.H2_tgjreadytime = 0;
-		vars.lastinternal = false;
-		vars.oldtick = -2;
-
-		vars.startedscene = 0;
-
-		vars.dirtybsps_byte.Clear();
-		vars.dirtybsps_int.Clear();
-		vars.dirtybsps_long.Clear();
-
-		vars.gametime = TimeSpan.Zero;
-		vars.multigametime = TimeSpan.Zero;
-		vars.ingametime = 0;
-		vars.leveltime = 0;
-		vars.pgcrexists = false;
-
-		vars.varsreset = false;
-		vars.partialreset = false;
+		if (settings["deathcounter"]) {vars.UpdateDeathCounter();}
 
 		print ("Autosplitter vars reinitalized!");
 	}
@@ -1329,7 +1329,7 @@ update
 
 				}
 
-				//Squiggily mess is squiggily. I have no idea how this works even though I wrote it :)
+				//Squiggily mess is squiggily. Don't touch unless really need to.
 				if (settings["ILmode"]) //ILs
 				{
 					if (settings["Loopmode"])
@@ -1438,8 +1438,10 @@ update
 				}
 			}
 
-			//RTA games load removal stuff. Moved here to prevent conflict with multigamepause and other types of timer pause logic
-			else if (vars.gameindicator.Current == 0 && !((settings["IGTmode"]) || settings["ILmode"])) //Halo 1
+			//RTA load removal stuff. Moved here to prevent conflict with multigamepause and other types of timer pause logic
+
+			//Halo 1
+			else if (vars.gameindicator.Current == 0 && !((settings["IGTmode"]) || settings["ILmode"]))
 			{
 				if (vars.loading == false) //if not currently loading, determine whether we need to be.
 				{
@@ -1457,7 +1459,9 @@ update
 					if (vars.H1_tickcounter.Current == (vars.H1_tickcounter.Old + 1)) {vars.loading = false;}//determine whether to unpause the timer, ie tick counter starts incrementing again.
 				}
 			}
-			else if (vars.gameindicator.Current == 1 && !(settings["ILmode"] || settings["IGTmode"])) //Halo 2
+
+			///Halo 2
+			else if (vars.gameindicator.Current == 1 && !(settings["ILmode"] || settings["IGTmode"]))
 			{
 				if (vars.loading == false ) //if not currently loading, determine whether we need to be
 				{
@@ -1515,32 +1519,10 @@ update
 				}
 				else	//if currently loading, determine whether we need not be
 				{
-					if (vars.menuindicator.Current == 7 && vars.stateindicator.Current != 44) //between level loads.
+					if (vars.menuindicator.Current == 7 && vars.stateindicator.Current != 44 && vars.H2_levellist.ContainsKey(vars.H2_levelname.Current)) //between level loads.
 					{
-						string H2_checklevel = vars.H2_levelname.Current;
-						switch (H2_checklevel)
+						if (vars.H2_levelname.Current == "03a")
 						{
-							case "01a": //Armory
-							case "01b": //Cairo
-							case "03b":	//Metropolis
-							case "04a":	//Arbiter
-							case "04b": //Oracle
-							case "05a": //Delta Halo
-							case "05b": //Regret
-							case "06a": //Sacred Icon
-							case "06b": //Quarantine Zone
-							case "07a": //Gravemind
-							case "08a": //Uprising
-							case "07b": //High Charity
-							case "08b": //The Great Journey
-							if (vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 129)
-							{
-								vars.loading = false;
-								vars.lastinternal = false;
-							} else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old && vars.H2_tickcounter.Current > 10) {vars.loading = false;}
-							break;
-
-							case "03a": // Outskirts
 							if (vars.stateindicator.Current != 44)
 							{
 								vars.watchers_h2bsp.UpdateAll(game);
@@ -1551,7 +1533,14 @@ update
 								}
 								else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old && vars.H2_tickcounter.Current > 10) {vars.loading = false;}
 							}
-							break;	
+						}
+						else
+						{
+							if (vars.H2_fadebyte.Current == 0 && vars.H2_fadebyte.Old == 1 && vars.stateindicator.Current != 129)
+							{
+								vars.loading = false;
+								vars.lastinternal = false;
+							} else if (vars.H2_fadebyte.Current == 0 && vars.H2_tickcounter.Current > vars.H2_tickcounter.Old && vars.H2_tickcounter.Current > 10) {vars.loading = false;}
 						}
 					}
 				}
@@ -1967,28 +1956,39 @@ split
 					
 					if (settings["bsp_cache"])
 					{
-						return (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.H1_levellist[checklevel], x => x == vars.H1_bspstate.Current));
+						if (checklevel == "b40")
+						{
+							if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.H1_levellist[checklevel], x => x == vars.H1_bspstate.Current) && vars.H1_tickcounter.Current > 30)
+							{
+								if (vars.H1_bspstate.Current == 0)
+								{
+									vars.watchers_h1xy.UpdateAll(game);
+									if (vars.H1_ypos.Current > (-19.344 - 0.2) && vars.H1_ypos.Current < (-19.344 + 0.2)) {return true;}
+									else {return false;}
+								} 
+								else {return true;}
+
+							}
+						}
+						else if (checklevel == "c40")
+						{
+							if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.H1_levellist[checklevel], x => x == vars.H1_bspstate.Current) && vars.H1_tickcounter.Current > 30)
+							{
+								if (vars.H1_bspstate.Current == 0)
+								{
+									//update xy, check for match
+									vars.watchers_h1xy.UpdateAll(game);
+									if (vars.H1_xpos.Current > 171.87326 && vars.H1_xpos.Current < 185.818526 && vars.H1_ypos.Current > -295.3629 && vars.H1_ypos.Current < -284.356986) {return true;}
+									else {return false;}
+								} 
+								else {return true;}
+							}
+						}
+						else {return (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.H1_levellist[checklevel], x => x == vars.H1_bspstate.Current));}
 					}
 					
-					switch (checklevel)
+					if (checklevel == "b40")
 					{
-						case "a10":
-						case "a30":
-						case "a50":
-						case "b30":
-						case "c10":
-						case "c20":
-						case "d20":
-						case "d40":
-						if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.H1_levellist[checklevel], x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
-						{
-							vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
-							return true;
-						}
-						break;
-						
-						
-						case "b40":
 						if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.H1_levellist[checklevel], x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
 						{
 							if (vars.H1_bspstate.Current == 0)
@@ -1998,7 +1998,8 @@ split
 								{
 									vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
 									return true;
-								} else return false;
+								}
+								else {return false;}
 							} 
 							else
 							{
@@ -2006,9 +2007,9 @@ split
 								return true;
 							}
 						}
-						break;
-						
-						case "c40":
+					}
+					else if (checklevel == "c40")
+					{
 						if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.H1_levellist[checklevel], x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)) && vars.H1_tickcounter.Current > 30)
 						{
 							if (vars.H1_bspstate.Current == 0)
@@ -2019,7 +2020,8 @@ split
 								{
 									vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
 									return true;
-								} else return false;
+								}
+								else {return false;}
 							} 
 							else
 							{
@@ -2027,10 +2029,14 @@ split
 								return true;
 							}
 						}
-						break;
-						
-						default:
-						break;
+					}
+					else
+					{
+						if (vars.H1_bspstate.Current != vars.H1_bspstate.Old && Array.Exists((byte[]) vars.H1_levellist[checklevel], x => x == vars.H1_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H1_bspstate.Current)))
+						{
+							vars.dirtybsps_byte.Add(vars.H1_bspstate.Current);
+							return true;
+						}
 					}
 				}
 				
@@ -2381,7 +2387,7 @@ split
 					}
 				} 
 				
-				if (!settings["ILmode"])	//IL end split
+				if (!settings["ILmode"])	//Split on loading screen
 				{
 					if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44)
 					{
@@ -2576,7 +2582,7 @@ reset
 					{
 						return (vars.H3_levelname.Current == vars.startedlevel && vars.H3_theatertime.Current > 0 && vars.H3_theatertime.Current < 15);
 					}
-					return ((vars.H3_levelname.Current == "005" || vars.H3_levelname.Current == "010") && vars.H3_theatertime.Current > 0 && vars.H3_theatertime.Current < 15);	
+					else return ((vars.H3_levelname.Current == "005" || vars.H3_levelname.Current == "010") && vars.H3_theatertime.Current > 0 && vars.H3_theatertime.Current < 15);	
 				}
 			} 
 			break;
