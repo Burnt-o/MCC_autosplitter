@@ -653,7 +653,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_h3death = new MemoryWatcherList(){
-				(vars.H3_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x48, 0x01E30758, 0x1074C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				(vars.H3_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x48, 0x01E30758, 0x1074D)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
 			
 			vars.watchers_hr = new MemoryWatcherList() {
