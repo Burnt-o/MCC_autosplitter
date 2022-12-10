@@ -117,20 +117,19 @@ init //hooking to game to make memorywatchers
 			}
 			else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe" || modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe") //Winstore
 			{
-				//Burnt update these plz :)
-				dllPointer = (0x3DE6578); 
+				dllPointer = (0x03E6B870); 
 
 				vars.watchers_fast = new MemoryWatcherList() {
-					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3CAFAA9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3DA30E5)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3D33AA9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E28465)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 
 				vars.watchers_slow = new MemoryWatcherList() {
-					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3DE6468, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E6B828, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 
 				vars.watchers_igt = new MemoryWatcherList() {
-					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3DE6570)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3E6B86C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 			}
 			
