@@ -186,7 +186,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_h3 = new MemoryWatcherList() {
-				(vars.H3_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x48, 0x1EDF9F0), 3)), 
+				(vars.H3_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x48, 0x1E92AB8), 3)), 
 				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1F2084C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
 			};
 			
@@ -751,6 +751,10 @@ init //hooking to game to make memorywatchers
 	//version dependant consts
 	switch (version)
 	{
+		case "1.3065.0.0":
+			vars.H1_checklist = new Dictionary<string, uint>{{"a10", 3589325267},{"a30", 3649693672},{"a50", 1186687708},{"b30", 1551598635},{"b40", 1100623455},{"c10", 3494823778},{"c20", 2445460720},{"c40", 3759075146},{"d20", 3442848200},{"d40", 1751474532},};
+		break;
+
 		case "1.2969.0.0":
 			vars.H1_checklist = new Dictionary<string, uint>{{"a10", 2023477633},{"a30", 1197744442},{"a50", 522123179},{"b30", 2022995318},{"b40", 4112928798},{"c10", 4250424451},{"c20", 1165450382},{"c40", 2733116763},{"d20", 1722772470},{"d40", 3775314541},};
 		break;
@@ -1195,7 +1199,7 @@ update
 		if (!vars.multigamepause)
 		{
 			//IGT function
-			if (vars.menuindicator.Current == 7 && (settings["IGTmode"] || !(test == 0 || (test == 1 && !settings["ILmode"]))))
+			if (vars.menuindicator.Current == 7 && (settings["IGTmode"] || !(test == 0 || (test == 1 && (!settings["ILmode"] || vars.H2_levelname.Current == "01a")))))
 			{
 				//reset gametime return of current iteration
 				vars.gametime = TimeSpan.Zero;
@@ -2649,7 +2653,7 @@ gameTime
 		}
 		return;
 	}
-	else if (vars.menuindicator.Current == 7 && (settings["IGTmode"] || !(vars.gameindicator.Current == 0 || (vars.gameindicator.Current == 1 && !settings["ILmode"]))))
+	else if (vars.menuindicator.Current == 7 && (settings["IGTmode"] || !(vars.gameindicator.Current == 0 || (vars.gameindicator.Current == 1 && (!settings["ILmode"] || vars.H2_levelname.Current == "01a")))))
 	{
 		return vars.gametime;
 	}
