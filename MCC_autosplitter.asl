@@ -199,7 +199,7 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_hr = new MemoryWatcherList() {
-				(vars.HR_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xC8, 0x275DE10), 3)),
+				(vars.HR_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xC8, 0x2A2F6D7), 3)),
 			};
 			
 			vars.watchers_hrbsp = new MemoryWatcherList() {
