@@ -22,9 +22,9 @@ init //hooking to game to make memorywatchers
 
 	var message = "It looks like MCC has received a new patch that will "+
 	"probably break me (the autosplitter). \n"+
-	"Autosplitter was made for version: "+ "1.2969.0.0" + "\n" + 
+	"Autosplitter was made for version: "+ "1.3073.0.0" + "\n" + 
 	"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
-	"If I'm broken, you'll just have to wait for Burnt to update me. "+
+	"If I'm broken, you'll just have to wait for Burnt or Cambid to update me. "+
 	"You won't need to do anything except restart Livesplit once I'm updated.";
 	
 	//so the latest version of winstore (as of v2904), has a fun issue where you can't get the FileVersion from the module like you normally can
@@ -79,9 +79,13 @@ init //hooking to game to make memorywatchers
 		case "1.3065.0.0":
 			version = "1.3065.0.0";
 		break;
+
+		case "1.3073.0.0":
+			version = "1.3073.0.0";
+		break;
 		
 		default: 
-			version = "1.3065.0.0";
+			version = "1.3073.0.0";
 			if (vars.brokenupdateshowed == false)
 			{
 				vars.brokenupdateshowed = true;
@@ -97,6 +101,144 @@ init //hooking to game to make memorywatchers
 	Int32 dllPointer = 0; //Game dll base address pointer. Define here to avoid mass copypasta
 	switch (version)
 	{
+		case "1.3073.0.0":
+			if (modules.First().ToString() == "MCC-Win64-Shipping.exe") //Steam
+			{
+				dllPointer = (0x401C208);
+			
+				vars.watchers_fast = new MemoryWatcherList() {
+					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3EE3FA9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3FD8E99)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				};
+
+				vars.watchers_slow = new MemoryWatcherList() {
+					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x401C1C0, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				};
+
+				vars.watchers_igt = new MemoryWatcherList() {
+					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x401C204)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				};
+			}
+			else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe" || modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe") //Winstore
+			{
+				dllPointer = (0x03E6B870); 
+
+				vars.watchers_fast = new MemoryWatcherList() {
+					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3D33AA9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E28465)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				};
+
+				vars.watchers_slow = new MemoryWatcherList() {
+					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E6B828, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				};
+
+				vars.watchers_igt = new MemoryWatcherList() {
+					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3E6B86C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				};
+			}
+			
+			vars.watchers_h1 = new MemoryWatcherList() {
+				(vars.H1_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x8, 0x2CA07CC), 3)),
+				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x8, 0x2CEBD34)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_IGT = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x8, 0x3008134)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0x8, 0x1CECDFC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x8, 0x3005198, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x8, 0x3005198, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_check = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x8, 0x2C9F828)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h1xy = new MemoryWatcherList() {
+				(vars.H1_xpos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x8, 0x2F00954)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_ypos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x8, 0x2F00958)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h1death = new MemoryWatcherList(){
+				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x8, 0x2CA0797)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h1fade = new MemoryWatcherList(){
+				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x8, 0x300D678, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
+				(vars.H1_fadelength = new MemoryWatcher<ushort>(new DeepPointer(dllPointer, 0x8, 0x300D678, 0x3C4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H1_fadebyte = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0x8, 0x300D678, 0x3C6)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h2 = new MemoryWatcherList() {
+				(vars.H2_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x28, 0xE6ED78), 3)),
+				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x15E1D74)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_IGT = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x15A1BA0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_fadebyte = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0x28, 0x15F42B8, -0x92E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0x15F42B8, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_graphics = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0x28, 0xE1F178)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h2bsp = new MemoryWatcherList() {
+				(vars.H2_bspstate = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0x28, 0xDF7D74)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h2xy = new MemoryWatcherList() {
+				(vars.H2_xpos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xE7E308)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H2_ypos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xE7E30C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+
+			vars.watchers_h2fade = new MemoryWatcherList(){
+				(vars.H2_fadetick = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x15E9458, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
+				(vars.H2_fadelength = new MemoryWatcher<ushort>(new DeepPointer(dllPointer, 0x28, 0x15E9458, 0x4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+			};
+			
+			vars.watchers_h2death = new MemoryWatcherList(){
+				(vars.H2_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x28, 0xE7E760, -0xEF)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h3 = new MemoryWatcherList() {
+				(vars.H3_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x48, 0x1E92AB8), 3)), 
+				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1F2084C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_h3bsp = new MemoryWatcherList() {
+				(vars.H3_bspstate = new MemoryWatcher<ulong>(new DeepPointer(dllPointer, 0x48, 0xA39220, 0x2C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_h3death = new MemoryWatcherList(){
+				(vars.H3_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x48, 0x1E19C98, 0xFDCD)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_hr = new MemoryWatcherList() {
+				(vars.HR_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xC8, 0x2A2F6D7), 3)),
+			};
+			
+			vars.watchers_hrbsp = new MemoryWatcherList() {
+				(vars.HR_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xC8, 0x3B9C020)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_hrdeath = new MemoryWatcherList(){
+				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0xC8, 0x250B808, 0x1ED09)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_odst = new MemoryWatcherList() {
+				(vars.ODST_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x20C0DA8), 4)),
+				(vars.ODST_streets = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x21463B4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_odstbsp = new MemoryWatcherList() {
+				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x33FD0DC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+			
+			vars.watchers_odstdeath = new MemoryWatcherList(){
+				(vars.ODST_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0xA8, 0xFDEAFC, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_h4 = new MemoryWatcherList() {
+				(vars.H4_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x68, 0x2AE485F), 3))
+			};
+			
+			vars.watchers_h4bsp = new MemoryWatcherList() {
+				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(dllPointer, 0x68, 0x2746930)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+			};
+
+		break;
+
+
+
 		case "1.3065.0.0":
 			if (modules.First().ToString() == "MCC-Win64-Shipping.exe") //Steam
 			{
@@ -751,6 +893,7 @@ init //hooking to game to make memorywatchers
 	//version dependant consts
 	switch (version)
 	{
+		case "1.3073.0.0":
 		case "1.3065.0.0":
 			vars.H1_checklist = new Dictionary<string, uint>{{"a10", 3589325267},{"a30", 3649693672},{"a50", 1186687708},{"b30", 1551598635},{"b40", 1100623455},{"c10", 3494823778},{"c20", 2445460720},{"c40", 3759075146},{"d20", 3442848200},{"d40", 1751474532},};
 		break;
