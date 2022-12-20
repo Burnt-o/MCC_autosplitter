@@ -32,7 +32,7 @@ init //hooking to game to make memorywatchers
 	
 	//first check for the failure
 	string testversion = modules.First().FileVersionInfo.FileVersion; 
-	var winstorefileversioncheck = (testversion == null && (modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe" || modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe"));
+	var winstorefileversioncheck = (testversion == null && (modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase)));
 	if (winstorefileversioncheck) 
 	{
 		print ("dear god why");
@@ -102,7 +102,7 @@ init //hooking to game to make memorywatchers
 	switch (version)
 	{
 		case "1.3073.0.0":
-			if (modules.First().ToString() == "MCC-Win64-Shipping.exe") //Steam
+			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
 			{
 				dllPointer = (0x401C208);
 			
@@ -119,7 +119,7 @@ init //hooking to game to make memorywatchers
 					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x401C204)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 			}
-			else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe" || modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe") //Winstore
+			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
 			{
 				dllPointer = (0x3E6B858); 
 
@@ -240,7 +240,7 @@ init //hooking to game to make memorywatchers
 
 
 		case "1.3065.0.0":
-			if (modules.First().ToString() == "MCC-Win64-Shipping.exe") //Steam
+			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
 			{
 				dllPointer = (0x401C208);
 			
@@ -257,7 +257,7 @@ init //hooking to game to make memorywatchers
 					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x401C204)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 			}
-			else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe" || modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe") //Winstore
+			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
 			{
 				dllPointer = (0x03E6B870); 
 
@@ -378,7 +378,7 @@ init //hooking to game to make memorywatchers
 
 
 		case "1.2969.0.0":
-			if (modules.First().ToString() == "MCC-Win64-Shipping.exe") //Steam
+			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
 			{
 				dllPointer = (0x3F94F90);
 			
@@ -395,7 +395,7 @@ init //hooking to game to make memorywatchers
 					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3F94F88)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 			}
-			else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe" || modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe") //Winstore
+			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
 			{
 				dllPointer = (0x3DE6578); 
 
@@ -516,7 +516,7 @@ init //hooking to game to make memorywatchers
 
 
 		case "1.2904.0.0":
-			if (modules.First().ToString() == "MCC-Win64-Shipping.exe") //Steam
+			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
 			{
 				dllPointer = (0x3F7BA50);
 
@@ -533,7 +533,7 @@ init //hooking to game to make memorywatchers
 					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3F7C33C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 			}
-			else if (modules.First().ToString() == "MCC-Win64-Shipping-WinStore.exe" || modules.First().ToString() == "MCCWinStore-Win64-Shipping.exe") //Winstore
+			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
 			{
 				dllPointer = (0x3E1F540);
 
