@@ -3,7 +3,7 @@
 
 //NOTES
 /*
-	Nothing to see here currently
+	Implement comp timer splitting for all games. Should just be copy paste + make sure watcher updating is set up.
 */
 
 state("MCC-Win64-Shipping") {}
@@ -76,10 +76,6 @@ init //hooking to game to make memorywatchers
 			version = "1.2969.0.0";
 		break;
 
-		case "1.3065.0.0":
-			version = "1.3065.0.0";
-		break;
-
 		case "1.3073.0.0":
 			version = "1.3073.0.0";
 		break;
@@ -118,6 +114,10 @@ init //hooking to game to make memorywatchers
 				vars.watchers_igt = new MemoryWatcherList() {
 					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x401C204)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
+
+				vars.watchers_comptimer = new MemoryWatcherList() {
+					(vars.comptimerstate = new MemoryWatcher<uint>(new DeepPointer(0x401C1D8, 0x1AC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				};
 			}
 			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
 			{
@@ -134,6 +134,10 @@ init //hooking to game to make memorywatchers
 
 				vars.watchers_igt = new MemoryWatcherList() {
 					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3E6B854)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+				};
+
+				vars.watchers_comptimer = new MemoryWatcherList() {
+					(vars.comptimerstate = new MemoryWatcher<uint>(new DeepPointer(0x3E6B828, 0x1AC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 			}
 			
@@ -220,7 +224,9 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
-				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x33FD0DC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x33FD0DC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_intelflag = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x130D3C0, 0x3BC4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_cinematic = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x130D3C0, 0xF8A5)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
@@ -239,180 +245,27 @@ init //hooking to game to make memorywatchers
 
 
 
-		case "1.3065.0.0":
-			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
-			{
-				dllPointer = (0x401C208);
-			
-				vars.watchers_fast = new MemoryWatcherList() {
-					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3EE3FA9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3FD8E99)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-
-				vars.watchers_slow = new MemoryWatcherList() {
-					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x401C1C0, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-
-				vars.watchers_igt = new MemoryWatcherList() {
-					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x401C204)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-			}
-			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
-			{
-				dllPointer = (0x03E6B870); 
-
-				vars.watchers_fast = new MemoryWatcherList() {
-					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3D33AA9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E28465)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-
-				vars.watchers_slow = new MemoryWatcherList() {
-					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E6B828, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-
-				vars.watchers_igt = new MemoryWatcherList() {
-					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3E6B86C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-			}
-			
-			vars.watchers_h1 = new MemoryWatcherList() {
-				(vars.H1_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x8, 0x2CA07BC), 3)),
-				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x8, 0x2CEBCF4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_IGT = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x8, 0x3008134)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_bspstate = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0x8, 0x1CECE14)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_cinematic = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x8, 0x3005190, 0x0A)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_cutsceneskip = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x8, 0x3005190, 0x0B)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_check = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x8, 0x2C9F818)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_h1xy = new MemoryWatcherList() {
-				(vars.H1_xpos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x8, 0x2F00944)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_ypos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x8, 0x2F00948)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_h1death = new MemoryWatcherList(){
-				(vars.H1_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x8, 0x2CA0787)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_h1fade = new MemoryWatcherList(){
-				(vars.H1_fadetick = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x8, 0x300D678, 0x3C0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
-				(vars.H1_fadelength = new MemoryWatcher<ushort>(new DeepPointer(dllPointer, 0x8, 0x300D678, 0x3C4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H1_fadebyte = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0x8, 0x300D678, 0x3C6)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_h2 = new MemoryWatcherList() {
-				(vars.H2_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x28, 0xE6ED78), 3)),
-				(vars.H2_tickcounter = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x15E1D74)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H2_IGT = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x15A1BA0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H2_fadebyte = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0x28, 0x15F42B8, -0x92E)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H2_letterbox = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0x15F42B8, -0x938)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H2_graphics = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0x28, 0xE1F178)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_h2bsp = new MemoryWatcherList() {
-				(vars.H2_bspstate = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0x28, 0xDF7D74)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_h2xy = new MemoryWatcherList() {
-				(vars.H2_xpos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xE7E308)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.H2_ypos = new MemoryWatcher<float>(new DeepPointer(dllPointer, 0x28, 0xE7E30C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-
-			vars.watchers_h2fade = new MemoryWatcherList(){
-				(vars.H2_fadetick = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x28, 0x15E9458, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),	
-				(vars.H2_fadelength = new MemoryWatcher<ushort>(new DeepPointer(dllPointer, 0x28, 0x15E9458, 0x4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-			};
-			
-			vars.watchers_h2death = new MemoryWatcherList(){
-				(vars.H2_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x28, 0xE7E760, -0xEF)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_h3 = new MemoryWatcherList() {
-				(vars.H3_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x48, 0x1E92AB8), 3)), 
-				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1F2084C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
-			};
-			
-			vars.watchers_h3bsp = new MemoryWatcherList() {
-				(vars.H3_bspstate = new MemoryWatcher<ulong>(new DeepPointer(dllPointer, 0x48, 0xA39220, 0x2C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
-			};
-			
-			vars.watchers_h3death = new MemoryWatcherList(){
-				(vars.H3_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0x48, 0x1E19C98, 0xFDCD)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_hr = new MemoryWatcherList() {
-				(vars.HR_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xC8, 0x2A2F6D7), 3)),
-			};
-			
-			vars.watchers_hrbsp = new MemoryWatcherList() {
-				(vars.HR_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xC8, 0x3B9C020)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_hrdeath = new MemoryWatcherList(){
-				(vars.HR_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0xC8, 0x250B808, 0x1ED09)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_odst = new MemoryWatcherList() {
-				(vars.ODST_levelname = new StringWatcher(new DeepPointer(dllPointer, 0xA8, 0x20C0DA8), 4)),
-				(vars.ODST_streets = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x21463B4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_odstbsp = new MemoryWatcherList() {
-				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x33FD0DC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
-			};
-			
-			vars.watchers_odstdeath = new MemoryWatcherList(){
-				(vars.ODST_deathflag = new MemoryWatcher<bool>(new DeepPointer(dllPointer, 0xA8, 0xFDEAFC, -0x913)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-			};
-			
-			vars.watchers_h4 = new MemoryWatcherList() {
-				(vars.H4_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x68, 0x2AE47DF), 3))
-			};
-			
-			vars.watchers_h4bsp = new MemoryWatcherList() {
-				(vars.H4_bspstate = new MemoryWatcher<ulong>(new DeepPointer(dllPointer, 0x68, 0x27468B0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
-			};
-
-		break;
-
-
-
+		//Legacy Steam Support - No Winstore
 		case "1.2969.0.0":
-			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
-			{
-				dllPointer = (0x3F94F90);
-			
-				vars.watchers_fast = new MemoryWatcherList() {
-					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E5DF29)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3F519E9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
+			dllPointer = (0x3F94F90);
 
-				vars.watchers_slow = new MemoryWatcherList() {
-					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3F94E90, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
+			vars.watchers_fast = new MemoryWatcherList() {
+				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E5DF29)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3F519E9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
 
-				vars.watchers_igt = new MemoryWatcherList() {
-					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3F94F88)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-			}
-			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
-			{
-				dllPointer = (0x3DE6578); 
+			vars.watchers_slow = new MemoryWatcherList() {
+				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3F94E90, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
 
-				vars.watchers_fast = new MemoryWatcherList() {
-					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3CAFAA9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3DA30E5)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
+			vars.watchers_igt = new MemoryWatcherList() {
+				(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3F94F88)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
 
-				vars.watchers_slow = new MemoryWatcherList() {
-					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3DE6468, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
+			vars.watchers_comptimer = new MemoryWatcherList() {
+				(vars.comptimerstate = new MemoryWatcher<uint>(new DeepPointer(0x3F94F60, 0x1A4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};		
 
-				vars.watchers_igt = new MemoryWatcherList() {
-					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3DE6570)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-			}
-			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x8, 0x2CC58AC), 3)),
 				(vars.H1_tickcounter = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x8, 0x2CECFD4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
@@ -496,7 +349,9 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
-				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x3417D4C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x3417D4C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_intelflag = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x12E6300, 0x3A5C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_cinematic = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x12E6300, 0xF425)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
@@ -516,40 +371,24 @@ init //hooking to game to make memorywatchers
 
 
 		case "1.2904.0.0":
-			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
-			{
-				dllPointer = (0x3F7BA50);
+			dllPointer = (0x3F7BA50);
 
-				vars.watchers_fast = new MemoryWatcherList() {
-					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E45529)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), 
-					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3F2FBC9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-				
-				vars.watchers_slow = new MemoryWatcherList() {
-					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x03F7C380, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
+			vars.watchers_fast = new MemoryWatcherList() {
+				(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E45529)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}), 
+				(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3F2FBC9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
+			
+			vars.watchers_slow = new MemoryWatcherList() {
+				(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x03F7C380, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
 
-				vars.watchers_igt = new MemoryWatcherList() {
-					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3F7C33C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-			}
-			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
-			{
-				dllPointer = (0x3E1F540);
+			vars.watchers_igt = new MemoryWatcherList() {
+				(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3F7C33C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};
 
-				vars.watchers_fast = new MemoryWatcherList() {
-					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3CE9329)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3DD36E9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-
-				vars.watchers_slow = new MemoryWatcherList() {
-					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x03E1FE60, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-
-				vars.watchers_igt = new MemoryWatcherList() {
-					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3E1FE1C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
-				};
-			}
+			vars.watchers_comptimer = new MemoryWatcherList() {
+				(vars.comptimerstate = new MemoryWatcher<uint>(new DeepPointer(0x3F7C358, 0x1A4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};		
 
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x8, 0x2B611EC), 3)),
@@ -634,7 +473,9 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
-				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x2F9FD4C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x2F9FD4C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_intelflag = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x126BA80, 0x3A5C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_cinematic = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x126BA80, 0xF425)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
@@ -653,7 +494,6 @@ init //hooking to game to make memorywatchers
 
 
 
-		//Legacy Steam Support - No Winstore
 		case "1.2645.0.0":
 			dllPointer = (0x3B80E98);
 
@@ -669,6 +509,10 @@ init //hooking to game to make memorywatchers
 			vars.watchers_igt = new MemoryWatcherList() {
 				(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3B80FF8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
+
+			vars.watchers_comptimer = new MemoryWatcherList() {
+				(vars.comptimerstate = new MemoryWatcher<uint>(new DeepPointer(0x03B81380, 0x1A4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};			
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x8, 0x2AF8288), 3)),
@@ -753,7 +597,9 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
-				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x2F91A9C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x2F91A9C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_intelflag = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x125D080, 0x3A5C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_cinematic = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x125D080, 0xF425)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
@@ -787,6 +633,10 @@ init //hooking to game to make memorywatchers
 			vars.watchers_igt = new MemoryWatcherList() {
 				(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3A25188)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 			};
+
+			vars.watchers_comptimer = new MemoryWatcherList() {
+				(vars.comptimerstate = new MemoryWatcher<uint>(new DeepPointer(0x03A254B0, 0x1A4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+			};	
 			
 			vars.watchers_h1 = new MemoryWatcherList() {
 				(vars.H1_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x8, 0x2AF111C), 3)),
@@ -871,7 +721,9 @@ init //hooking to game to make memorywatchers
 			};
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
-				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x2E46964)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x2E46964)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_intelflag = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x11B2080, 0x3A54)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.ODST_cinematic = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x11B2080, 0xF405)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
@@ -890,11 +742,10 @@ init //hooking to game to make memorywatchers
 	}
 		
 
-	//version dependant consts
+	//version dependent consts
 	switch (version)
 	{
 		case "1.3073.0.0":
-		case "1.3065.0.0":
 			vars.H1_checklist = new Dictionary<string, uint>{{"a10", 3589325267},{"a30", 3649693672},{"a50", 1186687708},{"b30", 1551598635},{"b40", 1100623455},{"c10", 3494823778},{"c20", 2445460720},{"c40", 3759075146},{"d20", 3442848200},{"d40", 1751474532},};
 		break;
 
@@ -926,7 +777,6 @@ startup //variable init and settings
 
 	//GENERAL VARS INIT - most of these need to be reinit on timer reset
 	vars.varsreset = false;
-	vars.partialreset = false;
 
 	vars.dirtybsps_byte = new List<byte>();
 	vars.dirtybsps_int = new List<uint>();
@@ -970,7 +820,7 @@ startup //variable init and settings
 		{"a30", new byte[] { 1 }}, //halo
 		{"a50", new byte[] { 1, 2, 3 }}, //tnr
 		{"b30", new byte[] { 1 }}, //sc
-		{"b40", new byte[] { 0, 1, 2, 4, 8, 9, 10, 11 }}, //aotcr - could put the others in for fullpath andys?
+		{"b40", new byte[] { 0, 1, 2, 4, 8, 9, 10, 11 }}, //aotcr - put the others in for fullpath andys
 		{"c10", new byte[] { 1, 3, 4, 5 }}, //343
 		{"c20", new byte[] { 1, 2, 3 }}, //library
 		{"c40", new byte[] { 12, 10, 1, 9, 8, 6, 0, 5 }}, //tb
@@ -1091,11 +941,16 @@ startup //variable init and settings
 		"This is so that if you hit a load, then die and revert to before the load, and hit again, you won't get duplicate splits. \n" +
 		"You probably shouldn't turn this on, unless you're say, practicing a specific segment of a level (from one load to another)."
 	);
-	
+
+	settings.Add("compsplits", false, "Use in-game competitive timer splits", "bspmode");
+	settings.SetToolTip("compsplits", "Splits according to the built-in splitting functionality of the MCC in-game competitive timer instead of bsp loads. \n" +
+		"For use with ODST and Halo 4 IL's only"
+	);
+
 	settings.Add("anylevel", false, "Start full-game runs on any level (breaks multi-game runs)");
 	settings.Add("menupause", true, "Pause when in Main Menu", "anylevel");
 	settings.Add("sqsplit", false, "Split when loading a new level", "anylevel");
-	settings.SetToolTip("sqsplit", "Useful for categories like Hunter%. Only works for Halo CE currently");
+	settings.SetToolTip("sqsplit", "Useful for categories like Hunter%. Only for Halo CE");
 
 	settings.Add("deathcounter", false, "Enable Death Counter");
 	settings.SetToolTip("deathcounter", "Will automatically create a layout component for you. Feel free \n" +
@@ -1113,6 +968,9 @@ startup //variable init and settings
 
 	settings.Add("IGTmode", false, "IGT Debug", "debugmode");
 	settings.SetToolTip("IGTmode", "Forces IGT sync regardless of game. Probably shouldn't use this");
+
+	settings.Add("wingmode", false, "Wingmode", "debugmode");
+	settings.SetToolTip("wingmode", "BSP + new intel on NMPD");
 	
 	
 
@@ -1148,6 +1006,13 @@ startup //variable init and settings
 		return textComponent.Settings;
 	}); 
 
+	//Clear dirty bsp function
+	vars.ClearDirtyBsps = (Action)(() => {
+		vars.dirtybsps_byte.Clear();
+		vars.dirtybsps_int.Clear();
+		vars.dirtybsps_long.Clear();
+	});
+
 } 
 
 
@@ -1170,6 +1035,8 @@ update
 			vars.loopcount = 0;
 		}
 		else {++vars.loopcount;}
+
+		if (settings["compsplits"]) {vars.watchers_comptimer.UpdateAll(game);}
 
 		byte test = vars.gameindicator.Current;
 		switch (test)
@@ -1229,11 +1096,11 @@ update
 	else if (timer.CurrentPhase == TimerPhase.NotRunning && vars.varsreset == true)
 	{
 		vars.varsreset = false;
-		vars.partialreset = false;
 
-		vars.dirtybsps_byte = new List<byte>();
-		vars.dirtybsps_int = new List<uint>();
-		vars.dirtybsps_long = new List<ulong>();
+		vars.ClearDirtyBsps();
+		//vars.dirtybsps_byte = new List<byte>();
+		//vars.dirtybsps_int = new List<uint>();
+		//vars.dirtybsps_long = new List<ulong>();
 
 		vars.startedlevel = "000";
 		vars.levelloaded = "000";
@@ -1272,33 +1139,7 @@ update
 	if (timer.CurrentPhase == TimerPhase.Running)
 	{
 		byte test = vars.gameindicator.Current;
-
-		//Clear dirty bsps
-		if (vars.partialreset)
-		{
-			switch (test)
-			{
-				case 0:
-				case 1:
-					vars.dirtybsps_byte.Clear();
-				break;
-
-				case 2:
-				case 3:
-					vars.dirtybsps_long.Clear();
-				break;
-
-				case 5:
-				case 6:
-					vars.dirtybsps_int.Clear();
-				break;
-			}
-
-			if (settings["debugmode"]) {print("Dirty BSPs cleared");}
-			vars.partialreset = false;
-		}
 		
-
 		//If someone is manually starting the timer for some reason
 		if (vars.menuindicator.Current == 7 && (vars.startedlevel == "000" || vars.startedlevel == null))
 		{
@@ -1408,7 +1249,7 @@ update
 
 				}
 
-				//Squiggily mess is squiggily. Don't touch unless really need to.
+				//Squiggily mess is squiggily. Don't touch this unless really need to.
 				if (settings["ILmode"]) //ILs
 				{
 					if (settings["Loopmode"])
@@ -1950,7 +1791,7 @@ split
 	if (vars.forcesplit2) //for sqsplit
 	{
 		vars.forcesplit2 = false;
-		vars.partialreset = true;
+		vars.ClearDirtyBsps();
 		return true;
 	}
 	
@@ -1959,7 +1800,7 @@ split
 		if (vars.forcesplit) //for IGT game splits and RTA end game splits
 		{
 			vars.forcesplit = false;
-			vars.partialreset = true;
+			vars.ClearDirtyBsps();
 			if (settings["Loopmode"]) {vars.loopsplit = false;}
 			return true;
 		}
@@ -1999,7 +1840,7 @@ split
 								vars.watchers_h1xy.UpdateAll(game);
 								if (vars.H1_xpos.Current < -55)
 								{
-									vars.dirtybsps_byte.Clear();
+									vars.ClearDirtyBsps();
 									vars.loading = false;
 								}
 							}
@@ -2012,7 +1853,7 @@ split
 							case "c10":
 								if (vars.H1_tickcounter.Current > 30 && vars.H1_tickcounter.Current < 1060 && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true) //levels with unskippable intro cutscenes
 								{
-									vars.dirtybsps_byte.Clear();
+									vars.ClearDirtyBsps();
 									vars.loading = false;
 								}
 							break;
@@ -2023,7 +1864,7 @@ split
 							case "d40":
 								if (vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true) //levels with skippable intro cutscenes
 								{
-									vars.dirtybsps_byte.Clear();
+									vars.ClearDirtyBsps();
 									vars.loading = false;
 								}
 							break;				
@@ -2128,7 +1969,7 @@ split
 								case "a10":
 									if (vars.H1_bspstate.Current == 6 && vars.H1_cutsceneskip.Old == false && vars.H1_cutsceneskip.Current == true)
 									{
-										vars.dirtybsps_byte.Clear();
+										vars.ClearDirtyBsps();
 										if (settings["Loopmode"]) {vars.loading = true;}
 										return true;
 									}
@@ -2137,7 +1978,7 @@ split
 								case "a30": //so we don't false split on lightbridge cs
 									if (vars.H1_bspstate.Current == 1 && vars.H1_cutsceneskip.Old == false && vars.H1_cutsceneskip.Current == true)
 									{
-										vars.dirtybsps_byte.Clear();
+										vars.ClearDirtyBsps();
 										if (settings["Loopmode"]) {vars.loading = true;}
 										return true;
 									}
@@ -2149,7 +1990,7 @@ split
 										vars.watchers_h1fade.UpdateAll(game);
 										if(vars.H1_fadelength.Current == 15)
 										{
-											vars.dirtybsps_byte.Clear();
+											vars.ClearDirtyBsps();
 											if (settings["Loopmode"]) {vars.loading = true;}
 											return true;
 										}
@@ -2159,7 +2000,7 @@ split
 								case "b30": //no longer false splits on the security button
 									if (vars.H1_bspstate.Current == 0 && vars.H1_cinematic.Current == false && vars.H1_cutsceneskip.Old == false && vars.H1_cutsceneskip.Current == true)
 									{
-										vars.dirtybsps_byte.Clear();
+										vars.ClearDirtyBsps();
 										if (settings["Loopmode"]) {vars.loading = true;}
 										return true;
 									}
@@ -2168,7 +2009,7 @@ split
 								case "b40": 
 									if (vars.H1_bspstate.Current == 2 && vars.H1_cutsceneskip.Old == false && vars.H1_cutsceneskip.Current == true) //mandatory bsp load for any category
 									{
-										vars.dirtybsps_byte.Clear();
+										vars.ClearDirtyBsps();
 										if (settings["Loopmode"]) {vars.loading = true;}
 										return true;
 									}
@@ -2177,7 +2018,7 @@ split
 								case "c10": //so we don't split on reveal cs
 									if (vars.H1_bspstate.Current != 2 && vars.H1_cutsceneskip.Old == false && vars.H1_cutsceneskip.Current == true)
 									{
-										vars.dirtybsps_byte.Clear();
+										vars.ClearDirtyBsps();
 										if (settings["Loopmode"]) {vars.loading = true;}
 										return true;
 									}
@@ -2186,7 +2027,7 @@ split
 								case "c20":
 									if (vars.H1_cinematic.Current == true && vars.H1_cinematic.Old == false && vars.H1_tickcounter.Current > 30)
 									{
-										vars.dirtybsps_byte.Clear();
+										vars.ClearDirtyBsps();
 										if (settings["Loopmode"]) {vars.loading = true;}
 										return true;
 									}
@@ -2198,7 +2039,7 @@ split
 										vars.watchers_h1fade.UpdateAll(game); 
 										if (vars.H1_fadebyte.Current != 1)	//so we dont false split on reverting to intro cutscene
 										{
-											vars.dirtybsps_byte.Clear();
+											vars.ClearDirtyBsps();
 											if (settings["Loopmode"]) {vars.loading = true;}
 											return true;
 										}
@@ -2211,12 +2052,12 @@ split
 									{
 										if (vars.H1_fadelength.Current == 30 && vars.H1_cinematic.Old == false && vars.H1_cinematic.Current == true)
 										{
-											vars.dirtybsps_byte.Clear();
+											vars.ClearDirtyBsps();
 											if (settings["Loopmode"]) {vars.loading = true;}
 											return true;
 										} else if (vars.H1_fadelength.Current == 60 && vars.H1_tickcounter.Current >= (vars.H1_fadetick.Current + 56) && vars.H1_tickcounter.Old < (vars.H1_fadetick.Current + 56)) //for the dumbass who does cutscene overlap. Nice timeloss nerd :P
 										{
-											vars.dirtybsps_byte.Clear();
+											vars.ClearDirtyBsps();
 											if (settings["Loopmode"]) {vars.loading = true;}
 											return true;
 										}
@@ -2229,7 +2070,7 @@ split
 										vars.watchers_h1death.UpdateAll(game);
 										if (!vars.H1_deathflag.Current)
 										{
-											vars.dirtybsps_byte.Clear();
+											vars.ClearDirtyBsps();
 											if (settings["Loopmode"]) {vars.loading = true;}
 											return true;
 										}
@@ -2245,7 +2086,7 @@ split
 						{
 							if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44) //split on loading screen
 							{
-								vars.dirtybsps_byte.Clear();
+								vars.ClearDirtyBsps();
 								return true;
 							}
 						}
@@ -2257,171 +2098,171 @@ split
 				//Halo 2
 				case 1:
 
-				if (settings["deathcounter"])
-				{
-					if (vars.H2_deathflag.Current && !vars.H2_deathflag.Old)
+					if (settings["deathcounter"])
 					{
-						print ("adding death");
-						vars.DeathCounter += 1;
-						vars.UpdateDeathCounter();
+						if (vars.H2_deathflag.Current && !vars.H2_deathflag.Old)
+						{
+							print ("adding death");
+							vars.DeathCounter += 1;
+							vars.UpdateDeathCounter();
+						}
+						
 					}
+
+					checklevel = vars.H2_levelname.Current;
 					
-				}
-
-				checklevel = vars.H2_levelname.Current;
-				
-				if (settings["Loopmode"] && vars.H2_levelname.Current == vars.startedlevel)
-				{
-					if (vars.H2_IGT.Current > 10 && vars.H2_IGT.Current < 30 && vars.loopsplit == false)
+					if (settings["Loopmode"] && vars.H2_levelname.Current == vars.startedlevel)
 					{
-						vars.dirtybsps_byte.Clear();
-						vars.loopsplit = true;
+						if (vars.H2_IGT.Current > 10 && vars.H2_IGT.Current < 30 && vars.loopsplit == false)
+						{
+							vars.ClearDirtyBsps();
+							vars.loopsplit = true;
+						}
 					}
-				}
-				
 
-				if (settings["bspmode"])
-				{
-					if (settings["bsp_cache"])
-					{
-						return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current));
-					}
-					
-					switch (checklevel)
-					{
-						case "01b":
-							if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H2_bspstate.Current)))
-							{
-								if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps_byte.Contains(2)))
-								{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
-								vars.dirtybsps_byte.Add(vars.H2_bspstate.Current);
-								return true;
-							}
-						break;
-						
-						case "03a":
-						case "03b":
-						case "05a":
-						case "05b":
-						case "06a":
-						case "06b":
-						case "07a":
-						case "07b":
-							if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H2_bspstate.Current)))
-							{
-								vars.dirtybsps_byte.Add(vars.H2_bspstate.Current);
-								return true;
-							}
-						break;
-						
-						case "04a":
-							if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H2_bspstate.Current)))
-							{
-								if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps_byte.Contains(3)))
-								{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
-								vars.dirtybsps_byte.Add(vars.H2_bspstate.Current);
-								return true;
-							}
-						break;
-						
-						case "04b":
-							if (vars.H2_bspstate.Current == 3 && !(vars.dirtybsps_byte.Contains(3)))
-							{
-								print ("e");
-								vars.dirtybsps_byte.Add(3);	//prevent splitting on starting bsp
-							}
-							if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H2_bspstate.Current)))
-							{
-								print ("a");
-								if (vars.H2_bspstate.Current == 0 && (vars.dirtybsps_byte.Contains(3)))
-								{
-									print ("b");
-								return true;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
-								
-								vars.dirtybsps_byte.Add(vars.H2_bspstate.Current);
-								return true;
-							}
-						break;
-						
-						case "08a":
-							if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H2_bspstate.Current)))
-							{
-								if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps_byte.Contains(1)))
-								{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
-								vars.dirtybsps_byte.Add(vars.H2_bspstate.Current);
-								return true;
-							}
-						break;
 
-						case "08b":
-							//TGJ -- starts 0 and in cs, then goes to 1, then 0, then 1, then 0, then 3 (skipping 2 cos it's skippable)
-							//so I have jank logic cos it does so much backtracking and backbacktracking
-							if (vars.H2_bspstate.Current != vars.H2_bspstate.Old)
-							{
-								vars.watchers_h2xy.UpdateAll(game);
-								//print ("x: " + vars.H2_xpos.Current);
-								//print ("y: " + vars.H2_ypos.Current);
-								
-								byte checkbspstate = vars.H2_bspstate.Current;
-								switch (checkbspstate)
+					if (settings["bspmode"])
+					{
+						if (settings["bsp_cache"])
+						{
+							return (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current));
+						}
+						
+						switch (checklevel)
+						{
+							case "01b":
+								if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H2_bspstate.Current)))
 								{
-									case 1:
-									if (!(vars.dirtybsps_byte.Contains(1)) && vars.H2_xpos.Current > -2 && vars.H2_xpos.Current < 5 && vars.H2_ypos.Current > -35 && vars.H2_ypos.Current < -15)
-									{
-										vars.dirtybsps_byte.Add(1);
-										//print ("first");
-										return true;
-									} else if (!(vars.dirtybsps_byte.Contains(21)) && (vars.dirtybsps_byte.Contains(10))  && vars.H2_xpos.Current > 15 && vars.H2_xpos.Current < 25 && vars.H2_ypos.Current > 15 && vars.H2_ypos.Current < 30)
-									{
-										vars.dirtybsps_byte.Add(21);
-										//print ("third");
-										return true;
-									}
-									
-									break;
-									
-									case 0:
-									if (!(vars.dirtybsps_byte.Contains(10)) && vars.H2_xpos.Current > -20 && vars.H2_xpos.Current < -10 && vars.H2_ypos.Current > 20 && vars.H2_ypos.Current < 30)
-									{
-										vars.dirtybsps_byte.Add(10);
-										//print ("second");
-										return true;
-									} else if (!(vars.dirtybsps_byte.Contains(20)) && (vars.dirtybsps_byte.Contains(21))  && vars.H2_xpos.Current > 45 && vars.H2_xpos.Current < 55 && vars.H2_ypos.Current > -5 && vars.H2_ypos.Current < 10)
-									{
-										//print ("fourth");
-										vars.dirtybsps_byte.Add(20);
-										return true;
-									}
-									break;
-									
-									case 3:
-									if (!(vars.dirtybsps_byte.Contains(3)))
-									{
-										vars.dirtybsps_byte.Add(3);
-										return true;
-									}
-									break;
-									
-									default:
-									break;
+									if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps_byte.Contains(2)))
+									{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
+									vars.dirtybsps_byte.Add(vars.H2_bspstate.Current);
+									return true;
 								}
-							} 
-						break;
-					
-						default:
-						break;
+							break;
+							
+							case "03a":
+							case "03b":
+							case "05a":
+							case "05b":
+							case "06a":
+							case "06b":
+							case "07a":
+							case "07b":
+								if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H2_bspstate.Current)))
+								{
+									vars.dirtybsps_byte.Add(vars.H2_bspstate.Current);
+									return true;
+								}
+							break;
+							
+							case "04a":
+								if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H2_bspstate.Current)))
+								{
+									if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps_byte.Contains(3)))
+									{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
+									vars.dirtybsps_byte.Add(vars.H2_bspstate.Current);
+									return true;
+								}
+							break;
+							
+							case "04b":
+								if (vars.H2_bspstate.Current == 3 && !(vars.dirtybsps_byte.Contains(3)))
+								{
+									print ("e");
+									vars.dirtybsps_byte.Add(3);	//prevent splitting on starting bsp
+								}
+								if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H2_bspstate.Current)))
+								{
+									print ("a");
+									if (vars.H2_bspstate.Current == 0 && (vars.dirtybsps_byte.Contains(3)))
+									{
+										print ("b");
+									return true;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
+									
+									vars.dirtybsps_byte.Add(vars.H2_bspstate.Current);
+									return true;
+								}
+							break;
+							
+							case "08a":
+								if (vars.H2_bspstate.Current != vars.H2_bspstate.Old && Array.Exists((byte[]) vars.H2_levellist[checklevel], x => x == vars.H2_bspstate.Current) && !(vars.dirtybsps_byte.Contains(vars.H2_bspstate.Current)))
+								{
+									if (vars.H2_bspstate.Current == 0 && !(vars.dirtybsps_byte.Contains(1)))
+									{return false;} // hacky workaround for the fact that the level starts on bsp 0 and returns there later
+									vars.dirtybsps_byte.Add(vars.H2_bspstate.Current);
+									return true;
+								}
+							break;
+
+							case "08b":
+								//TGJ -- starts 0 and in cs, then goes to 1, then 0, then 1, then 0, then 3 (skipping 2 cos it's skippable)
+								//so I have jank logic cos it does so much backtracking and backbacktracking
+								if (vars.H2_bspstate.Current != vars.H2_bspstate.Old)
+								{
+									vars.watchers_h2xy.UpdateAll(game);
+									//print ("x: " + vars.H2_xpos.Current);
+									//print ("y: " + vars.H2_ypos.Current);
+									
+									byte checkbspstate = vars.H2_bspstate.Current;
+									switch (checkbspstate)
+									{
+										case 1:
+										if (!(vars.dirtybsps_byte.Contains(1)) && vars.H2_xpos.Current > -2 && vars.H2_xpos.Current < 5 && vars.H2_ypos.Current > -35 && vars.H2_ypos.Current < -15)
+										{
+											vars.dirtybsps_byte.Add(1);
+											//print ("first");
+											return true;
+										} else if (!(vars.dirtybsps_byte.Contains(21)) && (vars.dirtybsps_byte.Contains(10))  && vars.H2_xpos.Current > 15 && vars.H2_xpos.Current < 25 && vars.H2_ypos.Current > 15 && vars.H2_ypos.Current < 30)
+										{
+											vars.dirtybsps_byte.Add(21);
+											//print ("third");
+											return true;
+										}
+										
+										break;
+										
+										case 0:
+										if (!(vars.dirtybsps_byte.Contains(10)) && vars.H2_xpos.Current > -20 && vars.H2_xpos.Current < -10 && vars.H2_ypos.Current > 20 && vars.H2_ypos.Current < 30)
+										{
+											vars.dirtybsps_byte.Add(10);
+											//print ("second");
+											return true;
+										} else if (!(vars.dirtybsps_byte.Contains(20)) && (vars.dirtybsps_byte.Contains(21))  && vars.H2_xpos.Current > 45 && vars.H2_xpos.Current < 55 && vars.H2_ypos.Current > -5 && vars.H2_ypos.Current < 10)
+										{
+											//print ("fourth");
+											vars.dirtybsps_byte.Add(20);
+											return true;
+										}
+										break;
+										
+										case 3:
+										if (!(vars.dirtybsps_byte.Contains(3)))
+										{
+											vars.dirtybsps_byte.Add(3);
+											return true;
+										}
+										break;
+										
+										default:
+										break;
+									}
+								} 
+							break;
+						
+							default:
+							break;
+						}
 					}
-				}
 
 
-				if (!(settings["ILmode"] || settings["IGTmode"])) //Split on loading screen
-				{
-					if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && checklevel != "00a") 
+					if (!(settings["ILmode"] || settings["IGTmode"])) //Split on loading screen
 					{
-						vars.dirtybsps_byte.Clear();
-						return true;
+						if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44 && checklevel != "00a") 
+						{
+							vars.ClearDirtyBsps();
+							return true;
+						}
 					}
-				}
 				break;
 				
 
@@ -2429,51 +2270,50 @@ split
 				//Halo 3
 				case 2:
 
-				if (settings["deathcounter"])
-				{
-					if (vars.H3_deathflag.Current && !vars.H3_deathflag.Old)
+					if (settings["deathcounter"])
 					{
-						print ("adding death");
-						vars.DeathCounter += 1;
-						vars.UpdateDeathCounter();
-					}
-				}
-				
-				
-				checklevel = vars.H3_levelname.Current;
-				
-				if (settings["Loopmode"] && vars.H3_levelname.Current == vars.startedlevel && vars.loopsplit == false)
-				{
-					if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
-					{
-						vars.loopsplit = true;
-						vars.dirtybsps_long.Clear();
-					}
-				}
-					
-				
-				if (settings["bspmode"])
-				{
-					if (settings["bsp_cache"])
-					{
-						return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.H3_levellist[checklevel], x => x == vars.H3_bspstate.Current));		
+						if (vars.H3_deathflag.Current && !vars.H3_deathflag.Old)
+						{
+							print ("adding death");
+							vars.DeathCounter += 1;
+							vars.UpdateDeathCounter();
+						}
 					}
 					
-					if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.H3_levellist[checklevel], x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+					
+					checklevel = vars.H3_levelname.Current;
+					
+					if (settings["Loopmode"] && vars.H3_levelname.Current == vars.startedlevel && vars.loopsplit == false)
 					{
-						vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
-						return true;
+						if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
+						{
+							vars.loopsplit = true;
+							vars.ClearDirtyBsps();
+						}
 					}
-				} 
-				
-				if (!settings["ILmode"])	//Split on loading screen
-				{
-					if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44)
+						
+					if (settings["bspmode"])
 					{
-						vars.dirtybsps_long.Clear();
-						return true;
-					}
-				} 
+						if (settings["bsp_cache"])
+						{
+							return (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.H3_levellist[checklevel], x => x == vars.H3_bspstate.Current));		
+						}
+						
+						if (vars.H3_bspstate.Current != vars.H3_bspstate.Old && Array.Exists((ulong[]) vars.H3_levellist[checklevel], x => x == vars.H3_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H3_bspstate.Current)))
+						{
+							vars.dirtybsps_long.Add(vars.H3_bspstate.Current);
+							return true;
+						}
+					} 
+					
+					if (!settings["ILmode"])	//Split on loading screen
+					{
+						if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44)
+						{
+							vars.ClearDirtyBsps();
+							return true;
+						}
+					} 
 				break;
 
 
@@ -2481,75 +2321,136 @@ split
 				//Halo 4
 				case 3:
 
-				//Death counter code goes here if we ever bother to add it
+					//Death counter code goes here if we ever bother to add it
 
-				checklevel = vars.H4_levelname.Current;
-				
-				if (settings["Loopmode"] && vars.H4_levelname.Current == vars.startedlevel)
-				{
-					if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5 && vars.loopsplit == false)
-					{
-						vars.loopsplit = true;
-						vars.dirtybsps_long.Clear();
-					}
-				}
-				
-				
-				if (settings["bspmode"])
-				{
-					if (settings["bsp_cache"])
-					{
-						return (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.H4_levellist[checklevel], x => x == vars.H4_bspstate.Current));
-					}
+					checklevel = vars.H4_levelname.Current;
 					
-					if (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.H4_levellist[checklevel], x => x == vars.H4_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H4_bspstate.Current)))
+					if (settings["Loopmode"] && vars.H4_levelname.Current == vars.startedlevel)
 					{
-						vars.dirtybsps_long.Add(vars.H4_bspstate.Current);
-						return true;
+						if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5 && vars.loopsplit == false)
+						{
+							vars.loopsplit = true;
+							vars.ClearDirtyBsps();
+						}
 					}
-				} 
+
+					if (settings["compsplits"])
+					{
+						if (vars.stateindicator.Current == 255 && vars.comptimerstate.Changed && vars.comptimerstate.Current != 0 && vars.IGT_float.Current > 2.0) {return true;}
+					}	
+					else if (settings["bspmode"])
+					{
+						if (settings["bsp_cache"])
+						{
+							return (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.H4_levellist[checklevel], x => x == vars.H4_bspstate.Current));
+						}
+						
+						if (vars.H4_bspstate.Current != vars.H4_bspstate.Old && !Array.Exists((ulong[]) vars.H4_levellist[checklevel], x => x == vars.H4_bspstate.Current) && !(vars.dirtybsps_long.Contains(vars.H4_bspstate.Current)))
+						{
+							vars.dirtybsps_long.Add(vars.H4_bspstate.Current);
+							return true;
+						}
+					} 
 				break;
 				
 
 
 				case 5: //ODST
 
-				//Death Counter
-				if (settings["deathcounter"])
-				{
-					if (vars.ODST_deathflag.Current && !vars.ODST_deathflag.Old)
+					//Death Counter
+					if (settings["deathcounter"])
 					{
-						print ("adding death");
-						vars.DeathCounter += 1;
-						vars.UpdateDeathCounter();
-					}
-				}
-
-				checklevel = vars.ODST_levelname.Current;
-
-				if (settings["Loopmode"] && checklevel == vars.startedlevel && vars.loopsplit == false)
-				{
-					if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
-					{
-						vars.loopsplit = true;
-						vars.dirtybsps_int.Clear();
-					}
-				}
-				
-				
-				if (settings["bspmode"])
-				{
-					if (settings["bsp_cache"])
-					{
-						return (vars.IGT_float.Current > 0.5 && vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((uint[]) vars.ODST_levellist[checklevel], x => x == vars.ODST_bspstate.Current));	
+						if (vars.ODST_deathflag.Current && !vars.ODST_deathflag.Old)
+						{
+							print ("adding death");
+							vars.DeathCounter += 1;
+							vars.UpdateDeathCounter();
+						}
 					}
 
-					if (vars.IGT_float.Current > 0.5 && vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((uint[]) vars.ODST_levellist[checklevel], x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_int.Contains(vars.ODST_bspstate.Current)))
+					checklevel = vars.ODST_levelname.Current;
+
+					if (settings["Loopmode"] && checklevel == vars.startedlevel && vars.loopsplit == false)
 					{
-						vars.dirtybsps_int.Add(vars.ODST_bspstate.Current);
-						return true;
+						if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
+						{
+							vars.loopsplit = true;
+							vars.ClearDirtyBsps();
+						}
 					}
-				} 
+					
+
+					if (settings["compsplits"])
+					{
+						switch (checklevel)
+						{
+							case "h100":
+							case "sc10":
+							case "sc11":
+							case "sc13":
+							case "sc12":
+							case "sc15":
+								if (vars.stateindicator.Current == 255 && vars.comptimerstate.Changed && vars.comptimerstate.Current != 0 && vars.IGT_float.Current > 2.0) {return true;}
+							break;
+
+							case "sc14":
+								if (vars.stateindicator.Current == 255 && vars.comptimerstate.Changed && vars.comptimerstate.Current != 0 && vars.IGT_float.Current > 2.0) {return true;}
+								if (vars.comptimerstate.Current == 1143080700 && vars.ODST_bspstate.Current == 12 && vars.ODST_intelflag.Current == 1 && vars.ODST_intelflag.Old == 0 && !(vars.dirtybsps_int.Contains(vars.ODST_bspstate.Current)))
+								{
+									vars.dirtybsps_int.Add(vars.ODST_bspstate.Current);
+									return true;
+								}
+							break;
+
+							case "l200":
+								if (vars.stateindicator.Current == 255 && vars.comptimerstate.Changed && vars.comptimerstate.Current != 0 && vars.IGT_float.Current > 2.0) {return true;}
+
+								if (vars.ODST_bspstate.Current == 48 && !(vars.dirtybsps_int.Contains(vars.ODST_bspstate.Current)))
+								{
+									if (vars.comptimerstate.Current == 770115030 && vars.ODST_cinematic.Current == 1 && vars.ODST_cinematic.Old == 0)
+									{
+										vars.dirtybsps_int.Add(vars.ODST_bspstate.Current);
+										return true;
+									}
+								}
+								else if (vars.ODST_bspstate.Current == 416 && !(vars.dirtybsps_int.Contains(vars.ODST_bspstate.Current)))
+								{
+									if (vars.comptimerstate.Current == 578880768 && vars.ODST_cinematic.Current == 1 && vars.ODST_cinematic.Old == 0)
+									{
+										vars.dirtybsps_int.Add(vars.ODST_bspstate.Current);
+										return true;
+									}
+								}
+							break;
+
+							case "l300":
+								if (vars.stateindicator.Current == 255 && vars.comptimerstate.Changed && vars.comptimerstate.Current != 876414390 && vars.comptimerstate.Current != 0 && vars.IGT_float.Current > 2.0) {return true;}
+							break;
+						}
+					}
+		
+					else if (settings["bspmode"])
+					{
+						if (settings["bsp_cache"])
+						{
+							return (vars.IGT_float.Current > 0.5 && vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((uint[]) vars.ODST_levellist[checklevel], x => x == vars.ODST_bspstate.Current));	
+						}
+
+						if (vars.IGT_float.Current > 0.5 && vars.ODST_bspstate.Current != vars.ODST_bspstate.Old && Array.Exists((uint[]) vars.ODST_levellist[checklevel], x => x == vars.ODST_bspstate.Current) && !(vars.dirtybsps_int.Contains(vars.ODST_bspstate.Current)))
+						{
+							vars.dirtybsps_int.Add(vars.ODST_bspstate.Current);
+							return true;
+						}
+
+						if (settings["wingmode"] && checklevel == "sc14")
+						{
+							if (vars.comptimerstate.Current == 1143080700 && vars.ODST_bspstate.Current == 12 && vars.ODST_intelflag.Current == 1 && vars.ODST_intelflag.Old == 0 && !(vars.dirtybsps_int.Contains(1)))
+							{
+								vars.dirtybsps_int.Add(1);
+								return true;
+							}
+						}
+					} 
 				break;
 				
 				
@@ -2557,41 +2458,41 @@ split
 				//Reach
 				case 6:
 
-				//Death counter check
-				if (settings["deathcounter"])
-				{
-					if (vars.HR_deathflag.Current && !vars.HR_deathflag.Old)
+					//Death counter check
+					if (settings["deathcounter"])
 					{
-						print ("adding death");
-						vars.DeathCounter += 1;
-						vars.UpdateDeathCounter();
+						if (vars.HR_deathflag.Current && !vars.HR_deathflag.Old)
+						{
+							print ("adding death");
+							vars.DeathCounter += 1;
+							vars.UpdateDeathCounter();
+						}
 					}
-				}
 
-				checklevel = vars.HR_levelname.Current;
-				
-				if (settings["Loopmode"] && vars.HR_levelname.Current == vars.startedlevel)
-				{
-					if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5 && vars.loopsplit == false)
-					{
-						vars.loopsplit = true;
-						vars.dirtybsps_int.Clear();
-					}
-				}
-				
-				if (settings["bspmode"])
-				{
-					if (settings["bsp_cache"])
-					{
-						return (vars.HR_bspstate.Current != vars.HR_bspstate.Old && Array.Exists((uint[]) vars.HR_levellist[checklevel], x => x == vars.HR_bspstate.Current));
-					}
+					checklevel = vars.HR_levelname.Current;
 					
-					if (vars.HR_bspstate.Current != vars.HR_bspstate.Old && Array.Exists((uint[]) vars.HR_levellist[checklevel], x => x == vars.HR_bspstate.Current) && !(vars.dirtybsps_int.Contains(vars.HR_bspstate.Current)))
+					if (settings["Loopmode"] && vars.HR_levelname.Current == vars.startedlevel)
 					{
-						vars.dirtybsps_int.Add(vars.HR_bspstate.Current);
-						return true;
+						if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5 && vars.loopsplit == false)
+						{
+							vars.loopsplit = true;
+							vars.ClearDirtyBsps();
+						}
 					}
-				}
+
+					if (settings["bspmode"])
+					{
+						if (settings["bsp_cache"])
+						{
+							return (vars.HR_bspstate.Current != vars.HR_bspstate.Old && Array.Exists((uint[]) vars.HR_levellist[checklevel], x => x == vars.HR_bspstate.Current));
+						}
+						
+						if (vars.HR_bspstate.Current != vars.HR_bspstate.Old && Array.Exists((uint[]) vars.HR_levellist[checklevel], x => x == vars.HR_bspstate.Current) && !(vars.dirtybsps_int.Contains(vars.HR_bspstate.Current)))
+						{
+							vars.dirtybsps_int.Add(vars.HR_bspstate.Current);
+							return true;
+						}
+					}
 				break;
 			}
 		}
