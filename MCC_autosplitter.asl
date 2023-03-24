@@ -225,8 +225,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
 				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x33FD0DC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.ODST_intelflag = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x130D3C0, 0x3BC4)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.ODST_cinematic = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x130D3C0, 0xF8A5)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
@@ -350,8 +348,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
 				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x3417D4C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.ODST_intelflag = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x12E6300, 0x3A5C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.ODST_cinematic = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x12E6300, 0xF425)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
@@ -474,8 +470,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
 				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x2F9FD4C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.ODST_intelflag = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x126BA80, 0x3A5C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.ODST_cinematic = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x126BA80, 0xF425)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
@@ -598,8 +592,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
 				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x2F91A9C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.ODST_intelflag = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x125D080, 0x3A5C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.ODST_cinematic = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x125D080, 0xF425)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
@@ -722,8 +714,6 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_odstbsp = new MemoryWatcherList() {
 				(vars.ODST_bspstate = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0xA8, 0x2E46964)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.ODST_intelflag = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x11B2080, 0x3A54)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-				(vars.ODST_cinematic = new MemoryWatcher<byte>(new DeepPointer(dllPointer, 0xA8, 0x11B2080, 0xF405)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_odstdeath = new MemoryWatcherList(){
@@ -968,9 +958,6 @@ startup //variable init and settings
 
 	settings.Add("IGTmode", false, "IGT Debug", "debugmode");
 	settings.SetToolTip("IGTmode", "Forces IGT sync regardless of game. Probably shouldn't use this");
-
-	settings.Add("wingmode", false, "Wingmode", "debugmode");
-	settings.SetToolTip("wingmode", "BSP + new intel on NMPD");
 	
 	
 
@@ -2055,7 +2042,8 @@ split
 											vars.ClearDirtyBsps();
 											if (settings["Loopmode"]) {vars.loading = true;}
 											return true;
-										} else if (vars.H1_fadelength.Current == 60 && vars.H1_tickcounter.Current >= (vars.H1_fadetick.Current + 56) && vars.H1_tickcounter.Old < (vars.H1_fadetick.Current + 56)) //for the dumbass who does cutscene overlap. Nice timeloss nerd :P
+										}
+										else if (vars.H1_fadelength.Current == 60 && vars.H1_tickcounter.Current >= (vars.H1_fadetick.Current + 56) && vars.H1_tickcounter.Old < (vars.H1_fadetick.Current + 56)) //for the dumbass who does cutscene overlap. Nice timeloss nerd :P
 										{
 											vars.ClearDirtyBsps();
 											if (settings["Loopmode"]) {vars.loading = true;}
@@ -2382,53 +2370,15 @@ split
 
 					if (settings["compsplits"])
 					{
-						switch (checklevel)
+						if (checklevel == "l300")
 						{
-							case "h100":
-							case "sc10":
-							case "sc11":
-							case "sc13":
-							case "sc12":
-							case "sc15":
-								if (vars.stateindicator.Current == 255 && vars.comptimerstate.Changed && vars.comptimerstate.Current != 0 && vars.IGT_float.Current > 2.0) {return true;}
-							break;
-
-							case "sc14":
-								if (vars.stateindicator.Current == 255 && vars.comptimerstate.Changed && vars.comptimerstate.Current != 0 && vars.IGT_float.Current > 2.0) {return true;}
-								if (vars.comptimerstate.Current == 1143080700 && vars.ODST_bspstate.Current == 12 && vars.ODST_intelflag.Current == 1 && vars.ODST_intelflag.Old == 0 && !(vars.dirtybsps_int.Contains(vars.ODST_bspstate.Current)))
-								{
-									vars.dirtybsps_int.Add(vars.ODST_bspstate.Current);
-									return true;
-								}
-							break;
-
-							case "l200":
-								if (vars.stateindicator.Current == 255 && vars.comptimerstate.Changed && vars.comptimerstate.Current != 0 && vars.IGT_float.Current > 2.0) {return true;}
-
-								if (vars.ODST_bspstate.Current == 48 && !(vars.dirtybsps_int.Contains(vars.ODST_bspstate.Current)))
-								{
-									if (vars.comptimerstate.Current == 770115030 && vars.ODST_cinematic.Current == 1 && vars.ODST_cinematic.Old == 0)
-									{
-										vars.dirtybsps_int.Add(vars.ODST_bspstate.Current);
-										return true;
-									}
-								}
-								else if (vars.ODST_bspstate.Current == 416 && !(vars.dirtybsps_int.Contains(vars.ODST_bspstate.Current)))
-								{
-									if (vars.comptimerstate.Current == 578880768 && vars.ODST_cinematic.Current == 1 && vars.ODST_cinematic.Old == 0)
-									{
-										vars.dirtybsps_int.Add(vars.ODST_bspstate.Current);
-										return true;
-									}
-								}
-							break;
-
-							case "l300":
-								if (vars.stateindicator.Current == 255 && vars.comptimerstate.Changed && vars.comptimerstate.Current != 876414390 && vars.comptimerstate.Current != 0 && vars.IGT_float.Current > 2.0) {return true;}
-							break;
+							if (vars.stateindicator.Current == 255 && vars.comptimerstate.Changed && vars.comptimerstate.Current != 876414390 && vars.comptimerstate.Current != 0 && vars.IGT_float.Current > 2.0) {return true;}
+						}
+						else
+						{
+							if (vars.stateindicator.Current == 255 && vars.comptimerstate.Changed && vars.comptimerstate.Current != 0 && vars.IGT_float.Current > 2.0) {return true;}
 						}
 					}
-		
 					else if (settings["bspmode"])
 					{
 						if (settings["bsp_cache"])
@@ -2440,15 +2390,6 @@ split
 						{
 							vars.dirtybsps_int.Add(vars.ODST_bspstate.Current);
 							return true;
-						}
-
-						if (settings["wingmode"] && checklevel == "sc14")
-						{
-							if (vars.comptimerstate.Current == 1143080700 && vars.ODST_bspstate.Current == 12 && vars.ODST_intelflag.Current == 1 && vars.ODST_intelflag.Old == 0 && !(vars.dirtybsps_int.Contains(1)))
-							{
-								vars.dirtybsps_int.Add(1);
-								return true;
-							}
 						}
 					} 
 				break;
