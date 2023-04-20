@@ -195,7 +195,8 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h3 = new MemoryWatcherList() {
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x48, 0x1E92AB8), 3)), 
-				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1F2084C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1F2084C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H3_tickcounter = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x2B34F2C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_h3bsp = new MemoryWatcherList() {
@@ -318,7 +319,8 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h3 = new MemoryWatcherList() {
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x48, 0x1EABB78), 3)), 
-				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1DC6200)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1F3DD5C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H3_tickcounter = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x2B4178C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_h3bsp = new MemoryWatcherList() {
@@ -440,7 +442,8 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h3 = new MemoryWatcherList() {
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x48, 0x1E092E8), 3)), 
-				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1EF61E8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1E9B4BC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H3_tickcounter = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x29E194C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_h3bsp = new MemoryWatcherList() {
@@ -562,7 +565,8 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h3 = new MemoryWatcherList() {
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x48, 0x1e0d358), 3)), 
-				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1F34A68)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1EDAA9C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H3_tickcounter = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x2A1F34C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_h3bsp = new MemoryWatcherList() {
@@ -684,7 +688,8 @@ init //hooking to game to make memorywatchers
 			
 			vars.watchers_h3 = new MemoryWatcherList() {
 				(vars.H3_levelname = new StringWatcher(new DeepPointer(dllPointer, 0x48, 0x1D2C460), 3)), 
-				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1E36118)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}) 
+				(vars.H3_theatertime = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x1DDC3BC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+				(vars.H3_tickcounter = new MemoryWatcher<uint>(new DeepPointer(dllPointer, 0x48, 0x2961E0C)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
 			};
 			
 			vars.watchers_h3bsp = new MemoryWatcherList() {
@@ -765,6 +770,8 @@ startup //variable init and settings
 	vars.brokenupdateshowed = false;
 	vars.loopcount = 0;
 
+	vars.h3resetflag = false;
+
 	//GENERAL VARS INIT - most of these need to be reinit on timer reset
 	vars.varsreset = false;
 
@@ -793,6 +800,7 @@ startup //variable init and settings
 	vars.ingametime = 0;
 	vars.leveltime = 0;
 	vars.pgcrexists = false;
+	vars.forcesync = false;
 
 	vars.isvalid = false;
 	vars.ctime = TimeSpan.Zero;
@@ -1012,7 +1020,8 @@ update
 	if (!(vars.menuindicator.Current == 7))
 	{
 		vars.watchers_slow.UpdateAll(game);
-		if (vars.pgcrexists == true) {vars.pgcrexists = false;} //sanity check. Should never come up normally
+		if (vars.h3resetflag) {vars.h3resetflag = false;}
+		if (vars.pgcrexists) {vars.pgcrexists = false;} //sanity check. Should never come up normally
 	}
 	else if (vars.menuindicator.Current == 7)
 	{
@@ -1085,9 +1094,6 @@ update
 		vars.varsreset = false;
 
 		vars.ClearDirtyBsps();
-		//vars.dirtybsps_byte = new List<byte>();
-		//vars.dirtybsps_int = new List<uint>();
-		//vars.dirtybsps_long = new List<ulong>();
 
 		vars.startedlevel = "000";
 		vars.levelloaded = "000";
@@ -1110,6 +1116,7 @@ update
 		vars.ingametime = 0;
 		vars.leveltime = 0;
 		vars.pgcrexists = false;
+		vars.forcesync = false;
 
 		vars.isvalid = false;
 		vars.ctime = TimeSpan.Zero;
@@ -1117,6 +1124,12 @@ update
 
 		vars.DeathCounter = 0;
 		if (settings["deathcounter"]) {vars.UpdateDeathCounter();}
+
+		if (vars.gameindicator.Current == 2)
+		{
+			if (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current >= 15) {vars.h3resetflag = true;}
+		}
+
 
 		print ("Autosplitter vars reinitalized!");
 	}
@@ -1170,7 +1183,7 @@ update
 		if (!vars.multigamepause)
 		{
 			//IGT function
-			if (vars.menuindicator.Current == 7 && (settings["IGTmode"] || !(test == 0 || (test == 1 && (!settings["ILmode"] || vars.H2_levelname.Current == "01a")))))
+			if (vars.menuindicator.Current == 7 && (settings["IGTmode"] || !(test == 0 || (test == 1 && (!settings["ILmode"] || vars.H2_levelname.Current == "01a")) || vars.h3resetflag)))
 			{
 				//reset gametime return of current iteration
 				vars.gametime = TimeSpan.Zero;
@@ -1463,6 +1476,25 @@ update
 					} 
 				}
 			}
+			else if (vars.gameindicator.Current == 2 && !(settings["ILmode"] || settings["IGTmode"]) && vars.h3resetflag)
+			{
+				vars.watchers_comptimer.UpdateAll(game);
+				if ((vars.stateindicator.Current == 57 && vars.stateindicator.Old != 57) || (vars.stateindicator.Current == 255 && vars.comptimerstate.Current == 0 && vars.comptimerstate.Old > 0)) {vars.loading = true;}
+
+				if (vars.stateindicator.Current == 44 && vars.stateindicator.Old != 44)	//Convert RTA to ticks and truncate
+				{
+					TimeSpan tempspan = TimeSpan.Zero;
+					uint tickcount = 0;
+
+					if (timer.CurrentTime.GameTime.HasValue) {tempspan = (TimeSpan)timer.CurrentTime.GameTime;} //Get current gametime
+					vars.ingametime = (uint)(60 * ((tempspan.Days * 60 * 60 * 24) + (tempspan.Hours * 60 * 60) + (tempspan.Minutes * 60) + (tempspan.Seconds))); //get in-game time in ticks, truncating the ms component
+					
+					vars.gametime = TimeSpan.FromMilliseconds((1000.0 / 60) * (vars.ingametime));
+					vars.h3resetflag = false;
+					vars.leveltime = 0;	//This shouldn't be necessary but funny things have been happening
+					vars.loading = false;
+				}
+			}
 
 			if (!settings["ILmode"])
 			{
@@ -1732,6 +1764,14 @@ start 	//starts timer
 					if (vars.stateindicator.Current != 44 && vars.H3_theatertime.Current > 15 && vars.H3_theatertime.Current < 30)
 					{
 						vars.startedlevel = vars.H3_levelname.Current;
+						return true;
+					}
+					else if (vars.h3resetflag == true && vars.H3_levelname.Current == "010" && vars.H3_tickcounter.Current >= 15 && vars.H3_tickcounter.Current < 20) //Starting H3 late via the tickcounter as otherwise too close to reset condition
+					{
+						vars.startedlevel = vars.H3_levelname.Current;
+						vars.gametime = TimeSpan.FromMilliseconds((1000.0 / 60) * (vars.H3_tickcounter.Current + 3));	//Compensating for the late start with a gametime sync + some offset. Chucking on a few extra ticks fir some reason.
+						print ("da fudge is this timespan: " + vars.gametime);
+						vars.forcesync = true;
 						return true;
 					}
 				}
@@ -2503,7 +2543,14 @@ reset
 						{
 							return (vars.H3_levelname.Current == vars.startedlevel && vars.H3_theatertime.Current > 0 && vars.H3_theatertime.Current < 15);
 						}
-						else return ((vars.H3_levelname.Current == "005" || vars.H3_levelname.Current == "010") && vars.H3_theatertime.Current > 0 && vars.H3_theatertime.Current < 15);	
+						else if (vars.H3_levelname.Current == "005")
+						{
+							return (vars.stateindicator.Current != 44 && vars.stateindicator.Old == 44 && vars.H3_tickcounter.Current < 60);
+						}
+						else if (vars.H3_levelname.Current == "010") 
+						{
+							return ((vars.H3_theatertime.Current > 0 && vars.H3_theatertime.Current < 15) || (vars.H3_theatertime.Current >= 15 && vars.H3_tickcounter.Current < vars.H3_tickcounter.Old && vars.H3_tickcounter.Current < 10 && vars.stateindicator.Current != 44));
+						}
 					}
 				} 
 			break;
@@ -2596,6 +2643,14 @@ isLoading
 		break;
 		
 		case 2:
+			if (vars.h3resetflag)
+			{
+				if (vars.stateindicator.Current == 129 || vars.loading) {return true;} else {return false;}
+			}
+			else {return true;}
+
+		break;
+
 		case 3:
 		case 5:
 		case 6:
@@ -2638,9 +2693,14 @@ gameTime
 		}
 		return;
 	}
-	else if (vars.menuindicator.Current == 7 && (settings["IGTmode"] || !(vars.gameindicator.Current == 0 || (vars.gameindicator.Current == 1 && (!settings["ILmode"] || vars.H2_levelname.Current == "01a")))))
+	else if (vars.menuindicator.Current == 7 && (vars.forcesync || settings["IGTmode"] || !(vars.gameindicator.Current == 0 || (vars.gameindicator.Current == 1 && (!settings["ILmode"] || vars.H2_levelname.Current == "01a")) || vars.h3resetflag)))
 	{
-		return vars.gametime;
+		if (vars.forcesync)
+		{
+			vars.forcesync = false;
+			return (timer.CurrentTime.GameTime + vars.gametime);
+		}
+		else return vars.gametime;
 	}
 }
 
