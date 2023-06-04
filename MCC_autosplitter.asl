@@ -1020,7 +1020,7 @@ update
 	if (!(vars.menuindicator.Current == 7))
 	{
 		vars.watchers_slow.UpdateAll(game);
-		if (vars.h3resetflag) {vars.h3resetflag = false;}
+		if (vars.h3resetflag || settings["ILmode"] || settings["Anylevel"]) {vars.h3resetflag = false;}
 		if (vars.pgcrexists) {vars.pgcrexists = false;} //sanity check. Should never come up normally
 	}
 	else if (vars.menuindicator.Current == 7)
@@ -1127,7 +1127,7 @@ update
 
 		if (vars.gameindicator.Current == 2)
 		{
-			if (vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current >= 15) {vars.h3resetflag = true;}
+			if (!settings["ILmode"] && !settings["Anylevel"] && vars.H3_levelname.Current == "010" && vars.H3_theatertime.Current >= 15) {vars.h3resetflag = true;}
 		}
 
 
@@ -1753,10 +1753,13 @@ start 	//starts timer
 
 			//Halo 3
 			case 2:
-				if (settings["ILmode"] && vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
+				if (settings["ILmode"])
 				{
-					vars.startedlevel = vars.H3_levelname.Current;
-					return true;
+					if (vars.IGT_float.Current > 0.167 && vars.IGT_float.Current < 0.5)
+					{
+						vars.startedlevel = vars.H3_levelname.Current;
+						return true;
+					}
 				}
 				else if (settings["anylevel"] || vars.H3_levelname.Current == "010")
 				{
@@ -1770,7 +1773,6 @@ start 	//starts timer
 					{
 						vars.startedlevel = vars.H3_levelname.Current;
 						vars.gametime = TimeSpan.FromMilliseconds((1000.0 / 60) * (vars.H3_tickcounter.Current + 3));	//Compensating for the late start with a gametime sync + some offset. Chucking on a few extra ticks fir some reason.
-						print ("da fudge is this timespan: " + vars.gametime);
 						vars.forcesync = true;
 						return true;
 					}
@@ -2552,7 +2554,7 @@ reset
 							return ((vars.H3_theatertime.Current > 0 && vars.H3_theatertime.Current < 15) || (vars.H3_theatertime.Current >= 15 && vars.H3_tickcounter.Current < vars.H3_tickcounter.Old && vars.H3_tickcounter.Current < 10 && vars.stateindicator.Current != 44));
 						}
 					}
-				} 
+				}
 			break;
 			
 			//H4
