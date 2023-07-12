@@ -3,7 +3,7 @@
 
 //NOTES
 /*
-	Yes
+	Game isn't doing comp splits dirty tracking anymore. Might have to add it here at some point.
 */
 
 state("MCC-Win64-Shipping") {}
@@ -125,24 +125,23 @@ init //hooking to game to make memorywatchers
 			}
 			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
 			{
-				//SoonTM
-				dllPointer = (0x0); 
+				dllPointer = (0x3E4BAB0); 
 
 				vars.watchers_fast = new MemoryWatcherList() {
-					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
-					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+					(vars.menuindicator = new MemoryWatcher<byte>(new DeepPointer(0x3D154A9)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull}),
+					(vars.stateindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E08969)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 
 				vars.watchers_slow = new MemoryWatcherList() {
-					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x0, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+					(vars.gameindicator = new MemoryWatcher<byte>(new DeepPointer(0x3E4B9E8, 0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 
 				vars.watchers_igt = new MemoryWatcherList() {
-					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x0)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+					(vars.IGT_float = new MemoryWatcher<float>(new DeepPointer(0x3E4BAA8)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 
 				vars.watchers_comptimer = new MemoryWatcherList() {
-					(vars.comptimerstate = new MemoryWatcher<uint>(new DeepPointer(0x0, 0x1AC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
+					(vars.comptimerstate = new MemoryWatcher<uint>(new DeepPointer(0x3E4BA00, 0x1AC)) { FailAction = MemoryWatcher.ReadFailAction.SetZeroOrNull})
 				};
 			}
 
