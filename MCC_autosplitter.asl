@@ -1481,7 +1481,6 @@ update
 				//TGJ cutscene rubbish
 				if (vars.H2_levelname.Current == "08b" && vars.H2_tgjreadyflag == false) 
 				{
-					vars.watchers_h2bsp.UpdateAll(game);
 					if (vars.H2_bspstate.Current == 3)
 					{
 						vars.H2_tgjreadyflag = true;
