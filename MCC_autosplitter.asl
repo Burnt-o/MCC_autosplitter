@@ -977,7 +977,7 @@ startup //variable init and settings
 
 	settings.Add("bspmode", false, "Split on unique \"Loading... Done\"'s ");
 	settings.SetToolTip("bspmode", "Split on unique bsp loads (\"Loading... Done\") within levels. \n" +
-		"You'll need to add a lot of extra splits for this option, see this spreadsheet for a count of how many per level of each game: \n" +
+		"You'll need to add a lot of extra splits for this option, see this spreadsheet for a count of how many per level of each game (outdated): \n" +
 		"tinyurl.com/bspsplit"
 	);
 
@@ -992,14 +992,16 @@ startup //variable init and settings
 		"For use with ODST and Halo 4 IL's only"
 	);
 
-	settings.Add("anylevel", false, "Start full-game runs on any level (breaks multi-game runs)");
+	settings.Add("anylevel", false, "Start full-game runs on any level (READ THE TOOLTIP)");
+	settings.SetToolTip("anylevel", "You probably don't need to use this. This option starts the timer on any level instead of just the first level for full-game runs. Breaks multi-game.");
+
 	settings.Add("menupause", true, "Pause when in Main Menu", "anylevel");
-	settings.Add("sqsplit", false, "Split when loading a new level (Halo: CE Only)", "anylevel");
+	settings.Add("sqsplit", false, "Split when loading a new level from menu", "anylevel");
 	settings.SetToolTip("sqsplit", "Useful for categories like Hunter%. Only for Halo CE");
 
 	settings.Add("anystart", false, "Start the timer on custom maps (Halo: CE Only)", "anylevel");
-	settings.SetToolTip("anystart", "Starts the timer on levels that aren't part of Halo: CE such as custom campaigns \n" +
-		"You will probably have to set a starting offset in Edit Splits"
+	settings.SetToolTip("anystart", "Starts the timer on levels that aren't part of the base game such as custom campaigns like Lumoria. \n" +
+		"You don't need this for Cursed Halo full-game as PoA is part of the base game. You will probably have to set a starting offset in Edit Splits"
 	);
 
 	settings.Add("deathcounter", false, "Enable Death Counter");
@@ -1586,12 +1588,9 @@ update
 				switch (test)
 				{
 					case 0:
-						if (vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_tickcounter.Current > 280 && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true) //Start on PoA
+						if (vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_xpos.Current < -55 && vars.H1_tickcounter.Current > 280 && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true) //Start on PoA
 						{
-							if (vars.H1_xpos.Current < -55)
-							{
-								vars.multigamepause = false;
-							}
+							vars.multigamepause = false;
 						}
 					break;
 
@@ -1671,14 +1670,10 @@ start 	//starts timer
 		{
 			//Halo 1
 			case 0:
-			if (vars.H1_levelname.Current != "") {
-				if (vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_tickcounter.Current > 280 && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true) //Start on PoA
+				if (vars.H1_levelname.Current == "a10" && vars.H1_bspstate.Current == 0 && vars.H1_xpos.Current < -55 && vars.H1_tickcounter.Current > 280 && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true) //Start on PoA
 				{
-					if (vars.H1_xpos.Current < -55)
-					{
-						vars.startedlevel = "a10";
-						return true;
-					}
+					vars.startedlevel = "a10";
+					return true;
 				}
 				else if ((settings["ILmode"] || settings["anylevel"]) && vars.H1_levelname.Current != "a10")	//Start on any level thats not PoA
 				{
@@ -1716,7 +1711,7 @@ start 	//starts timer
 						break;
 
 						default:
-							if (settings["anystart"])
+							if (settings["anystart"] && vars.H1_levelname.Current != "") 
 							{
 								if ((vars.H1_cutsceneskip.Current == false && vars.H1_cutsceneskip.Old == true) || (vars.H1_tickcounter.Current > 30 && vars.H1_cinematic.Current == false && vars.H1_cinematic.Old == true))
 								{
@@ -1727,7 +1722,6 @@ start 	//starts timer
 						break;			
 					}
 				} 
-			}
 			break;
 			
 
