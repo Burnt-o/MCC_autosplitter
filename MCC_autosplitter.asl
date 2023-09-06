@@ -1652,7 +1652,7 @@ update
 					{
 						if (entry.Value())
 						{
-							if (entry.Key == 0)
+							if (entry.Key == 0 || entry.Key == 2)
 							{
 								if (!settings["anylevel"])
 								{
