@@ -62,6 +62,14 @@ init //hooking to game to make memorywatchers
 	//version check and warning message for invalid version  
 	switch (testversion)
 	{
+		case "1.1570.0.0":
+			version = "1.1570.0.0";
+		break;
+
+		case "1.1619.0.0":
+			version = "1.1619.0.0";
+		break;
+
 		case "1.2448.0.0":
 			version = "1.2448.0.0";
 		break;
@@ -678,6 +686,64 @@ init //hooking to game to make memorywatchers
 
 			vars.watchers_h4.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0x68, 0x276ACA3), 3) { Name = "levelname" });
 			vars.watchers_h4bsp.Add(new MemoryWatcher<ulong>(new DeepPointer(vars.dllPointer, 0x68, 0x2441AB8, -0x560)) { Name = "bspstate" });
+
+		break;
+
+
+		case "1.1570.0.0":
+		case "1.1619.0.0":
+			vars.dllPointer = 0x38DC480;
+
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x385DC39)) { Name = "menuindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x38F92D9)) { Name = "stateindicator" });
+			vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x38F2268, 0x0)) { Name = "gameindicator" });
+			vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x38F2910)) { Name = "IGT_float" });
+			vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x38DDCF8, 0x19C)) { Name = "comptimerstate" });
+
+			vars.H1_core = 0x115C6B0;
+			vars.H1_map = 0x218EB94;
+			vars.H1_cinflags = 0x115CAB8;
+			vars.H1_coords = 0x2199338;
+			vars.H1_fade = 0x1FA76E8;
+
+			vars.watchers_h1.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, 0x1FA8B94)) { Name = "tickcounter" });
+			vars.watchers_h1.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, 0x1176118)) { Name = "IGT" });
+			vars.watchers_h1.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x8, 0x10CF324)) { Name = "bspstate" });
+
+			vars.watchers_h1.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0x8, vars.H1_map + 0x20), 32) { Name = "levelname" });
+			vars.watchers_h1load.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_core + 0x1)) { Name = "gamewon" });
+			vars.watchers_h1cs.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_cinflags, 0x0A)) { Name = "cinematic" });
+			vars.watchers_h1cs.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_cinflags, 0x0B)) { Name = "cutsceneskip" });
+			vars.watchers_h1xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_coords)) { Name = "xpos" });
+			vars.watchers_h1xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_coords + 0x4)) { Name = "ypos" });
+			vars.watchers_h1fade.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_fade, 0x3C0)) { Name = "fadetick" });
+			vars.watchers_h1fade.Add(new MemoryWatcher<ushort>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_fade, 0x3C4)) { Name = "fadelength" });
+			vars.watchers_h1fade.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_fade, 0x3C6)) { Name = "fadebyte" });
+			vars.watchers_h1death.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_core + 0x17)) { Name = "deathflag" });
+			vars.watchers_h1other.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_map + 0x64)) { Name = "checksum" });
+			vars.watchers_h1other.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_map + 0x68)) { Name = "h1aflags" });
+
+			vars.H2_cinflags = 0x6882D88;
+			vars.H2_coords = 0x133E0E8;
+			vars.H2_fade = 0x199B028;
+
+			vars.watchers_h2.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0x28, 0x13FB373), 3) { Name = "levelname" });
+			vars.watchers_h2.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x28, 0x13BA300)) { Name = "IGT" });
+			vars.watchers_h2bsp.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x28, 0x1294D74)) { Name = "bspstate" });
+			vars.watchers_h2death.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x28, 0x133E5C0, 0x11B9)) { Name = "deathflag" });
+			vars.watchers_h2fg.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x28, 0x13FA504)) { Name = "tickcounter" });
+			vars.watchers_h2fg.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x28, 0x12B8A08)) { Name = "graphics" });
+			
+			vars.watchers_h2fg.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_cinflags, -0x92E)) { Name = "fadebyte" });
+			vars.watchers_h2fg.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_cinflags, -0x938)) { Name = "letterbox" });
+			vars.watchers_h2xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_coords)) { Name = "xpos" });
+			vars.watchers_h2xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_coords + 0x4)) { Name = "ypos" });
+			vars.watchers_h2fade.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_fade, 0x0)) { Name = "fadetick" });
+			vars.watchers_h2fade.Add(new MemoryWatcher<ushort>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_fade, 0x4)) { Name = "fadelength" });
+
+			vars.watchers_hr.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0xC8, 0x2A2687F), 3) { Name = "levelname" });
+			vars.watchers_hrbsp.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0xC8, 0xD29588)) { Name = "bspstate" });
+			vars.watchers_hrdeath.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0xC8, 0x2504258, 0x1EC09)) { Name = "deathflag" });
 
 		break;
 	}
