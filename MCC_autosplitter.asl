@@ -838,7 +838,7 @@ startup //variable init and settings
 	{
 		{ 0, () => vars.watchers_h1["levelname"].Current == "d40" && !vars.watchers_h1cs["cinematic"].Old && vars.watchers_h1cs["cinematic"].Current && !vars.watchers_h1cs["cutsceneskip"].Current && vars.watchers_h1xy["xpos"].Current > 1000 && !vars.watchers_h1death["deathflag"].Current }, //poa
 		{ 1, () => vars.watchers_h2["levelname"].Current == "08b" && (vars.watchers_h2fg["fadebyte"].Current == 1 && vars.watchers_h2fg["letterbox"].Current > 0.96 && vars.watchers_h2fg["letterbox"].Old <= 0.96  && vars.watchers_h2fg["letterbox"].Old != 0 && vars.H2_tgjreadyflag && ( vars.watchers_h2fg["tickcounter"].Current > (vars.H2_tgjreadytime + 300))) }, //h2
-		{ 2, () => vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_mcc["stateindicator"].Old != 44 && vars.watchers_h3["levelname"].Current == "130" && !settings["anylevel"] }, //h3
+		{ 2, () => vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_mcc["stateindicator"].Old != 44 && vars.watchers_h3["levelname"].Current == "130" }, //h3
 		{ 3, () => vars.watchers_mcc["stateindicator"].Current == 57 && vars.watchers_mcc["stateindicator"].Old != 57 && vars.watchers_mcc["stateindicator"].Old != 190 && vars.watchers_h4["levelname"].Current == "m90" && !settings["anylevel"] }, //h4
 		{ 5, () => vars.watchers_mcc["stateindicator"].Current == 57 && vars.watchers_mcc["stateindicator"].Old != 57 && vars.watchers_mcc["stateindicator"].Old != 190 && vars.watchers_odst["levelname"].Current == "l300" && !settings["anylevel"] }, //odst
 		{ 6, () => vars.watchers_mcc["stateindicator"].Current == 57 && vars.watchers_mcc["stateindicator"].Old != 57 && vars.watchers_mcc["stateindicator"].Old != 190 && vars.watchers_hr["levelname"].Current == "m70" && !settings["anylevel"] }, //hr
@@ -1877,12 +1877,11 @@ start 	//starts timer
 	{
 		byte test = vars.watchers_game["gameindicator"].Current;
 		vars.startedgame = test; //Why did 343 reuse reach level names in H4 smh my head!
-		
+
 		switch (test)
 		{
 			//Halo 1
 			case 0:
-
 				if (vars.watchers_h1["levelname"].Current != "")
 				{
 					if (vars.H1_ILstart.ContainsKey(vars.watchers_h1["levelname"].Current))
