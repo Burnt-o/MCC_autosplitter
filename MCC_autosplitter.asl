@@ -2211,7 +2211,7 @@ split
  						}
 						else	//fullgame or anylevel
 						{
-							if (vars.watchers_h1load["gamewon"].Current && !vars.watchers_h1load["gamewon"].Old) //split on game_won call
+							if (vars.watchers_h1load["gamewon"].Current && !vars.watchers_h1load["gamewon"].Old && vars.watchers_h1["levelname"].Current != "") //split on game_won call, but not during menu load in in coop
 							{
 								vars.ClearDirtyBsps();
 								return true;
