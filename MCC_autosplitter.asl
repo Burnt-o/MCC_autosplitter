@@ -62,14 +62,6 @@ init //hooking to game to make memorywatchers
 	//version check and warning message for invalid version  
 	switch (testversion)
 	{
-		case "1.1570.0.0":
-			version = "1.1570.0.0";
-		break;
-
-		case "1.1619.0.0":
-			version = "1.1619.0.0";
-		break;
-
 		case "1.2448.0.0":
 			version = "1.2448.0.0";
 		break;
@@ -88,10 +80,6 @@ init //hooking to game to make memorywatchers
 
 		case "1.3073.0.0":
 			version = "1.3073.0.0";
-		break;
-
-		case "1.3251.0.0":
-			version = "1.3251.0.0";
 		break;
 		
 		case "1.3272.0.0":
@@ -156,9 +144,12 @@ init //hooking to game to make memorywatchers
 			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
 			{
 				vars.dllPointer = 0x3FFE598;
+				vars.menustate = 0x3FFDAA4;
 
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3EC79A9)) { Name = "menuindicator" });
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3FBB499)) { Name = "stateindicator" });
+				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate)) { Name = "loadindicator" });
+				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0x11)) { Name = "menuindicator" });
+				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xB)) { Name = "pauseindicator" });
+				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xC)) { Name = "pgcrindicator" });
 				vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x3FFE4D8, 0x0)) { Name = "gameindicator" });
 				vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x3FFE590)) { Name = "IGT_float" });
 				vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x3FFE4F0, 0x1AC)) { Name = "comptimerstate" });
@@ -166,9 +157,12 @@ init //hooking to game to make memorywatchers
 			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
 			{
 				vars.dllPointer = 0x3E4CB38; 
+				vars.menustate = 0x3E4C034;
 
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3D164A9)) { Name = "menuindicator" });
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3E099E9)) { Name = "stateindicator" });
+				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate)) { Name = "loadindicator" });
+				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0x11)) { Name = "menuindicator" });
+				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xB)) { Name = "pauseindicator" });
+				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xC)) { Name = "pgcrindicator" });
 				vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x3E4CA78, 0x0)) { Name = "gameindicator" });
 				vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x3E4CB30)) { Name = "IGT_float" });
 				vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x3E4CA90, 0x1AC)) { Name = "comptimerstate" });
@@ -236,112 +230,18 @@ init //hooking to game to make memorywatchers
 		break;
 
 
-
-		case "1.3251.0.0":
-			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
-			{
-				vars.dllPointer = 0x3FFD608;
-
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3EC6A29)) { Name = "menuindicator" });
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3FBA369)) { Name = "stateindicator" });
-				vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x3FFD548, 0x0)) { Name = "gameindicator" });
-				vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x3FFD600)) { Name = "IGT_float" });
-				vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x3FFD560, 0x1AC)) { Name = "comptimerstate" });
-			}
-			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
-			{
-				vars.dllPointer = 0x3E4BAB0; 
-
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3D154A9)) { Name = "menuindicator" });
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3E08969)) { Name = "stateindicator" });
-				vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x3E4B9E8, 0x0)) { Name = "gameindicator" });
-				vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x3E4BAA8)) { Name = "IGT_float" });
-				vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x3E4BA00, 0x1AC)) { Name = "comptimerstate" });
-			}
-
-			vars.H1_core = 0x2B23700;
-			vars.H1_map = 0x2B22744;
-			vars.H1_cinflags = 0x2EA0208;
-			vars.H1_coords = 0x2D9B9C4;
-			vars.H1_fade = 0x2EA8718;
-
-			vars.watchers_h1.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, 0x2B6F5E4)) { Name = "tickcounter" });
-			vars.watchers_h1.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, 0x2EA31D4)) { Name = "IGT" });
-			vars.watchers_h1.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x8, 0x1B860A4)) { Name = "bspstate" });
-
-			vars.watchers_h1.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0x8, vars.H1_map + 0x20), 32) { Name = "levelname" });
-			vars.watchers_h1load.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_core + 0x1)) { Name = "gamewon" });
-			vars.watchers_h1cs.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_cinflags, 0x0A)) { Name = "cinematic" });
-			vars.watchers_h1cs.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_cinflags, 0x0B)) { Name = "cutsceneskip" });
-			vars.watchers_h1xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_coords)) { Name = "xpos" });
-			vars.watchers_h1xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_coords + 0x4)) { Name = "ypos" });
-			vars.watchers_h1fade.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_fade, 0x3C0)) { Name = "fadetick" });
-			vars.watchers_h1fade.Add(new MemoryWatcher<ushort>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_fade, 0x3C4)) { Name = "fadelength" });
-			vars.watchers_h1fade.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_fade, 0x3C6)) { Name = "fadebyte" });
-			vars.watchers_h1death.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_core + 0x17)) { Name = "deathflag" });
-			vars.watchers_h1other.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_map + 0x64)) { Name = "checksum" });
-			vars.watchers_h1other.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_map + 0x68)) { Name = "h1aflags" });
-
-			vars.H2_cinflags = 0x15F5788;
-			vars.H2_coords = 0xE7F5E8;
-			vars.H2_fade = 0x15EA778;
-
-			vars.watchers_h2.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0x28, 0xE6FE68), 3) { Name = "levelname" });
-			vars.watchers_h2.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x28, 0x15A2EA0)) { Name = "IGT" });
-			vars.watchers_h2bsp.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x28, 0xDF8D74)) { Name = "bspstate" });
-			vars.watchers_h2death.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x28, 0xE7FA50, -0xEF)) { Name = "deathflag" });
-			vars.watchers_h2fg.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x28, 0x15E3074)) { Name = "tickcounter" });
-			vars.watchers_h2fg.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x28, 0xE20278)) { Name = "graphics" });
-
-			vars.watchers_h2fg.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_cinflags, -0x92E)) { Name = "fadebyte" });
-			vars.watchers_h2fg.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_cinflags, -0x938)) { Name = "letterbox" });
-			vars.watchers_h2xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_coords)) { Name = "xpos" });
-			vars.watchers_h2xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_coords + 0x4)) { Name = "ypos" });
-			vars.watchers_h2fade.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_fade, 0x0)) { Name = "fadetick" });
-			vars.watchers_h2fade.Add(new MemoryWatcher<ushort>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_fade, 0x4)) { Name = "fadelength" });
-
-			vars.watchers_h3.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0x48, 0x20A8118), 3) { Name = "levelname" });
-			vars.watchers_h3fg.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x48, 0x2135F70)) { Name = "theatertime" });
-			vars.watchers_h3fg.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x48, 0x2D3C04C)) { Name = "tickcounter" });
-			vars.watchers_h3bsp.Add(new MemoryWatcher<ulong>(new DeepPointer(vars.dllPointer, 0x48, 0xA4E170, 0x2C)) { Name = "bspstate" });
-			vars.watchers_h3death.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x48, 0x202F2D8, 0xFDCD)) { Name = "deathflag" });
-
-			vars.watchers_hr.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0xC8, 0x2A1F597), 3) { Name = "levelname" });
-			vars.watchers_hrbsp.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0xC8, 0x4E2FBA8)) { Name = "bspstate" });
-			vars.watchers_hrdeath.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0xC8, 0x24FB718, 0x1ED09)) { Name = "deathflag" });
-
-			vars.watchers_odst.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0xA8, 0x20EF128), 4) { Name = "levelname" });
-			vars.watchers_odst.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0xA8, 0x21F05F8)) { Name = "streets" });
-			vars.watchers_odstbsp.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0xA8, 0x46E261C)) { Name = "bspstate" });
-			vars.watchers_odstdeath.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0xA8, 0x100CB3C, -0x913)) { Name = "deathflag" });
-
-			vars.watchers_h4.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0x68, 0x2AFF81F), 3) { Name = "levelname" });
-			vars.watchers_h4bsp.Add(new MemoryWatcher<ulong>(new DeepPointer(vars.dllPointer, 0x68, 0x275D550)) { Name = "bspstate" });
-
-		break;
-
-
+		//Legacy Steam Support - No Winstore
 		case "1.3073.0.0":
-			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
-			{
-				vars.dllPointer = 0x3FFD608;
+			vars.dllPointer = 0x401C208;
+			vars.menustate = 0x401B76C;
 
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3EE3FA9)) { Name = "menuindicator" });
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3FD8E99)) { Name = "stateindicator" });
-				vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x401C1C0, 0x0)) { Name = "gameindicator" });
-				vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x401C204)) { Name = "IGT_float" });
-				vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x401C1D8, 0x1AC)) { Name = "comptimerstate" });
-			}
-			else if (modules.First().ToString().Equals("MCC-Win64-Shipping-WinStore.exe", StringComparison.OrdinalIgnoreCase) || modules.First().ToString().Equals("MCCWinStore-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Winstore
-			{
-				vars.dllPointer = 0x3E4BAB0; 
-
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3D33AA9)) { Name = "menuindicator" });
-				vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3E28465)) { Name = "stateindicator" });
-				vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x3E6B810, 0x0)) { Name = "gameindicator" });
-				vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x3E6B854)) { Name = "IGT_float" });
-				vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x3E6B828, 0x1AC)) { Name = "comptimerstate" });
-			}
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate)) { Name = "loadindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0x11)) { Name = "menuindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xB)) { Name = "pauseindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xC)) { Name = "pgcrindicator" });
+			vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x401C1C0, 0x0)) { Name = "gameindicator" });
+			vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x401C204)) { Name = "IGT_float" });
+			vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x401C1D8, 0x1AC)) { Name = "comptimerstate" });
 
 			vars.H1_core = 0x2CA0780;
 			vars.H1_map = 0x2C9F7C4;
@@ -405,12 +305,14 @@ init //hooking to game to make memorywatchers
 		break;
 
 
-		//Legacy Steam Support - No Winstore
 		case "1.2969.0.0":
 			vars.dllPointer = 0x3F94F90;
+			vars.menustate = 0x3F9446C;
 
-			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3E5DF29)) { Name = "menuindicator" });
-			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3F519E9)) { Name = "stateindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate)) { Name = "loadindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0x11)) { Name = "menuindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xB)) { Name = "pauseindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xC)) { Name = "pgcrindicator" });
 			vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x3F94E90, 0x0)) { Name = "gameindicator" });
 			vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x3F94F88)) { Name = "IGT_float" });
 			vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x3F94F60, 0x1A4)) { Name = "comptimerstate" });
@@ -479,9 +381,12 @@ init //hooking to game to make memorywatchers
 
 		case "1.2904.0.0":
 			vars.dllPointer = 0x3F7BA50;
+			vars.menustate = 0x3F7BAAD;
 
-			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3E45529)) { Name = "menuindicator" });
-			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3F2FBC9)) { Name = "stateindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate)) { Name = "loadindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0x8)) { Name = "menuindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0x5)) { Name = "pauseindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0x6)) { Name = "pgcrindicator" });
 			vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x3F7C380, 0x0)) { Name = "gameindicator" });
 			vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x3F7C33C)) { Name = "IGT_float" });
 			vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x3F7C358, 0x1A4)) { Name = "comptimerstate" });
@@ -550,9 +455,12 @@ init //hooking to game to make memorywatchers
 
 		case "1.2645.0.0":
 			vars.dllPointer = 0x3B80E98;
+			vars.menustate = 0x3B80E64;
 
-			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3A4A7C9)) { Name = "menuindicator" });
-			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x3b40d69)) { Name = "stateindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate)) { Name = "loadindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0x11)) { Name = "menuindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xB)) { Name = "pauseindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xC)) { Name = "pgcrindicator" });
 			vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x3B81270, 0x0)) { Name = "gameindicator" });
 			vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x3B80FF8)) { Name = "IGT_float" });
 			vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x3B81380, 0x1A4)) { Name = "comptimerstate" });
@@ -621,9 +529,12 @@ init //hooking to game to make memorywatchers
 
 		case "1.2448.0.0":
 			vars.dllPointer = 0x3A24FF8;
+			vars.menustate = 0x3A24FC4;
 
-			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x38EF0A9)) { Name = "menuindicator" });
-			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x39E4DE9)) { Name = "stateindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate)) { Name = "loadindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0x11)) { Name = "menuindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xA)) { Name = "pauseindicator" });
+			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(vars.menustate + 0xB)) { Name = "pgcrindicator" });
 			vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x3A253A0, 0x0)) { Name = "gameindicator" });
 			vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x3A25188)) { Name = "IGT_float" });
 			vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x3A254B0, 0x1A4)) { Name = "comptimerstate" });
@@ -688,64 +599,6 @@ init //hooking to game to make memorywatchers
 			vars.watchers_h4bsp.Add(new MemoryWatcher<ulong>(new DeepPointer(vars.dllPointer, 0x68, 0x2441AB8, -0x560)) { Name = "bspstate" });
 
 		break;
-
-
-		case "1.1570.0.0":
-		case "1.1619.0.0":
-			vars.dllPointer = 0x38DC480;
-
-			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x385DC39)) { Name = "menuindicator" });
-			vars.watchers_mcc.Add(new MemoryWatcher<byte>(new DeepPointer(0x38F92D9)) { Name = "stateindicator" });
-			vars.watchers_game.Add(new MemoryWatcher<byte>(new DeepPointer(0x38F2268, 0x0)) { Name = "gameindicator" });
-			vars.watchers_igt.Add(new MemoryWatcher<float>(new DeepPointer(0x38F2910)) { Name = "IGT_float" });
-			vars.watchers_comptimer.Add(new MemoryWatcher<uint>(new DeepPointer(0x38DDCF8, 0x19C)) { Name = "comptimerstate" });
-
-			vars.H1_core = 0x115C6B0;
-			vars.H1_map = 0x218EB94;
-			vars.H1_cinflags = 0x115CAB8;
-			vars.H1_coords = 0x2199338;
-			vars.H1_fade = 0x1FA76E8;
-
-			vars.watchers_h1.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, 0x1FA8B94)) { Name = "tickcounter" });
-			vars.watchers_h1.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, 0x1176118)) { Name = "IGT" });
-			vars.watchers_h1.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x8, 0x10CF324)) { Name = "bspstate" });
-
-			vars.watchers_h1.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0x8, vars.H1_map + 0x20), 32) { Name = "levelname" });
-			vars.watchers_h1load.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_core + 0x1)) { Name = "gamewon" });
-			vars.watchers_h1cs.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_cinflags, 0x0A)) { Name = "cinematic" });
-			vars.watchers_h1cs.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_cinflags, 0x0B)) { Name = "cutsceneskip" });
-			vars.watchers_h1xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_coords)) { Name = "xpos" });
-			vars.watchers_h1xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_coords + 0x4)) { Name = "ypos" });
-			vars.watchers_h1fade.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_fade, 0x3C0)) { Name = "fadetick" });
-			vars.watchers_h1fade.Add(new MemoryWatcher<ushort>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_fade, 0x3C4)) { Name = "fadelength" });
-			vars.watchers_h1fade.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_fade, 0x3C6)) { Name = "fadebyte" });
-			vars.watchers_h1death.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_core + 0x17)) { Name = "deathflag" });
-			vars.watchers_h1other.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_map + 0x64)) { Name = "checksum" });
-			vars.watchers_h1other.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x8, vars.H1_map + 0x68)) { Name = "h1aflags" });
-
-			vars.H2_cinflags = 0x6882D88;
-			vars.H2_coords = 0x133E0E8;
-			vars.H2_fade = 0x199B028;
-
-			vars.watchers_h2.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0x28, 0x13FB373), 3) { Name = "levelname" });
-			vars.watchers_h2.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x28, 0x13BA300)) { Name = "IGT" });
-			vars.watchers_h2bsp.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x28, 0x1294D74)) { Name = "bspstate" });
-			vars.watchers_h2death.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0x28, 0x133E5C0, 0x11B9)) { Name = "deathflag" });
-			vars.watchers_h2fg.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x28, 0x13FA504)) { Name = "tickcounter" });
-			vars.watchers_h2fg.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x28, 0x12B8A08)) { Name = "graphics" });
-			
-			vars.watchers_h2fg.Add(new MemoryWatcher<byte>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_cinflags, -0x92E)) { Name = "fadebyte" });
-			vars.watchers_h2fg.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_cinflags, -0x938)) { Name = "letterbox" });
-			vars.watchers_h2xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_coords)) { Name = "xpos" });
-			vars.watchers_h2xy.Add(new MemoryWatcher<float>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_coords + 0x4)) { Name = "ypos" });
-			vars.watchers_h2fade.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_fade, 0x0)) { Name = "fadetick" });
-			vars.watchers_h2fade.Add(new MemoryWatcher<ushort>(new DeepPointer(vars.dllPointer, 0x28, vars.H2_fade, 0x4)) { Name = "fadelength" });
-
-			vars.watchers_hr.Add(new StringWatcher(new DeepPointer(vars.dllPointer, 0xC8, 0x2A2687F), 3) { Name = "levelname" });
-			vars.watchers_hrbsp.Add(new MemoryWatcher<uint>(new DeepPointer(vars.dllPointer, 0xC8, 0xD29588)) { Name = "bspstate" });
-			vars.watchers_hrdeath.Add(new MemoryWatcher<bool>(new DeepPointer(vars.dllPointer, 0xC8, 0x2504258, 0x1EC09)) { Name = "deathflag" });
-
-		break;
 	}
 		
 
@@ -753,7 +606,6 @@ init //hooking to game to make memorywatchers
 	switch (version)
 	{
 		case "1.3272.0.0":
-		case "1.3251.0.0":
 			vars.h1_checklist = new Dictionary<string, uint>{{"a10", 1731967100},{"a30", 2334900663},{"a50", 2345488806},{"b30", 389775619},{"b40", 232036917},{"c10", 3544120777},{"c20", 2188406812},{"c40", 687169669},{"d20", 485256620},{"d40", 1783204841},};
 			vars.fadescale = 0.067;
 		break;
@@ -838,16 +690,16 @@ startup //variable init and settings
 	{
 		{ 0, () => vars.watchers_h1["levelname"].Current == "d40" && !vars.watchers_h1cs["cinematic"].Old && vars.watchers_h1cs["cinematic"].Current && !vars.watchers_h1cs["cutsceneskip"].Current && vars.watchers_h1xy["xpos"].Current > 1000 && !vars.watchers_h1death["deathflag"].Current }, //poa
 		{ 1, () => vars.watchers_h2["levelname"].Current == "08b" && (vars.watchers_h2fg["fadebyte"].Current == 1 && vars.watchers_h2fg["letterbox"].Current > 0.96 && vars.watchers_h2fg["letterbox"].Old <= 0.96  && vars.watchers_h2fg["letterbox"].Old != 0 && vars.H2_tgjreadyflag && ( vars.watchers_h2fg["tickcounter"].Current > (vars.H2_tgjreadytime + 300))) }, //h2
-		{ 2, () => vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_mcc["stateindicator"].Old != 44 && vars.watchers_h3["levelname"].Current == "130" }, //h3
-		{ 3, () => vars.watchers_mcc["stateindicator"].Current == 57 && vars.watchers_mcc["stateindicator"].Old != 57 && vars.watchers_mcc["stateindicator"].Old != 190 && vars.watchers_h4["levelname"].Current == "m90" && !settings["anylevel"] }, //h4
-		{ 5, () => vars.watchers_mcc["stateindicator"].Current == 57 && vars.watchers_mcc["stateindicator"].Old != 57 && vars.watchers_mcc["stateindicator"].Old != 190 && vars.watchers_odst["levelname"].Current == "l300" && !settings["anylevel"] }, //odst
-		{ 6, () => vars.watchers_mcc["stateindicator"].Current == 57 && vars.watchers_mcc["stateindicator"].Old != 57 && vars.watchers_mcc["stateindicator"].Old != 190 && vars.watchers_hr["levelname"].Current == "m70" && !settings["anylevel"] }, //hr
+		{ 2, () => vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0 && vars.watchers_h3["levelname"].Current == "130" }, //h3
+		{ 3, () => vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0 && vars.watchers_h4["levelname"].Current == "m90" && !settings["anylevel"] }, //h4
+		{ 5, () => vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0 && vars.watchers_odst["levelname"].Current == "l300" && !settings["anylevel"] }, //odst
+		{ 6, () => vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0 && vars.watchers_hr["levelname"].Current == "m70" && !settings["anylevel"] }, //hr
 	};
 
 	vars.multigameresume = new Dictionary<byte, Func<bool>>
 	{
 		{ 0, () => vars.watchers_h1["levelname"].Current == "a10" && vars.watchers_h1["bspstate"].Current == 0 && vars.watchers_h1xy["xpos"].Current < -55 && vars.watchers_h1["tickcounter"].Current > 280 && vars.watchers_h1cs["cinematic"].Current == false && vars.watchers_h1cs["cinematic"].Old == true }, //h1
-		{ 1, () => (vars.watchers_h2["levelname"].Current == "01a" && vars.watchers_h2fg["tickcounter"].Current >= 26 &&  vars.watchers_h2fg["tickcounter"].Current < 30) || (vars.watchers_h2["levelname"].Current == "01b" && vars.watchers_mcc["stateindicator"].Current != 44 && vars.watchers_h2fg["fadebyte"].Current == 0 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_h2fg["tickcounter"].Current < 30) }, //h2
+		{ 1, () => (vars.watchers_h2["levelname"].Current == "01a" && vars.watchers_h2fg["tickcounter"].Current >= 26 &&  vars.watchers_h2fg["tickcounter"].Current < 30) || (vars.watchers_h2["levelname"].Current == "01b" && vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_h2fg["fadebyte"].Current == 0 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_h2fg["tickcounter"].Current < 30) }, //h2
 		{ 2, () => vars.watchers_h3["levelname"].Current == "010" && vars.watchers_h3fg["theatertime"].Current > 15 && vars.watchers_h3fg["theatertime"].Current < 30 }, //h3
 		{ 3, () => vars.watchers_h4["levelname"].Current == "m10" && vars.watchers_igt["IGT_float"].Current > 0.167 && vars.watchers_igt["IGT_float"].Current < 0.5 }, //h4
 		{ 5, () => vars.watchers_odst["levelname"].Current == "h100" && vars.watchers_odst["streets"].Current == 0 && vars.watchers_igt["IGT_float"].Current > 0.167 && vars.watchers_igt["IGT_float"].Current < 0.5 }, //odst
@@ -1023,8 +875,8 @@ startup //variable init and settings
 	settings.SetToolTip("anylevel", "You probably don't need to use this. This option starts the timer on any level instead of just the first level for full-game runs. Breaks multi-game.");
 
 	settings.Add("menupause", true, "Pause when in Main Menu", "anylevel");
-	settings.Add("sqsplit", false, "Split when loading a new level from menu", "anylevel");
-	settings.SetToolTip("sqsplit", "Useful for categories like Hunter%. Only for Halo CE");
+	settings.Add("sqsplit", false, "Split when loading a level from main menu", "anylevel");
+	settings.SetToolTip("sqsplit", "Useful for categories like Hunter%. Only for RTA games (H1 and H2)");
 
 	settings.Add("anystart", false, "Start the timer on custom maps (Halo: CE Only)", "anylevel");
 	settings.SetToolTip("anystart", "Starts the timer on levels that aren't part of the base game such as custom campaigns like Lumoria. \n" +
@@ -1109,10 +961,6 @@ update
 	if (vars.watchers_mcc["menuindicator"].Current == 0)	//Stuff to do on the main menu
 	{
 		vars.watchers_game.UpdateAll(game);
-		if (vars.watchers_game["gameindicator"].Current == 0)
-		{
-			vars.watchers_comptimer.UpdateAll(game);
-		}
 		if (vars.h3resetflag || settings["ILmode"] || settings["anylevel"])
 		{
 			vars.h3resetflag = false;
@@ -1158,7 +1006,6 @@ update
 					}
 					else {
 						vars.watchers_h1load.UpdateAll(game);
-						vars.watchers_comptimer.UpdateAll(game);
 						if (vars.watchers_h1["levelname"].Current == "d40")
 						{
 							vars.watchers_h1cs.UpdateAll(game);
@@ -1217,6 +1064,10 @@ update
 				else
 				{
 					vars.watchers_h3fg.UpdateAll(game);
+					if (vars.watchers_h3["levelname"].Current == "010")
+					{
+						vars.watchers_comptimer.UpdateAll(game);
+					}
 				}
 
 				if (settings["bspmode"])
@@ -1343,7 +1194,7 @@ update
 	{
 		byte test = vars.watchers_game["gameindicator"].Current;
 		//If someone is manually starting the timer for some reason
-		if (vars.watchers_mcc["menuindicator"].Current > 0 && (vars.startedlevel == "000" || vars.startedlevel == null))
+		if (vars.watchers_mcc["menuindicator"].Current == 1 && (vars.startedlevel == "000" || vars.startedlevel == null))
 		{
 			switch (test)
 			{
@@ -1385,7 +1236,7 @@ update
 		if (!vars.multigamepause)
 		{
 			//IGT function
-			if (vars.watchers_mcc["menuindicator"].Current > 0 && (settings["IGTmode"] || !(test == 0 || (test == 1 && (!settings["ILmode"] || vars.watchers_h2["levelname"].Current == "01a")) || (vars.h3resetflag && !settings["ILmode"]))))
+			if (vars.watchers_mcc["menuindicator"].Current == 1 && (settings["IGTmode"] || !(test == 0 || (test == 1 && (!settings["ILmode"] || vars.watchers_h2["levelname"].Current == "01a")) || (vars.h3resetflag && !settings["ILmode"]))))
 			{
 				//reset gametime return of current iteration
 				vars.gametime = TimeSpan.Zero;
@@ -1458,7 +1309,7 @@ update
 					{
 						if (vars.leveltime == 0)
 						{
-							if (vars.watchers_mcc["stateindicator"].Current != 44 && !(vars.pgcrexists) && vars.startedlevel == level)
+							if (vars.watchers_mcc["loadindicator"].Current == 0 && !(vars.pgcrexists) && vars.startedlevel == level)
 							{
 								vars.leveltime = IGT;
 							}
@@ -1468,14 +1319,14 @@ update
 							vars.leveltime = vars.leveltime + (IGT - IGTold);
 						}
 						
-						if (vars.watchers_mcc["stateindicator"].Current == 57 && vars.watchers_mcc["stateindicator"].Old != 57 && vars.watchers_mcc["stateindicator"].Old != 190) //add times
+						if (vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0) //add times
 						{
 							vars.ingametime = vars.ingametime + ((vars.leveltime) - ((vars.leveltime) % tickrate));
 							vars.leveltime = 0;
 							vars.pgcrexists = true;
 							vars.forcesplit = true;
 						}
-						else if (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_mcc["stateindicator"].Old != 44)
+						else if (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0)
 						{
 							if (!(vars.pgcrexists))
 							{
@@ -1485,7 +1336,7 @@ update
 							}
 							vars.pgcrexists = false;
 						}
-						else if (IGT < IGTold && IGT < 10 && vars.watchers_mcc["stateindicator"].Current != 44)
+						else if (IGT < IGTold && IGT < 10 && vars.watchers_mcc["loadindicator"].Current == 0)
 						{
 							if (!settings["IGTadd"])
 							{
@@ -1505,7 +1356,7 @@ update
 							vars.leveltime = 0;
 						}
 						
-						if (level != vars.startedlevel || vars.watchers_mcc["stateindicator"].Current == 44)
+						if (level != vars.startedlevel || vars.watchers_mcc["loadindicator"].Current == 1)
 						{
 							vars.gametime = TimeSpan.FromMilliseconds((1000.0 / tickrate) * (vars.ingametime));
 						}
@@ -1516,12 +1367,12 @@ update
 					}
 					else
 					{
-						if (vars.watchers_mcc["stateindicator"].Current == 57 && vars.watchers_mcc["stateindicator"].Old != 57 && vars.watchers_mcc["stateindicator"].Old != 190) //add times
+						if (vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0) //add times
 						{
 							vars.pgcrexists = true;
 							vars.forcesplit = true;
 						}
-						else if (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_mcc["stateindicator"].Old != 44)
+						else if (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0)
 						{
 							if (!(vars.pgcrexists))
 							{
@@ -1536,7 +1387,7 @@ update
 				{
 					if (vars.leveltime == 0)
 					{
-						if (vars.watchers_mcc["stateindicator"].Current != 44 && !(vars.pgcrexists))
+						if (vars.watchers_mcc["loadindicator"].Current == 0 && !(vars.pgcrexists))
 						{
 							vars.leveltime = IGT;
 						}
@@ -1548,7 +1399,7 @@ update
 
 					if (test == 2) //Want to do the math on the loading screen for theatre timing
 					{
-						if (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_mcc["stateindicator"].Old != 44)
+						if (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0)
 						{
 							vars.ingametime = vars.ingametime + ((vars.leveltime) - ((vars.leveltime) % tickrate));
 							vars.leveltime = 0;
@@ -1556,14 +1407,14 @@ update
 					}
 					else
 					{
-						if (vars.watchers_mcc["stateindicator"].Current == 57 && vars.watchers_mcc["stateindicator"].Old != 57 && vars.watchers_mcc["stateindicator"].Old != 190) //add times
+						if (vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0) //add times
 						{
 							vars.ingametime = vars.ingametime + ((vars.leveltime) - ((vars.leveltime) % tickrate));
 							vars.leveltime = 0;
 							vars.pgcrexists = true;
 							vars.forcesplit = true;
 						}
-						else if (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_mcc["stateindicator"].Old != 44)
+						else if (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0)
 						{
 							if (!(vars.pgcrexists))
 							{
@@ -1573,7 +1424,7 @@ update
 							}
 							vars.pgcrexists = false;
 						}
-						else if (IGT < IGTold && IGT < 10 && vars.watchers_mcc["stateindicator"].Current != 44)
+						else if (IGT < IGTold && IGT < 10 && vars.watchers_mcc["loadindicator"].Current == 0)
 						{
 							if (!settings["IGTadd"])
 							{
@@ -1594,7 +1445,7 @@ update
 						}
 					}
 
-					if (vars.watchers_mcc["stateindicator"].Current == 44)
+					if (vars.watchers_mcc["loadindicator"].Current == 1)
 					{
 						vars.gametime = (TimeSpan.FromMilliseconds((1000.0 / tickrate) * (vars.ingametime)) + vars.multigametime);
 					}
@@ -1611,14 +1462,14 @@ update
 			{
 				if (!vars.loading) //if not currently loading, determine whether we need to be.
 				{
-					if (vars.watchers_mcc["menuindicator"].Current > 0) //between level loads.
+					if (vars.watchers_mcc["menuindicator"].Current == 1) //between level loads.
 					{
 						if (vars.watchers_h1load["gamewon"].Current && !vars.watchers_h1load["gamewon"].Old)
 						{
 							vars.loading = true;
 						}
 					}
-					else if (vars.watchers_comptimer["comptimerstate"].Current == 0 && vars.watchers_comptimer["comptimerstate"].Old != 0) 	//main menu to level loads
+					else if (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0) 	//main menu to level loads
 					{
 						vars.loading = true;
 					}
@@ -1637,13 +1488,13 @@ update
 			{
 				if (!vars.loading) //if not currently loading, determine whether we need to be
 				{
-					if (vars.watchers_mcc["menuindicator"].Current > 0) //between level loads.
+					if (vars.watchers_mcc["menuindicator"].Current == 1) //between level loads.
 					{
 						string H2_checklevel = vars.watchers_h2["levelname"].Current;
 						switch (H2_checklevel)
 						{
 							case "01a": //Armory
-								if (vars.watchers_mcc["stateindicator"].Current == 44 || vars.watchers_mcc["stateindicator"].Current == 57)
+								if (vars.watchers_mcc["loadindicator"].Current == 1 || vars.watchers_mcc["pgcrindicator"].Current == 1)
 								{
 									vars.loading = true;
 								}
@@ -1658,7 +1509,7 @@ update
 							case "07a": //Gravemind
 							case "08a": //Uprising
 							case "07b": //High Charity
-								if ((vars.watchers_h2fg["tickcounter"].Current > 60 && vars.watchers_h2fg["fadebyte"].Current == 1 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_h2fg["letterbox"].Current > 0.96 && vars.watchers_h2fg["letterbox"].Old <= 0.96 && vars.watchers_h2fg["letterbox"].Old != 0) || vars.watchers_mcc["stateindicator"].Current == 44 || vars.watchers_mcc["stateindicator"].Current == 57)
+								if ((vars.watchers_h2fg["tickcounter"].Current > 60 && vars.watchers_h2fg["fadebyte"].Current == 1 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_h2fg["letterbox"].Current > 0.96 && vars.watchers_h2fg["letterbox"].Old <= 0.96 && vars.watchers_h2fg["letterbox"].Old != 0) || vars.watchers_mcc["loadindicator"].Current == 1 || vars.watchers_mcc["pgcrindicator"].Current == 1)
 								{
 									vars.loading = true;
 								}
@@ -1677,7 +1528,7 @@ update
 										vars.lastinternal = true;
 									}
 								}
-								else if ((vars.watchers_h2fg["tickcounter"].Current > 60 && vars.lastinternal && vars.watchers_h2fg["fadebyte"].Current == 1 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_h2fg["letterbox"].Current > 0.96 && vars.watchers_h2fg["letterbox"].Old <= 0.96 && vars.watchers_h2fg["letterbox"].Old != 0) || vars.watchers_mcc["stateindicator"].Current == 44 || vars.watchers_mcc["stateindicator"].Current == 57)
+								else if ((vars.watchers_h2fg["tickcounter"].Current > 60 && vars.lastinternal && vars.watchers_h2fg["fadebyte"].Current == 1 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_h2fg["letterbox"].Current > 0.96 && vars.watchers_h2fg["letterbox"].Old <= 0.96 && vars.watchers_h2fg["letterbox"].Old != 0) || vars.watchers_mcc["loadindicator"].Current == 1 || vars.watchers_mcc["pgcrindicator"].Current == 1)
 								{
 									vars.loading = true;	
 									vars.lastinternal = false;
@@ -1685,9 +1536,9 @@ update
 							break;
 
 							case "06b":	//Quarantine Zone
-								if ((vars.watchers_h2fg["tickcounter"].Current > 60 && vars.watchers_h2fg["fadebyte"].Current == 1 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_h2fg["letterbox"].Current > 0.96 && vars.watchers_h2fg["letterbox"].Old <= 0.96 && vars.watchers_h2fg["letterbox"].Old != 0) || vars.watchers_mcc["stateindicator"].Current == 44 || vars.watchers_mcc["stateindicator"].Current == 57)
+								if ((vars.watchers_h2fg["tickcounter"].Current > 60 && vars.watchers_h2fg["fadebyte"].Current == 1 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_h2fg["letterbox"].Current > 0.96 && vars.watchers_h2fg["letterbox"].Old <= 0.96 && vars.watchers_h2fg["letterbox"].Old != 0) || vars.watchers_mcc["loadindicator"].Current == 1 || vars.watchers_mcc["pgcrindicator"].Current == 1)
 								{
-									if (vars.watchers_h2bsp["bspstate"].Current == 4  || vars.watchers_mcc["stateindicator"].Current == 44 || vars.watchers_mcc["stateindicator"].Current == 57)
+									if (vars.watchers_h2bsp["bspstate"].Current == 4 || vars.watchers_mcc["loadindicator"].Current == 1 || vars.watchers_mcc["pgcrindicator"].Current == 1)
 									{
 										vars.loading = true;
 									}
@@ -1695,18 +1546,18 @@ update
 							break;
 						}
 					}
-					else if (vars.watchers_mcc["stateindicator"].Current == 44 || vars.watchers_mcc["stateindicator"].Current == 57)	//main menu to level loads.
+					else if (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0)	//main menu to level loads.
 					{
 						vars.loading = true;
 					}
 				}
 				else	//if currently loading, determine whether we need not be
 				{
-					if (vars.watchers_mcc["menuindicator"].Current > 0 && vars.watchers_mcc["stateindicator"].Current != 44 && vars.H2_levellist.ContainsKey(vars.watchers_h2["levelname"].Current)) //between level loads.
+					if (vars.watchers_mcc["menuindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Current == 0 && vars.H2_levellist.ContainsKey(vars.watchers_h2["levelname"].Current)) //between level loads.
 					{
 						if (vars.watchers_h2["levelname"].Current == "03a")
 						{
-							if (vars.watchers_mcc["stateindicator"].Current != 44)
+							if (vars.watchers_mcc["loadindicator"].Current == 0)
 							{
 								if (vars.watchers_h2fg["fadebyte"].Current == 1 && vars.watchers_h2bsp["bspstate"].Current == 0 && vars.watchers_h2fg["tickcounter"].Current > 10 && vars.watchers_h2fg["tickcounter"].Current < 100)
 								{
@@ -1734,7 +1585,7 @@ update
 						}
 						else
 						{
-							if (vars.watchers_h2fg["fadebyte"].Current == 0 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_mcc["stateindicator"].Current != 129 && vars.watchers_h2bsp["bspstate"].Current != 255)
+							if (vars.watchers_h2fg["fadebyte"].Current == 0 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_mcc["pauseindicator"].Current == 0 && vars.watchers_h2bsp["bspstate"].Current != 255)
 							{
 								vars.loading = false;
 								vars.lastinternal = false;
@@ -1759,12 +1610,12 @@ update
 			}
 			else if (vars.watchers_game["gameindicator"].Current == 2 && !(settings["ILmode"] || settings["IGTmode"]) && vars.h3resetflag)
 			{
-				if ((vars.watchers_mcc["stateindicator"].Current == 57 && vars.watchers_mcc["stateindicator"].Old != 57) || (vars.watchers_mcc["stateindicator"].Current == 255 && vars.watchers_comptimer["comptimerstate"].Current == 0 && vars.watchers_comptimer["comptimerstate"].Old > 0))
+				if ((vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0) || (vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_comptimer["comptimerstate"].Current == 0 && vars.watchers_comptimer["comptimerstate"].Old > 0))
 				{
 					vars.loading = true;
 				}
 
-				if (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_mcc["stateindicator"].Old != 44)	//Convert RTA to ticks and truncate
+				if (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0)	//Convert RTA to ticks and truncate
 				{
 					TimeSpan tempspan = TimeSpan.Zero;
 					uint tickcount = 0;
@@ -1785,18 +1636,26 @@ update
 			if (!settings["ILmode"])
 			{
 				//Save and quit splitting level tracking. Should probably get it working in other games, but eh
-				if (settings["sqsplit"] && vars.watchers_game["gameindicator"].Current == 0)
+				if (settings["sqsplit"])
 				{
-					if (vars.levelloaded == "000")
+					if (vars.watchers_game["gameindicator"].Current == 0)
 					{
-						vars.levelloaded = vars.startedlevel;
-					}
-					else if (vars.forcesplit2 == false && vars.watchers_h1["levelname"].Current != "" && vars.watchers_h1["levelname"].Old == "" && vars.H1_levellist.ContainsKey(vars.watchers_h1["levelname"].Current)) //determine if there is a level swap thus a split required
-					{
-						if (vars.watchers_h1["levelname"].Current != vars.startedlevel) //dont split if loading the starting level, probably a reset/loopmode. Otherwise split.
+						if (vars.forcesplit2 == false && vars.watchers_h1["levelname"].Current != "" && vars.watchers_h1["levelname"].Old == "" && vars.H1_levellist.ContainsKey(vars.watchers_h1["levelname"].Current)) //determine if there is a level swap thus a split required
 						{
-							vars.levelloaded = vars.watchers_h1["levelname"].Current;
-							vars.forcesplit2 = true;
+							if (vars.watchers_h1["levelname"].Current != vars.startedlevel) //dont split if loading the starting level, probably a reset/loopmode. Otherwise split.
+							{
+								vars.forcesplit2 = true;
+							}
+						}
+					}
+					else if (vars.watchers_game["gameindicator"].Current == 1)
+					{
+						if (vars.forcesplit2 == false && vars.watchers_h2["levelname"].Current != "" && vars.watchers_h2["levelname"].Old == "" && vars.H2_levellist.ContainsKey(vars.watchers_h2["levelname"].Current)) //determine if there is a level swap thus a split required
+						{
+							if (vars.watchers_h2["levelname"].Current != vars.startedlevel) //dont split if loading the starting level, probably a reset/loopmode. Otherwise split.
+							{
+								vars.forcesplit2 = true;
+							}
 						}
 					}
 				}
@@ -1856,7 +1715,7 @@ update
 
 		if (vars.isvalid == false && test == 0 && vars.loopcount == 0)
 		{
-			if (vars.watchers_mcc["menuindicator"].Current > 0 && vars.watchers_mcc["stateindicator"].Current != 44 && vars.H1_levellist.ContainsKey(vars.watchers_h1["levelname"].Current))
+			if (vars.watchers_mcc["menuindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Current == 0 && vars.H1_levellist.ContainsKey(vars.watchers_h1["levelname"].Current))
 			{
 				vars.watchers_h1other.UpdateAll(game);
 				if (vars.watchers_h1["tickcounter"].Current < 500 && vars.h1_checklist.Count > 0 && vars.h1_checklist[vars.watchers_h1["levelname"].Current] != vars.watchers_h1other["checksum"].Current && vars.watchers_h1other["h1aflags"].Current == 0)
@@ -1873,7 +1732,7 @@ update
 
 start 	//starts timer
 {
-	if (vars.watchers_mcc["menuindicator"].Current > 0 && !vars.varsreset)
+	if (vars.watchers_mcc["menuindicator"].Current == 1 && !vars.varsreset)
 	{
 		byte test = vars.watchers_game["gameindicator"].Current;
 		vars.startedgame = test; //Why did 343 reuse reach level names in H4 smh my head!
@@ -1927,12 +1786,12 @@ start 	//starts timer
 						vars.startedlevel = "01a";
 						return true;
 					}
-					else if (vars.watchers_h2["levelname"].Current == "01b" && vars.watchers_mcc["stateindicator"].Current != 44 && vars.watchers_h2fg["fadebyte"].Current == 0 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_h2fg["tickcounter"].Current < 30) //start on cairo
+					else if (vars.watchers_h2["levelname"].Current == "01b" && vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_h2fg["fadebyte"].Current == 0 && vars.watchers_h2fg["fadebyte"].Old == 1 && vars.watchers_h2fg["tickcounter"].Current < 30) //start on cairo
 					{
 						vars.startedlevel = "01b";
 						return true;
 					}
-					else if ((settings["anylevel"] || settings["ILmode"]) && vars.watchers_mcc["stateindicator"].Current != 44) //start on any other level
+					else if ((settings["anylevel"] || settings["ILmode"]) && vars.watchers_mcc["loadindicator"].Current == 0) //start on any other level
 					{	
 						if (vars.watchers_h2["levelname"].Current == "03a") //outskirts
 						{
@@ -1968,7 +1827,7 @@ start 	//starts timer
 				else if (settings["anylevel"] || vars.watchers_h3["levelname"].Current == "010")
 				{
 					
-					if (vars.watchers_mcc["stateindicator"].Current != 44 && vars.watchers_h3fg["theatertime"].Current > 15 && vars.watchers_h3fg["theatertime"].Current < 30)
+					if (vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_h3fg["theatertime"].Current > 15 && vars.watchers_h3fg["theatertime"].Current < 30)
 					{
 						vars.startedlevel = vars.watchers_h3["levelname"].Current;
 						return true;
@@ -2026,7 +1885,7 @@ split
 		return true;
 	}
 
-	if (vars.watchers_mcc["menuindicator"].Current > 0)
+	if (vars.watchers_mcc["menuindicator"].Current == 1)
 	{
 		if (vars.forcesplit) //for IGT game splits and RTA end game splits
 		{
@@ -2211,7 +2070,7 @@ split
  						}
 						else	//fullgame or anylevel
 						{
-							if (vars.watchers_h1load["gamewon"].Current && !vars.watchers_h1load["gamewon"].Old && vars.watchers_h1["levelname"].Current != "") //split on game_won call, but not during menu load in in coop
+							if (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0) //split on loading screen
 							{
 								vars.ClearDirtyBsps();
 								return true;
@@ -2385,9 +2244,9 @@ split
 						}
 					}
 
-					if (!(settings["ILmode"] || settings["IGTmode"])) //Split on loading screen
+					if (!(settings["ILmode"] || settings["IGTmode"])) //Split on loading screen, but not heretic -> armory load
 					{
-						if (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_mcc["stateindicator"].Old != 44 && checklevel != "00a") 
+						if (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0 && checklevel != "00a") 
 						{
 							vars.ClearDirtyBsps();
 							return true;
@@ -2435,7 +2294,7 @@ split
 
 					if (!settings["ILmode"])	//Split on loading screen
 					{
-						if (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_mcc["stateindicator"].Old != 44)
+						if (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0)
 						{
 							vars.ClearDirtyBsps();
 							return true;
@@ -2461,8 +2320,8 @@ split
 
 					if (settings["compsplits"])
 					{
-						if (vars.watchers_mcc["stateindicator"].Current == 255 && vars.watchers_comptimer["comptimerstate"].Changed && vars.watchers_comptimer["comptimerstate"].Current != 0 && vars.watchers_igt["IGT_float"].Current > 2.0) {return true;}
-					}	
+						if (vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_mcc["pgcrindicator"].Current == 0 && vars.watchers_comptimer["comptimerstate"].Changed && vars.watchers_comptimer["comptimerstate"].Current != 0 && vars.watchers_igt["IGT_float"].Current > 2.0) {return true;}
+					}
 					else if (settings["bspmode"])
 					{
 						if (settings["bsp_cache"])
@@ -2507,11 +2366,11 @@ split
 					{
 						if (checklevel == "l300")
 						{
-							if (vars.watchers_mcc["stateindicator"].Current == 255 && vars.watchers_comptimer["comptimerstate"].Changed && vars.watchers_comptimer["comptimerstate"].Current != 876414390 && vars.watchers_comptimer["comptimerstate"].Current != 0 && vars.watchers_igt["IGT_float"].Current > 2.0) {return true;}
+							if (vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_mcc["pgcrindicator"].Current == 0 && vars.watchers_comptimer["comptimerstate"].Changed && vars.watchers_comptimer["comptimerstate"].Current != 876414390 && vars.watchers_comptimer["comptimerstate"].Current != 0 && vars.watchers_igt["IGT_float"].Current > 2.0) {return true;}
 						}
 						else
 						{
-							if (vars.watchers_mcc["stateindicator"].Current == 255 && vars.watchers_comptimer["comptimerstate"].Changed && vars.watchers_comptimer["comptimerstate"].Current != 0 && vars.watchers_igt["IGT_float"].Current > 2.0) {return true;}
+							if (vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_mcc["pgcrindicator"].Current == 0 && vars.watchers_comptimer["comptimerstate"].Changed && vars.watchers_comptimer["comptimerstate"].Current != 0 && vars.watchers_igt["IGT_float"].Current > 2.0) {return true;}
 						}
 					}
 					else if (settings["bspmode"])
@@ -2583,7 +2442,7 @@ reset
 		return true;
 	}
 
-	if ((!(settings["Loopmode"])) && vars.watchers_mcc["menuindicator"].Current > 0)
+	if ((!(settings["Loopmode"])) && vars.watchers_mcc["menuindicator"].Current == 1)
 	{
 		byte test = vars.watchers_game["gameindicator"].Current;
 		switch (test)
@@ -2594,14 +2453,14 @@ reset
 				{
 					if (vars.watchers_h1["levelname"].Current == vars.startedlevel && vars.startedgame == 0 && timer.CurrentPhase != TimerPhase.Ended)
 					{
-						return ((vars.watchers_h1["IGT"].Current < vars.watchers_h1["IGT"].Old && vars.watchers_h1["IGT"].Current < 10) || (vars.watchers_comptimer["comptimerstate"].Current != 0 && vars.watchers_comptimer["comptimerstate"].Old == 0 && vars.watchers_h1["tickcounter"].Current < 60));
+						return ((vars.watchers_h1["IGT"].Current < vars.watchers_h1["IGT"].Old && vars.watchers_h1["IGT"].Current < 10) || (vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_mcc["loadindicator"].Old == 1 && vars.watchers_h1["tickcounter"].Current < 60));
 					} 
 				}
 				else
 				{
 					if (vars.watchers_h1["levelname"].Current == "a10" && vars.startedgame == 0 && timer.CurrentPhase != TimerPhase.Ended)
 					{
-						return ((vars.watchers_h1["IGT"].Current < vars.watchers_h1["IGT"].Old && vars.watchers_h1["IGT"].Current < 10) || (vars.watchers_comptimer["comptimerstate"].Current != 0 && vars.watchers_comptimer["comptimerstate"].Old == 0 && vars.watchers_h1["tickcounter"].Current < 60));
+						return ((vars.watchers_h1["IGT"].Current < vars.watchers_h1["IGT"].Old && vars.watchers_h1["IGT"].Current < 10) || (vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_mcc["loadindicator"].Old == 1 && vars.watchers_h1["tickcounter"].Current < 60));
 					} 
 				}
 			break;
@@ -2612,14 +2471,14 @@ reset
 				{
 					if (vars.watchers_h2["levelname"].Current == vars.startedlevel && vars.startedgame == 1 && timer.CurrentPhase != TimerPhase.Ended)
 					{				
-						return ((vars.watchers_h2["IGT"].Current < vars.watchers_h2["IGT"].Old && vars.watchers_h2["IGT"].Current < 10) || (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_h2["IGT"].Current == 0)); 
+						return ((vars.watchers_h2["IGT"].Current < vars.watchers_h2["IGT"].Old && vars.watchers_h2["IGT"].Current < 10) || (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_h2["IGT"].Current == 0)); 
 					}
 				}
 				else
 				{
 					if ((vars.watchers_h2["levelname"].Current == "01a" || (vars.watchers_h2["levelname"].Current == "01b" && vars.startedlevel != "01a") || vars.watchers_h2["levelname"].Current == "00a") && vars.startedgame == 1 && timer.CurrentPhase != TimerPhase.Ended)
 					{
-						return ((vars.watchers_h2["IGT"].Current < vars.watchers_h2["IGT"].Old && vars.watchers_h2["IGT"].Current < 10) || (vars.watchers_mcc["stateindicator"].Current != 44 && vars.watchers_mcc["stateindicator"].Old == 44 && vars.watchers_h2fg["tickcounter"].Current < 60));
+						return ((vars.watchers_h2["IGT"].Current < vars.watchers_h2["IGT"].Old && vars.watchers_h2["IGT"].Current < 10) || (vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_mcc["loadindicator"].Old == 1 && vars.watchers_h2fg["tickcounter"].Current < 60));
 					}
 				}
 			break;
@@ -2640,11 +2499,11 @@ reset
 						}
 						else if (vars.watchers_h3["levelname"].Current == "005")
 						{
-							return (vars.watchers_mcc["stateindicator"].Current != 44 && vars.watchers_mcc["stateindicator"].Old == 44 && vars.watchers_h3fg["tickcounter"].Current < 60);
+							return (vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_mcc["loadindicator"].Old == 1 && vars.watchers_h3fg["tickcounter"].Current < 60);
 						}
 						else if (vars.watchers_h3["levelname"].Current == "010") 
 						{
-							return ((vars.watchers_h3fg["theatertime"].Current > 0 && vars.watchers_h3fg["theatertime"].Current < 15) || (vars.watchers_h3fg["theatertime"].Current >= 15 && vars.watchers_h3fg["tickcounter"].Current < vars.watchers_h3fg["tickcounter"].Old && vars.watchers_h3fg["tickcounter"].Current < 10 && vars.watchers_mcc["stateindicator"].Current != 44));
+							return ((vars.watchers_h3fg["theatertime"].Current > 0 && vars.watchers_h3fg["theatertime"].Current < 15) || (vars.watchers_h3fg["theatertime"].Current >= 15 && vars.watchers_h3fg["tickcounter"].Current < vars.watchers_h3fg["tickcounter"].Old && vars.watchers_h3fg["tickcounter"].Current < 10 && vars.watchers_mcc["loadindicator"].Current == 0));
 						}
 					}
 				}
@@ -2656,14 +2515,14 @@ reset
 				{
 					if (vars.watchers_h4["levelname"].Current == vars.startedlevel && vars.startedgame == 3 && timer.CurrentPhase != TimerPhase.Ended)
 					{
-						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_igt["IGT_float"].Current == 0));
+						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_igt["IGT_float"].Current == 0));
 					}
 				}
 				else
 				{
 					if (vars.watchers_h4["levelname"].Current == "m10" && vars.startedgame == 3 && timer.CurrentPhase != TimerPhase.Ended)
 					{
-						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_igt["IGT_float"].Current == 0));
+						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_igt["IGT_float"].Current == 0));
 					}
 				}
 			break;
@@ -2674,14 +2533,14 @@ reset
 				{
 					if (vars.watchers_odst["levelname"].Current == vars.startedlevel && vars.startedscene == vars.watchers_odst["streets"].Current && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
 					{
-						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_igt["IGT_float"].Current == 0));
+						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_igt["IGT_float"].Current == 0));
 					}
 				}
 				else
 				{
 					if ((vars.watchers_odst["levelname"].Current == "c100" || (vars.watchers_odst["levelname"].Current == "h100" && vars.watchers_odst["streets"].Current == 0)) && vars.startedgame == 5 && timer.CurrentPhase != TimerPhase.Ended)
 					{
-						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_igt["IGT_float"].Current == 0));
+						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_igt["IGT_float"].Current == 0));
 					}
 				}
 			break;
@@ -2692,14 +2551,14 @@ reset
 				{
 					if (vars.watchers_hr["levelname"].Current == vars.startedlevel && vars.startedgame == 6 && timer.CurrentPhase != TimerPhase.Ended)
 					{
-						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_igt["IGT_float"].Current == 0));
+						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_igt["IGT_float"].Current == 0));
 					}
 				}
 				else
 				{
 					if (vars.watchers_hr["levelname"].Current == "m10" && vars.startedgame == 6 && timer.CurrentPhase != TimerPhase.Ended)
 					{
-						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["stateindicator"].Current == 44 && vars.watchers_igt["IGT_float"].Current == 0));
+						return ((vars.watchers_igt["IGT_float"].Current < vars.watchers_igt["IGT_float"].Old && vars.watchers_igt["IGT_float"].Current < 0.167) || (vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_igt["IGT_float"].Current == 0));
 					}
 				}
 			break;
@@ -2718,7 +2577,7 @@ isLoading
 		return true;
 	}
 
-	if (settings["menupause"] && (vars.watchers_mcc["stateindicator"].Current == 44 || vars.watchers_mcc["menuindicator"].Current == 0))
+	if (settings["menupause"] && (vars.watchers_mcc["loadindicator"].Current == 1 || vars.watchers_mcc["menuindicator"].Current == 0))
 	{
 		return true;
 	}
@@ -2742,7 +2601,7 @@ isLoading
 			else
 			{
 				//Graphics swap load pausing. Just leaving it here for now unless issues start happening
-				if (vars.loading == false && vars.watchers_h2fg["graphics"].Current == 1 && vars.watchers_mcc["stateindicator"].Current == 255)
+				if (vars.loading == false && vars.watchers_h2fg["graphics"].Current == 1 && vars.watchers_mcc["pauseindicator"].Current == 0)
 				{
 					if ((vars.watchers_h2fg["tickcounter"].Current == vars.oldtick) || (vars.watchers_h2fg["tickcounter"].Current == vars.oldtick + 1))
 					{
@@ -2768,7 +2627,7 @@ isLoading
 			}
 			else if (vars.h3resetflag)
 			{
-				if (vars.watchers_mcc["stateindicator"].Current == 129 || vars.loading)
+				if (vars.watchers_mcc["pauseindicator"].Current == 1 || vars.loading)
 				{
 					return true;
 				}
@@ -2791,7 +2650,7 @@ isLoading
 
 gameTime
 {
-	if (vars.watchers_game["gameindicator"].Current == 0 && vars.watchers_mcc["menuindicator"].Current > 0)
+	if (vars.watchers_game["gameindicator"].Current == 0 && vars.watchers_mcc["menuindicator"].Current == 1)
 	{
 		if (!vars.multigamepause && vars.isvalid && !vars.loading)
 		{
@@ -2826,7 +2685,7 @@ gameTime
 		}
 		return;
 	}
-	else if (vars.watchers_mcc["menuindicator"].Current > 0 && (settings["IGTmode"] || !(vars.watchers_game["gameindicator"].Current == 0 || (vars.watchers_game["gameindicator"].Current == 1 && (!settings["ILmode"] || vars.watchers_h2["levelname"].Current == "01a")) || (vars.h3resetflag && !settings["ILmode"]))))
+	else if (vars.watchers_mcc["menuindicator"].Current == 1 && (settings["IGTmode"] || !(vars.watchers_game["gameindicator"].Current == 0 || (vars.watchers_game["gameindicator"].Current == 1 && (!settings["ILmode"] || vars.watchers_h2["levelname"].Current == "01a")) || (vars.h3resetflag && !settings["ILmode"]))))
 	{
 		return vars.gametime;
 	}
