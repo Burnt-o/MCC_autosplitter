@@ -691,9 +691,9 @@ startup //variable init and settings
 		{ 0, () => vars.watchers_h1["levelname"].Current == "d40" && !vars.watchers_h1cs["cinematic"].Old && vars.watchers_h1cs["cinematic"].Current && !vars.watchers_h1cs["cutsceneskip"].Current && vars.watchers_h1xy["xpos"].Current > 1000 && !vars.watchers_h1death["deathflag"].Current }, //poa
 		{ 1, () => vars.watchers_h2["levelname"].Current == "08b" && (vars.watchers_h2fg["fadebyte"].Current == 1 && vars.watchers_h2fg["letterbox"].Current > 0.96 && vars.watchers_h2fg["letterbox"].Old <= 0.96  && vars.watchers_h2fg["letterbox"].Old != 0 && vars.H2_tgjreadyflag && ( vars.watchers_h2fg["tickcounter"].Current > (vars.H2_tgjreadytime + 300))) }, //h2
 		{ 2, () => vars.watchers_mcc["loadindicator"].Current == 1 && vars.watchers_mcc["loadindicator"].Old == 0 && vars.watchers_h3["levelname"].Current == "130" }, //h3
-		{ 3, () => vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0 && vars.watchers_h4["levelname"].Current == "m90" && !settings["anylevel"] }, //h4
-		{ 5, () => vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0 && vars.watchers_odst["levelname"].Current == "l300" && !settings["anylevel"] }, //odst
-		{ 6, () => vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0 && vars.watchers_hr["levelname"].Current == "m70" && !settings["anylevel"] }, //hr
+		{ 3, () => vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0 && vars.watchers_h4["levelname"].Current == "m90" }, //h4
+		{ 5, () => vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0 && vars.watchers_odst["levelname"].Current == "l300" }, //odst
+		{ 6, () => vars.watchers_mcc["pgcrindicator"].Current == 1 && vars.watchers_mcc["pgcrindicator"].Old == 0 && vars.watchers_hr["levelname"].Current == "m70" }, //hr
 	};
 
 	vars.multigameresume = new Dictionary<byte, Func<bool>>
@@ -1476,7 +1476,7 @@ update
 				}
 				else //if currently loading, determine whether we need to not be.
 				{
-					if (vars.watchers_h1["tickcounter"].Current == (vars.watchers_h1["tickcounter"].Old + 1)) //determine whether to unpause the timer, ie tick counter starts incrementing again
+					if (vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_mcc["loadindicator"].Old == 1) //determine whether to unpause the timer, ie tick counter starts incrementing again
 					{
 						vars.loading = false;
 					}
@@ -1667,7 +1667,7 @@ update
 					{
 						if (entry.Value())
 						{
-							if (entry.Key == 0 || entry.Key == 2)
+							if (entry.Key == 0)
 							{
 								if (!settings["anylevel"])
 								{
@@ -1675,7 +1675,7 @@ update
 								}
 								vars.forcesplit = true;
 							}
-							if (entry.Key == 1)
+							else if (entry.Key == 1)
 							{
 								if (settings["anylevel"])
 								{
@@ -1688,9 +1688,20 @@ update
 								vars.H2_tgjreadyflag = false;
 								vars.forcesplit = true;
 							}
+							else if (entry.Key == 2)
+							{
+								if (!settings["anylevel"])
+								{
+									vars.multigamepause = true;
+									vars.forcesplit = true;
+								}
+							}
 							else
 							{
-								vars.multigamepause = true;
+								if (!settings["anylevel"])
+								{
+									vars.multigamepause = true;
+								}
 							}
 							print ("multigamepause is true");
 						}
