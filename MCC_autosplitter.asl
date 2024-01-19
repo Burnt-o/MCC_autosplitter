@@ -1476,7 +1476,7 @@ update
 				}
 				else //if currently loading, determine whether we need to not be.
 				{
-					if (vars.watchers_mcc["loadindicator"].Current == 0 && vars.watchers_mcc["loadindicator"].Old == 1) //determine whether to unpause the timer, ie tick counter starts incrementing again
+					if (vars.watchers_h1["tickcounter"].Current == (vars.watchers_h1["tickcounter"].Old + 1)) //determine whether to unpause the timer, ie tick counter starts incrementing again
 					{
 						vars.loading = false;
 					}
