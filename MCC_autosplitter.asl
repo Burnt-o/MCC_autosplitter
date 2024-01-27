@@ -983,14 +983,16 @@ update
 			//H1
 			case 0:
 				vars.watchers_h1.UpdateAll(game);
-				if (timer.CurrentPhase == TimerPhase.NotRunning || vars.multigamepause || (settings["Loopmode"] && vars.loading)) {
+				if (timer.CurrentPhase == TimerPhase.NotRunning || vars.multigamepause || (settings["Loopmode"] && vars.loading))
+				{
 					vars.watchers_h1cs.UpdateAll(game);
 					if (vars.watchers_h1["levelname"].Current == "a10")
 					{
 						vars.watchers_h1xy.UpdateAll(game);
 					}
 				}
-				else {
+				else 
+				{
 					if (settings["ILmode"])
 					{
 						vars.watchers_h1cs.UpdateAll(game);
@@ -1004,13 +1006,22 @@ update
 							vars.watchers_h1death.UpdateAll(game);
 						}
 					}
-					else {
+					else
+					{
 						vars.watchers_h1load.UpdateAll(game);
 						if (vars.watchers_h1["levelname"].Current == "d40")
 						{
 							vars.watchers_h1cs.UpdateAll(game);
 							vars.watchers_h1xy.UpdateAll(game);
 							vars.watchers_h1death.UpdateAll(game);
+						}
+					}
+
+					if (settings["bspmode"])
+					{
+						if (vars.watchers_h1["levelname"].Current == "b40" || vars.watchers_h1["levelname"].Current == "c40")
+						{
+							vars.watchers_h1xy.UpdateAll(game);
 						}
 					}
 				}
