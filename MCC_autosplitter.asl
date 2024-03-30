@@ -966,6 +966,9 @@ startup //variable init and settings
 		"For use with ODST and Halo 4 IL's only"
 	);
 
+	settings.Add("h3coop", false, "Don't pause timer on pause screen (H3 Coop)");
+	settings.SetToolTip("h3coop", "Only tick if playing Halo 3 Coop. To prevent timer pausing on pause screens on Sierra in RTA mode");
+
 	settings.Add("anylevel", false, "Start full-game runs on any level (READ THE TOOLTIP)");
 	settings.SetToolTip("anylevel", "You probably don't need to use this. This option starts the timer on any level instead of just the first level for full-game runs. Breaks multi-game.");
 
@@ -2744,7 +2747,7 @@ isLoading
 			}
 			else if (vars.h3resetflag)
 			{
-				if (vars.watchers_mcc["pauseindicator"].Current == 1 || vars.loading)
+				if ((!settings["h3coop"] && vars.watchers_mcc["pauseindicator"].Current == 1) || vars.loading)
 				{
 					return true;
 				}
