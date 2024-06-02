@@ -103,17 +103,6 @@ init //hooking to game to make memorywatchers
 		break;
 	}
 
-	if (settings["DankMemes"])
-	{
-		var timingMessage = MessageBox.Show(
-			"Your free trial of the Halo MCC autosplitter has expired. "+
-			"To continue, please subscribe to the full version. " +
-			"Now available from HaloRuns.com at the discount price of $15 a month! ",
-			vars.aslName+" | LiveSplit",
-			MessageBoxButtons.OK
-		);
-		version = "April 1";
-	}
 
 	//STATE init
 	//Create watchers
@@ -952,13 +941,6 @@ startup //variable init and settings
 		);
 		if (timingMessage == DialogResult.Yes)
 		timer.CurrentTimingMethod = TimingMethod.GameTime;
-	}
-
-	DateTime localdate = DateTime.Today;
-	if (localdate.Month == 4 && localdate.Day == 1)
-	{
-		settings.Add("DankMemes", true, "Funny date");
-		settings.SetToolTip("DankMemes", "Untick and restart splitter to return normal functionality.");
 	}
 
 	settings.Add("ILmode", false, "Individual Level mode");
