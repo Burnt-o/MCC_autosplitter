@@ -94,6 +94,10 @@ init //hooking to game to make memorywatchers
 			version = "1.3495.0.0";
 		break;
 
+		case "1.3498.0.0":
+			version = "1.3498.0.0";
+		break;
+
 		default: 
 			version = "1.3495.0.0";
 			if (vars.brokenupdateshowed == false)
@@ -149,6 +153,7 @@ init //hooking to game to make memorywatchers
 	switch (version)
 	{
 		case "1.3495.0.0":
+		case "1.3498.0.0":
 			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
 			{
 				vars.dllPointer = 0x4000BC0;
@@ -793,6 +798,8 @@ init //hooking to game to make memorywatchers
 	//version dependent constants
 	switch (version)
 	{
+		case "1.3498.0.0":
+		case "1.3495.0.0":
 		case "1.3385.0.0":
 		case "1.3272.0.0":
 			vars.h1_checklist = new Dictionary<string, uint>{{"a10", 1731967100},{"a30", 2334900663},{"a50", 2345488806},{"b30", 389775619},{"b40", 232036917},{"c10", 3544120777},{"c20", 2188406812},{"c40", 687169669},{"d20", 485256620},{"d40", 1783204841},};
