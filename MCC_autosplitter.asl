@@ -1550,13 +1550,20 @@ update
 						{
 							if (!settings["IGTadd"])
 							{
-								if ((vars.leveltime % tickrate) > (0.5 * tickrate))
+								if (vars.leveltime < tickrate)
 								{
-									vars.ingametime = vars.ingametime + (vars.leveltime + (tickrate - (vars.leveltime % tickrate)));
+									vars.ingametime = vars.ingametime + tickrate;
 								}
 								else
 								{
-									vars.ingametime = vars.ingametime + ((vars.leveltime) - ((vars.leveltime) % tickrate));
+									if ((vars.leveltime % tickrate) > (0.5 * tickrate))
+									{
+										vars.ingametime = vars.ingametime + (vars.leveltime + (tickrate - (vars.leveltime % tickrate)));
+									}
+									else
+									{
+										vars.ingametime = vars.ingametime + ((vars.leveltime) - ((vars.leveltime) % tickrate));
+									}
 								}
 							}
 							else
