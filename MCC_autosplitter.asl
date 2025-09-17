@@ -24,7 +24,7 @@ init //hooking to game to make memorywatchers
 
 	var message = "It looks like MCC has received a new patch that will "+
 	"probably break me (the autosplitter). \n"+
-	"Autosplitter was made for version: "+ "1.3495.0.0" + "\n" + 
+	"Autosplitter was made for version: "+ "1.3528.0.0" + "\n" + 
 	"Current detected version: "+ modules.First().FileVersionInfo.FileVersion + "\n" +
 	"If I'm broken, you'll just have to wait for Burnt or Cambid to update me. "+
 	"You won't need to do anything except restart Livesplit once I'm updated.";
@@ -98,8 +98,12 @@ init //hooking to game to make memorywatchers
 			version = "1.3498.0.0";
 		break;
 
+		case "1.3528.0.0":
+			version = "1.3528.0.0";
+		break;
+	
 		default: 
-			version = "1.3495.0.0";
+			version = "1.3528.0.0";
 			if (vars.brokenupdateshowed == false)
 			{
 				vars.brokenupdateshowed = true;
@@ -154,6 +158,7 @@ init //hooking to game to make memorywatchers
 	{
 		case "1.3495.0.0":
 		case "1.3498.0.0":
+		case "1.3528.0.0":
 			if (modules.First().ToString().Equals("MCC-Win64-Shipping.exe", StringComparison.OrdinalIgnoreCase)) //Steam
 			{
 				vars.dllPointer = 0x4000BC0;
@@ -798,6 +803,7 @@ init //hooking to game to make memorywatchers
 	//version dependent constants
 	switch (version)
 	{
+		case "1.3528.0.0":
 		case "1.3498.0.0":
 		case "1.3495.0.0":
 		case "1.3385.0.0":
