@@ -1556,7 +1556,7 @@ update
 						{
 							if (!settings["IGTadd"])
 							{
-								if (vars.leveltime < tickrate)
+								if (vars.leveltime < tickrate && IGTold < tickrate)
 								{
 									vars.ingametime = vars.ingametime + tickrate;
 								}
@@ -1651,7 +1651,7 @@ update
 						{
 							if (!settings["IGTadd"])
 							{
-								if (vars.leveltime < tickrate)
+								if (vars.leveltime < tickrate && IGTold < tickrate)
 								{
 									vars.ingametime = vars.ingametime + tickrate;
 								}
